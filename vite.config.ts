@@ -6,8 +6,22 @@ const envPath = resolve(__dirname, "src", ".env")
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true,
+        modifyVars: {},
+      },
+    },
+  },
+  plugins: [
+    react({
+      jsxImportSource: "@emotion/react",
+      babel: {
+        presets: ["@emotion/babel-preset-css-prop"],
+      },
+    }),
+  ],
   resolve: {
     alias: [
       {

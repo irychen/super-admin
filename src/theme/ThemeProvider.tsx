@@ -1,8 +1,8 @@
-import {createContext, ReactNode, useContext, useLayoutEffect, useMemo, useState} from "react"
-import {setCookie, parseCookies} from "nookies"
-import {ConfigProvider, theme} from "antd"
-import type {ThemeConfig} from "antd"
-import {isNil} from "ramda"
+import { createContext, ReactNode, useContext, useLayoutEffect, useMemo, useState } from "react"
+import { setCookie, parseCookies } from "nookies"
+import { ConfigProvider, theme } from "antd"
+import type { ThemeConfig } from "antd"
+import { isNil } from "ramda"
 
 export type IsAutoTheme = "yes" | "no" | undefined
 export type ThemeMode = "light" | "dark"
@@ -62,11 +62,15 @@ function setCookieIsAutoTheme(isAuto: boolean) {
     }) // 将主题存储到 cookie，有效期 365 天
 }
 
-function ThemeProvider({children}: { children: ReactNode }) {
+function ThemeProvider({ children }: { children: ReactNode }) {
     const cookieThemeIsAuto = parseCookies().isAutoTheme as IsAutoTheme
     const initIsAuto = cookieThemeIsAuto ? cookieThemeIsAuto === "yes" : true
     const media = window.matchMedia("(prefers-color-scheme: dark)")
-    const themeMode = initIsAuto ? (media.matches ? "dark" : "light") : (parseCookies().themeMode || 'light') as ThemeMode
+    const themeMode = initIsAuto
+        ? media.matches
+            ? "dark"
+            : "light"
+        : ((parseCookies().themeMode || "light") as ThemeMode)
     // 是否自动跟随系统主题
     const [isAuto, setIsAuto] = useState<boolean>(initIsAuto)
     // 主题模式 light | dark
@@ -76,7 +80,7 @@ function ThemeProvider({children}: { children: ReactNode }) {
         token: {
             borderRadius: 0,
             colorPrimary: "#3958ef",
-        }
+        },
     })
 
     // 切换主题 light | dark | undefined
@@ -96,7 +100,7 @@ function ThemeProvider({children}: { children: ReactNode }) {
     const memoizedThemeConfig = useMemo(() => {
         return {
             ...themeConfig,
-            algorithm: mode === "light" ? undefined : theme.darkAlgorithm
+            algorithm: mode === "light" ? undefined : theme.darkAlgorithm,
         }
     }, [themeConfig, mode])
 
@@ -119,31 +123,30 @@ function ThemeProvider({children}: { children: ReactNode }) {
     }, [isAuto])
 
     return (
-        <ThemeContext.Provider value={{
-            themeConfig: memoizedThemeConfig,
-            setThemeConfig,
-            mode,
-            isAuto,
-            toggleTheme,
-            setIsAuto
-        }}>{children}</ThemeContext.Provider>
+        <ThemeContext.Provider
+            value={{
+                themeConfig: memoizedThemeConfig,
+                setThemeConfig,
+                mode,
+                isAuto,
+                toggleTheme,
+                setIsAuto,
+            }}
+        >
+            {children}
+        </ThemeContext.Provider>
     )
 }
 
+function AntdThemeProvider({ children }: { children?: ReactNode }) {
+    const { themeConfig } = useThemeContext()
+    return <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>
+}
 
-function AntdThemeProvider({children}: { children?: ReactNode }) {
-    const {themeConfig} = useThemeContext()
+export function AppThemeProvider({ children }: { children?: ReactNode }) {
     return (
-        <ConfigProvider theme={themeConfig}>
-            {children}
-        </ConfigProvider>
+        <ThemeProvider>
+            <AntdThemeProvider>{children}</AntdThemeProvider>
+        </ThemeProvider>
     )
-}
-
-export function AppThemeProvider({children}: { children?: ReactNode }) {
-    return <ThemeProvider>
-        <AntdThemeProvider>
-            {children}
-        </AntdThemeProvider>
-    </ThemeProvider>
 }

@@ -22,6 +22,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": ["@emotion/react/types/css-prop","node"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

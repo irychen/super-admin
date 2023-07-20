@@ -1,10 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from '@/App.tsx'
-import '@/style/global.scss'
+import ReactDOM from "react-dom"
+import App from "@/App.tsx"
+import "@/style/global.scss"
+// import { StrictMode } from "react"
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ReactDOM.render(
+    // <StrictMode>
+    <App />,
+    // {/*</StrictMode>,*/}
+    document.getElementById("root") as HTMLElement,
 )
