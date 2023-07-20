@@ -6,11 +6,12 @@ import { useLocation } from "react-router-dom"
  * @param cb 回调函数
  * @param skipMount 是否跳过首次挂载
  */
-export default function useOnActive(cb: () => void, skipMount = true) {
+export default function useOnActive(cb: () => any, skipMount = true) {
     const domRef = useRef<HTMLDivElement>(null)
     const location = useLocation()
     const isMount = useRef(false)
     useEffect(() => {
+        let destroyCb: any
         if (domRef.current) {
             const parent = domRef.current?.parentElement
             if (parent) {
@@ -18,14 +19,19 @@ export default function useOnActive(cb: () => void, skipMount = true) {
                 const fullPath = location.pathname + location.search
                 if (id === fullPath) {
                     if (skipMount) {
-                        if (isMount.current) cb()
+                        if (isMount.current) destroyCb = cb()
                     } else {
-                        cb()
+                        destroyCb = cb()
                     }
                 }
             }
         }
         isMount.current = true
+        return () => {
+            if (destroyCb && typeof destroyCb === "function") {
+                destroyCb()
+            }
+        }
     }, [location])
     return domRef
 }

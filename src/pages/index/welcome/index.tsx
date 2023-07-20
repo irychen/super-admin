@@ -56,6 +56,7 @@ function Welcome() {
             dataIndex: "website",
         },
         {
+            width: 80,
             title: "MBTI",
             key: "mbti",
             dataIndex: "mbti",
@@ -66,11 +67,13 @@ function Welcome() {
             dataIndex: "languages",
         },
         {
+            width: 80,
             title: "code",
             key: "code",
             dataIndex: "code",
         },
         {
+            width: 80,
             title: "codex",
             key: "codex",
             dataIndex: "codex",

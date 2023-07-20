@@ -4,6 +4,10 @@ import useOnActive from "@/hooks/useOnActive"
 function Theme() {
     const domRef = useOnActive(() => {
         console.log("active Theme")
+
+        return () => {
+            console.log("onDestroy Theme")
+        }
     })
 
     return (
