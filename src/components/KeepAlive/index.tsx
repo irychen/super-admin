@@ -1,7 +1,7 @@
-import ReactDOM from "react-dom"
 import { equals, isNil, map, filter, includes, length, append, slice } from "ramda"
-import { useEffect, useRef, useState, Fragment, useLayoutEffect, useImperativeHandle } from "react"
+import { useRef, memo, useState, Fragment, useLayoutEffect, useImperativeHandle } from "react"
 import type { ReactNode, RefObject } from "react"
+import CacheComponent from "@/components/CacheComponent"
 
 export interface ComponentReactElement {
     children?: ReactNode | ReactNode[]
@@ -10,6 +10,7 @@ export interface ComponentReactElement {
 export type KeepAliveRef = {
     getCaches: () => Array<{ name: string; ele?: ReactNode }>
     removeCache: (name: string) => void
+    cleanCache: () => void
 }
 
 interface Props extends ComponentReactElement {
@@ -20,14 +21,10 @@ interface Props extends ComponentReactElement {
     cache?: boolean
     aliveRef?: RefObject<KeepAliveRef>
 }
-// name === key
 
-function KeepAlive({ activeName, children, exclude, include, maxLen = 10, aliveRef }: Props) {
+const KeepAlive = memo(function KeepAlive({ activeName, children, exclude, include, maxLen = 10, aliveRef }: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [cacheReactNodes, setCacheReactNodes] = useState<Array<{ name: string; ele?: ReactNode }>>([])
-    useEffect(() => {
-        console.log("cacheReactNodes", cacheReactNodes)
-    }, [cacheReactNodes])
 
     useImperativeHandle(
         aliveRef,
@@ -37,6 +34,9 @@ function KeepAlive({ activeName, children, exclude, include, maxLen = 10, aliveR
                 setCacheReactNodes(cacheReactNodes => {
                     return filter(({ name: cacheName }) => !equals(cacheName, name), cacheReactNodes)
                 })
+            },
+            cleanCache: () => {
+                setCacheReactNodes([])
             },
         }),
         [cacheReactNodes],
@@ -83,48 +83,14 @@ function KeepAlive({ activeName, children, exclude, include, maxLen = 10, aliveR
             <div ref={containerRef} className="keep-alive" />
             {map(
                 ({ name, ele }) => (
-                    <Component active={equals(name, activeName)} renderDiv={containerRef} name={name} key={name}>
+                    <CacheComponent active={equals(name, activeName)} renderDiv={containerRef} name={name} key={name}>
                         {ele}
-                    </Component>
+                    </CacheComponent>
                 ),
                 cacheReactNodes,
             )}
         </Fragment>
     )
-}
+})
 
 export default KeepAlive
-
-interface ComponentProps extends ComponentReactElement {
-    active: boolean
-    name: string
-    renderDiv: RefObject<HTMLDivElement>
-}
-
-/*
-  这个组件的作用是将页面渲染到内存中的div中
-  activatedRef.current = activatedRef.current || active 用来保证组件在激活时才渲染
-
-  再根据active: 是否激活决定是否将内存中的div
-  渲染到renderDiv中 或者 从renderDiv中移除
- */
-function Component({ active, children, name, renderDiv }: ComponentProps) {
-    const [targetElement] = useState(() => document.createElement("div"))
-    const activatedRef = useRef(false)
-    activatedRef.current = activatedRef.current || active
-    useEffect(() => {
-        if (active) {
-            renderDiv.current?.appendChild(targetElement)
-        } else {
-            try {
-                renderDiv.current?.removeChild(targetElement)
-            } catch (e) {
-                console.log(e, "removeChild error")
-            }
-        }
-    }, [active, renderDiv, targetElement])
-    useEffect(() => {
-        targetElement.setAttribute("id", name)
-    }, [name, targetElement])
-    return <Fragment>{activatedRef.current && ReactDOM.createPortal(children, targetElement)}</Fragment>
-}

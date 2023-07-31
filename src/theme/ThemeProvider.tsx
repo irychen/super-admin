@@ -79,7 +79,7 @@ function ThemeProvider({ children }: { children: ReactNode }) {
     const [themeConfig, setThemeConfig] = useState<ThemeConfig>({
         token: {
             borderRadius: 0,
-            colorPrimary: "#3958ef",
+            colorPrimary: "#1b80ff",
         },
     })
 

@@ -1,13 +1,14 @@
-import { RouteConfig } from "@/router/config"
 import { Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
 import { JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState } from "react"
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { map, isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { usePageContext } from "@/router/PageManageProvider"
 import { SuspenseLoading } from "@/components/Loading"
 import { Button, Layout as ALayout, Menu, Tabs } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive, { KeepAliveRef } from "@/components/KeepAlive"
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
+
+import { RouteConfig } from "@/router/config"
 
 function mergePath(path: string, paterPath = "") {
     path = path.startsWith("/") ? path : "/" + path
@@ -50,6 +51,7 @@ function getRouteContext(data: any): any {
     }
     return isNil(data.routeContext) ? getRouteContext(data.children.props) : data.routeContext
 }
+
 function getLatchRouteByEle(ele: ReactElement): RouteMatch[] | null {
     if (ele) {
         const data = getRouteContext(ele.props)
@@ -57,6 +59,7 @@ function getLatchRouteByEle(ele: ReactElement): RouteMatch[] | null {
     }
     return null
 }
+
 function getMatchRouteObj(ele: ReactElement | null) {
     if (isNil(ele)) {
         return null
@@ -118,7 +121,7 @@ function Layout({ route }: Props) {
     const keepAliveRef = useRef<KeepAliveRef>(null)
     const location = useLocation()
     const navigate = useNavigate()
-
+    const { pages, active, open, close } = usePageContext()
     const [routes, items] = useMemo(() => {
         if (isNil(route.children)) {
             return [[], []] as [RouteObjectDto[], ItemType[]]
@@ -133,7 +136,6 @@ function Layout({ route }: Props) {
         eleRef.current = ele
         return getMatchRouteObj(ele)
     }, [routes, location])
-    const { pages, active, open, close } = usePageContext()
 
     useEffect(() => {
         const { key, title, cache } = matchRouteObj ?? {}
@@ -170,7 +172,7 @@ function Layout({ route }: Props) {
                 </ALayout.Sider>
                 <ALayout
                     style={{
-                        background: "#f0f0f0",
+                        background: "#F0F2F5",
                     }}
                 >
                     <ALayout.Header
@@ -207,8 +209,9 @@ function Layout({ route }: Props) {
                         }}
                         onEdit={(targetKey, action) => {
                             if (action === "remove") {
-                                const willOpenKey = close(targetKey as string)
-                                keepAliveRef?.current?.removeCache(targetKey as string)
+                                const willOpenKey = close(targetKey as string, () => {
+                                    keepAliveRef?.current?.removeCache(targetKey as string)
+                                })
                                 if (willOpenKey) {
                                     navigate(willOpenKey)
                                 }

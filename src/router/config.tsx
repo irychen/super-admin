@@ -26,6 +26,14 @@ export interface RouteConfig {
 const adminRoutes: Array<RouteConfig> = [
     {
         path: "",
+        name: "home",
+        meta: { title: "首页" },
+        cache: true,
+        component: lazy(() => import("@/pages/index/index")),
+        icon: <HomeOutlined />,
+    },
+    {
+        path: "welcome",
         name: "welcome",
         component: lazy(() => import("@/pages/index/welcome")),
         meta: { title: "欢迎页" },
@@ -56,6 +64,7 @@ const adminRoutes: Array<RouteConfig> = [
             },
         ],
     },
+
 ]
 
 export const routes: Array<RouteConfig> = [
