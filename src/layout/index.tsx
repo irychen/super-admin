@@ -222,7 +222,7 @@ function Layout({ route }: Props) {
                     />
                     <ALayout.Content className="app-content px-[5px]">
                         <div
-                            className={"w-full bg-white"}
+                            className={"w-full"}
                             style={{
                                 height: "calc(100vh - 102px)",
                                 overflow: "auto",
@@ -236,7 +236,9 @@ function Layout({ route }: Props) {
                                 >
                                     {matchRouteObj?.cache ? eleRef.current : null}
                                 </KeepAlive>
-                                {matchRouteObj?.cache ? null : eleRef.current}
+                                {matchRouteObj?.cache ? null : <div className={'content-animate'}>
+                                    {eleRef.current}
+                                </div>}
                             </SuspenseLoading>
                         </div>
                     </ALayout.Content>

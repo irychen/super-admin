@@ -10,3 +10,34 @@
     }
   }
 }
+
+// fade in animation
+.fade-in{
+    animation: fadein 0.5s;
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+}
+
+.slide-in{
+    animation: slidein 0.5s;
+    @keyframes slidein {
+        from { transform: translateY(-100%); }
+        to   { transform: translateY(0); }
+    }
+}
+
+.content-animate{
+  animation: slidein 0.3s;
+  @keyframes slidein {
+    0% {
+        transform: scale(0.96) translateX(-2%) translateY(-2%);
+        opacity: 0;
+    }
+    100%   {
+        transform: scale(1) translateX(-0%) translateY(-0%);
+        opacity: 1;
+    }
+  }
+}
