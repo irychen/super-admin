@@ -1,17 +1,17 @@
 import { Fragment } from "react"
 import { StyleProvider } from "@ant-design/cssinjs"
-import { AppThemeProvider } from "@/theme/ThemeProvider.tsx"
+import { AppThemeProvider } from "@/providers/ThemeProvider"
 import { AppRouter } from "@/router"
-import { PageManageProvider } from "@/router/PageManageProvider.tsx"
+import { Index } from "@/providers/PageManageProvider"
 
 function App() {
     return (
         <Fragment>
             <StyleProvider hashPriority="high">
                 <AppThemeProvider>
-                    <PageManageProvider>
+                    <Index>
                         <AppRouter />
-                    </PageManageProvider>
+                    </Index>
                 </AppThemeProvider>
             </StyleProvider>
         </Fragment>

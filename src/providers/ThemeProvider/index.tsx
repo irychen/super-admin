@@ -22,7 +22,7 @@ export interface AppTheme {
     setThemeConfig: (v: ThemeConfig) => void
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
+
 const ThemeContext = createContext<AppTheme>({
     isAuto: false,
     mode: "light",
@@ -38,7 +38,7 @@ const ThemeContext = createContext<AppTheme>({
     },
 })
 
-// eslint-disable-next-line react-refresh/only-export-components
+
 export const useThemeContext = () => {
     return useContext(ThemeContext)
 }
@@ -62,7 +62,7 @@ function setCookieIsAutoTheme(isAuto: boolean) {
     }) // 将主题存储到 cookie，有效期 365 天
 }
 
-function ThemeProvider({ children }: { children: ReactNode }) {
+function Index({ children }: { children: ReactNode }) {
     const cookieThemeIsAuto = parseCookies().isAutoTheme as IsAutoTheme
     const initIsAuto = cookieThemeIsAuto ? cookieThemeIsAuto === "yes" : true
     const media = window.matchMedia("(prefers-color-scheme: dark)")
@@ -145,8 +145,8 @@ function AntdThemeProvider({ children }: { children?: ReactNode }) {
 
 export function AppThemeProvider({ children }: { children?: ReactNode }) {
     return (
-        <ThemeProvider>
+        <Index>
             <AntdThemeProvider>{children}</AntdThemeProvider>
-        </ThemeProvider>
+        </Index>
     )
 }

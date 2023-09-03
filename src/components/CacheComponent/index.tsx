@@ -34,7 +34,7 @@ function CacheComponent({active, children, name, renderDiv}: CacheComponentProps
     }, [active, renderDiv, targetElement])
     useEffect(() => {
         targetElement.setAttribute("id", name)
-        targetElement.classList.add("content-animate")
+        targetElement.className = "page-content page-content-animate"
     }, [name, targetElement])
     return <Fragment>{activatedRef.current && createPortal(children, targetElement)}</Fragment>
 }

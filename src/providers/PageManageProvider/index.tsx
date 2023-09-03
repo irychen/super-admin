@@ -37,7 +37,7 @@ export const usePageContext = () => {
 
 const TabPageStorageKey = "admin_pages"
 
-export function PageManageProvider(props: { children: ReactNode }) {
+export function Index(props: { children: ReactNode }) {
     const [active, setActive] = useState("")
     const [pages, setPages] = useSessionStorageState<PageConfig[]>(TabPageStorageKey, [])
     const [messageApi, messageEle] = message.useMessage()

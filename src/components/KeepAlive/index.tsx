@@ -80,7 +80,7 @@ const KeepAlive = memo(function KeepAlive({ activeName, children, exclude, inclu
 
     return (
         <Fragment>
-            <div ref={containerRef} className="keep-alive" />
+            <div ref={containerRef} className="keep-alive page-content-wrapper" />
             {map(
                 ({ name, ele }) => (
                     <CacheComponent active={equals(name, activeName)} renderDiv={containerRef} name={name} key={name}>

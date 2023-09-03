@@ -1,4 +1,4 @@
-import { Input } from "antd"
+import {Card, Input} from "antd"
 import useOnActive from "@/hooks/useOnActive"
 
 function Theme() {
@@ -9,10 +9,12 @@ function Theme() {
         }
     })
     return (
-        <div ref={domRef}>
-            <h1>Theme</h1>
-            <Input placeholder="输入一个值 然后切换tab组件不会被销毁" />
-        </div>
+
+        <Card  ref={domRef}  className={"h-full"} title={"Theme"} bordered={false}>
+            <div className={"h-full"}>
+                <Input placeholder="输入一个值 然后切换tab组件不会被销毁" />
+            </div>
+        </Card>
     )
 }
 

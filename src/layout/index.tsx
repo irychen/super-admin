@@ -1,8 +1,8 @@
 import { Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
-import { JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState } from "react"
+import {Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState} from "react"
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { map, isNil, reduce, last, filter, not, isEmpty } from "ramda"
-import { usePageContext } from "@/router/PageManageProvider"
+import { usePageContext } from "@/providers/PageManageProvider"
 import { SuspenseLoading } from "@/components/Loading"
 import { Button, Layout as ALayout, Menu, Tabs } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
@@ -221,13 +221,7 @@ function Layout({ route }: Props) {
                         items={pages}
                     />
                     <ALayout.Content className="app-content px-[5px]">
-                        <div
-                            className={"w-full"}
-                            style={{
-                                height: "calc(100vh - 102px)",
-                                overflow: "auto",
-                            }}
-                        >
+                        <Fragment>
                             <SuspenseLoading>
                                 <KeepAlive
                                     aliveRef={keepAliveRef}
@@ -236,11 +230,11 @@ function Layout({ route }: Props) {
                                 >
                                     {matchRouteObj?.cache ? eleRef.current : null}
                                 </KeepAlive>
-                                {matchRouteObj?.cache ? null : <div className={'content-animate'}>
+                                {matchRouteObj?.cache ? null : <div className={'page-content page-content-animate'}>
                                     {eleRef.current}
                                 </div>}
                             </SuspenseLoading>
-                        </div>
+                        </Fragment>
                     </ALayout.Content>
                 </ALayout>
             </ALayout>

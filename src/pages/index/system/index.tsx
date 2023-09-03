@@ -1,7 +1,10 @@
-import { ProTable } from "@ant-design/pro-components"
-import { memo } from "react"
+import {ActionType, ProTable} from "@ant-design/pro-components"
+import {useRef} from "react"
+import {FormInstance} from "antd/lib";
 
 function System() {
+    const actionRef = useRef<ActionType>()
+    const formRef = useRef<FormInstance>()
     const dataSource = [
         {
             id: 1,
@@ -88,6 +91,8 @@ function System() {
     return (
         <div>
             <ProTable
+                actionRef={actionRef}
+                formRef={formRef}
                 rowKey={"id"}
                 scroll={{
                     x: "max-content",
@@ -102,4 +107,4 @@ function System() {
     )
 }
 
-export default memo(System)
+export default System
