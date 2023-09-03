@@ -4,8 +4,9 @@ import Children from "@/router/Children.tsx"
 import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
 import { HomeOutlined } from "@ant-design/icons"
+import Login from "@/pages/login";
 
-export type Component = ComponentType<any> | LazyExoticComponent<any>
+export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => JSX.Element>
 
 export interface RouteConfig {
     path: string
@@ -73,6 +74,13 @@ export const routes: Array<RouteConfig> = [
         component: NotFound,
         name: "404",
         meta: { title: "404" },
+        checkToken: false,
+    },
+    {
+        path: "/login",
+        component: lazy(() => import("@/pages/login")),
+        name: "login",
+        meta: { title: "登录" },
         checkToken: false,
     },
     {

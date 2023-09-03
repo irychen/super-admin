@@ -1,5 +1,5 @@
 import { Spin } from "antd"
-import { Suspense } from "react"
+import {ReactNode, Suspense} from "react"
 import { css } from "@emotion/react"
 
 export function Loading() {
@@ -16,7 +16,7 @@ export function Loading() {
 }
 
 interface Props {
-    children: JSX.Element | React.ReactNode
+    children: JSX.Element | ReactNode
 }
 export function SuspenseLoading({ children }: Props) {
     return <Suspense fallback={<Loading />}>{children}</Suspense>

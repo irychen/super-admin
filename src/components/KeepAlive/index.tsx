@@ -1,6 +1,6 @@
-import { equals, isNil, map, filter, includes, length, append, slice } from "ramda"
-import { useRef, memo, useState, Fragment, useLayoutEffect, useImperativeHandle } from "react"
-import type { ReactNode, RefObject } from "react"
+import {equals, isNil, map, filter, includes, length, append, slice} from "ramda"
+import {useRef, memo, useState, Fragment, useLayoutEffect, useImperativeHandle} from "react"
+import type {ReactNode, RefObject} from "react"
 import CacheComponent from "@/components/CacheComponent"
 
 export interface ComponentReactElement {
@@ -22,7 +22,7 @@ interface Props extends ComponentReactElement {
     aliveRef?: RefObject<KeepAliveRef>
 }
 
-const KeepAlive = memo(function KeepAlive({ activeName, children, exclude, include, maxLen = 10, aliveRef }: Props) {
+const KeepAlive = memo(function KeepAlive({activeName, children, exclude, include, maxLen = 10, aliveRef}: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [cacheReactNodes, setCacheReactNodes] = useState<Array<{ name: string; ele?: ReactNode }>>([])
 
@@ -32,7 +32,9 @@ const KeepAlive = memo(function KeepAlive({ activeName, children, exclude, inclu
             getCaches: () => cacheReactNodes,
             removeCache: (name: string) => {
                 setCacheReactNodes(cacheReactNodes => {
-                    return filter(({ name: cacheName }) => !equals(cacheName, name), cacheReactNodes)
+                    const newCacheReactNodes = [...cacheReactNodes]
+                    newCacheReactNodes.filter(res => !equals(res.name, name))
+                    return newCacheReactNodes
                 })
             },
             cleanCache: () => {
@@ -61,28 +63,28 @@ const KeepAlive = memo(function KeepAlive({ activeName, children, exclude, inclu
                 )
             } else {
                 cacheReactNodes = map(res => {
-                    return equals(res.name, activeName) ? { ...res, ele: children } : res
+                    return equals(res.name, activeName) ? {...res, ele: children} : res
                 }, cacheReactNodes)
             }
             return isNil(exclude) && isNil(include)
                 ? cacheReactNodes
-                : filter(({ name }) => {
-                      if (exclude && includes(name, exclude)) {
-                          return false
-                      }
-                      if (include) {
-                          return includes(name, include)
-                      }
-                      return true
-                  }, cacheReactNodes)
+                : filter(({name}) => {
+                    if (exclude && includes(name, exclude)) {
+                        return false
+                    }
+                    if (include) {
+                        return includes(name, include)
+                    }
+                    return true
+                }, cacheReactNodes)
         })
     }, [children, activeName, exclude, maxLen, include])
 
     return (
         <Fragment>
-            <div ref={containerRef} className="keep-alive page-content-wrapper" />
+            <div ref={containerRef} className="keep-alive page-content-wrapper"/>
             {map(
-                ({ name, ele }) => (
+                ({name, ele}) => (
                     <CacheComponent active={equals(name, activeName)} renderDiv={containerRef} name={name} key={name}>
                         {ele}
                     </CacheComponent>

@@ -4,7 +4,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { map, isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { usePageContext } from "@/providers/PageManageProvider"
 import { SuspenseLoading } from "@/components/Loading"
-import { Button, Layout as ALayout, Menu, Tabs } from "antd"
+import {Button, Divider, Layout as ALayout, Menu, Tabs} from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive, { KeepAliveRef } from "@/components/KeepAlive"
 
@@ -122,6 +122,7 @@ function Layout({ route }: Props) {
     const location = useLocation()
     const navigate = useNavigate()
     const { pages, active, open, close } = usePageContext()
+
     const [routes, items] = useMemo(() => {
         if (isNil(route.children)) {
             return [[], []] as [RouteObjectDto[], ItemType[]]
@@ -160,6 +161,11 @@ function Layout({ route }: Props) {
         <ALayout className={"w-full h-screen"}>
             <ALayout>
                 <ALayout.Sider collapsed={collapsed} width={220} theme="light">
+                    <div className={'px-[10px] w-full whitespace-nowrap overflow-hidden text-[#1C80FF] text-[20px] pb-0 py-[10px] font-semibold text-center'}>
+                        {
+                            collapsed ? 'S' : 'Super Admin'
+                        }
+                    </div>
                     <Menu
                         style={{
                             padding: "10px 10px",
@@ -205,7 +211,10 @@ function Layout({ route }: Props) {
                         hideAdd
                         type="editable-card"
                         onChange={key => {
-                            navigate(key)
+                            console.log(key,'onChange')
+                            navigate({
+                                pathname: key,
+                            })
                         }}
                         onEdit={(targetKey, action) => {
                             if (action === "remove") {
@@ -213,7 +222,9 @@ function Layout({ route }: Props) {
                                     keepAliveRef?.current?.removeCache(targetKey as string)
                                 })
                                 if (willOpenKey) {
-                                    navigate(willOpenKey)
+                                    navigate({
+                                        pathname: willOpenKey,
+                                    })
                                 }
                             }
                         }}
