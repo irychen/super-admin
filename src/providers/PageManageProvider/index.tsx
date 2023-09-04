@@ -60,7 +60,7 @@ export function Index(props: { children: ReactNode }) {
         newPages.splice(index, 1)
         setPages(newPages)
         if (active === key) {
-            if(lastOpenKey.current){
+            if (lastOpenKey.current) {
                 if (lastOpenKey.current === key) {
                     const activeKey = newPages[newPages.length - 1].key
                     setActive(activeKey)
@@ -69,7 +69,7 @@ export function Index(props: { children: ReactNode }) {
                     setActive(lastOpenKey.current)
                     return lastOpenKey.current
                 }
-            }else{
+            } else {
                 const activeKey = newPages[newPages.length - 1].key
                 setActive(activeKey)
                 return activeKey

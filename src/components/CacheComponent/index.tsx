@@ -1,6 +1,6 @@
-import {Fragment, RefObject, useEffect, useLayoutEffect, useRef, useState} from "react"
-import {ComponentReactElement} from "@/components/KeepAlive"
-import {createPortal} from "react-dom"
+import { Fragment, RefObject, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { ComponentReactElement } from "@/components/KeepAlive"
+import { createPortal } from "react-dom"
 
 /*
   这个组件的作用是将页面渲染到内存中的div中
@@ -16,12 +16,11 @@ interface CacheComponentProps extends ComponentReactElement {
     renderDiv: RefObject<HTMLDivElement>
 }
 
-function CacheComponent({active, children, name, renderDiv}: CacheComponentProps) {
+function CacheComponent({ active, children, name, renderDiv }: CacheComponentProps) {
     const [targetElement] = useState(() => document.createElement("div"))
     const activatedRef = useRef(false)
     activatedRef.current = activatedRef.current || active
     useLayoutEffect(() => {
-
         if (active) {
             renderDiv.current?.appendChild(targetElement)
         } else {

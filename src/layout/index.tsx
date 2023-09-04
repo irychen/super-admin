@@ -1,10 +1,10 @@
 import { Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
-import {Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState} from "react"
+import { Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState } from "react"
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { map, isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { usePageContext } from "@/providers/PageManageProvider"
 import { SuspenseLoading } from "@/components/Loading"
-import {Button, Divider, Layout as ALayout, Menu, Tabs} from "antd"
+import { Button, Layout as ALayout, Menu, Tabs } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive, { KeepAliveRef } from "@/components/KeepAlive"
 
@@ -161,10 +161,12 @@ function Layout({ route }: Props) {
         <ALayout className={"w-full h-screen"}>
             <ALayout>
                 <ALayout.Sider collapsed={collapsed} width={220} theme="light">
-                    <div className={'px-[10px] w-full whitespace-nowrap overflow-hidden text-[#1C80FF] text-[20px] pb-0 py-[10px] font-semibold text-center'}>
-                        {
-                            collapsed ? 'S' : 'Super Admin'
+                    <div
+                        className={
+                            "px-[10px] w-full whitespace-nowrap overflow-hidden text-[#1C80FF] text-[20px] pb-0 py-[10px] font-semibold text-center"
                         }
+                    >
+                        {collapsed ? "S" : "Super Admin"}
                     </div>
                     <Menu
                         style={{
@@ -211,7 +213,6 @@ function Layout({ route }: Props) {
                         hideAdd
                         type="editable-card"
                         onChange={key => {
-                            console.log(key,'onChange')
                             navigate({
                                 pathname: key,
                             })
@@ -237,13 +238,13 @@ function Layout({ route }: Props) {
                                 <KeepAlive
                                     aliveRef={keepAliveRef}
                                     activeName={matchRouteObj?.cache ? activeKey : undefined}
-                                    maxLen={10}
+                                    maxLen={20}
                                 >
                                     {matchRouteObj?.cache ? eleRef.current : null}
                                 </KeepAlive>
-                                {matchRouteObj?.cache ? null : <div className={'page-content page-content-animate'}>
-                                    {eleRef.current}
-                                </div>}
+                                {matchRouteObj?.cache ? null : (
+                                    <div className={"page-content page-content-animate"}>{eleRef.current}</div>
+                                )}
                             </SuspenseLoading>
                         </Fragment>
                     </ALayout.Content>
