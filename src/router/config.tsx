@@ -3,7 +3,6 @@ import { lazy } from "react"
 import Children from "@/router/Children.tsx"
 import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
-import { HomeOutlined } from "@ant-design/icons"
 
 export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => JSX.Element>
 
@@ -29,42 +28,44 @@ const adminRoutes: Array<RouteConfig> = [
     {
         path: "",
         name: "home",
-        meta: { title: "首页" },
+        meta: { title: "首页(带缓存)" },
         cache: true,
         component: lazy(() => import("@/pages/index/index")),
-        icon: <HomeOutlined />,
+        // icon: <HomeOutlined />,
     },
     {
-        path: "welcome",
-        name: "welcome",
-        component: lazy(() => import("@/pages/index/welcome")),
-        meta: { title: "欢迎页" },
-        icon: <HomeOutlined />,
+        path: "no-cache",
+        name: "no-cache",
+        meta: { title: "无缓存页面" },
+        component: lazy(() => import("@/pages/index/no-cache")),
     },
     {
-        path: "system",
-        name: "system",
-        cache: true,
-        component: lazy(() => import("@/pages/index/system")),
-        meta: { title: "系统管理" },
-        icon: <HomeOutlined />,
-    },
-    {
-        path: "settings",
-        name: "settings",
-        meta: { title: "设置" },
+        path: "nested-1",
+        name: "nested-1",
+        meta: { title: "嵌套路由1" },
         component: Children,
-        icon: <HomeOutlined />,
         children: [
             {
-                path: "theme",
-                name: "theme",
-                // alwaysShow: true,
-                cache: true,
-                meta: { title: "主题设置" },
-                component: lazy(() => import("@/pages/index/settings/theme")),
+                path: "nested-1-1",
+                name: "nested-1-1",
+                meta: { title: "嵌套路由1-1" },
+                component: Children,
+                children: [
+                    {
+                        path: "nested-1-1-1",
+                        name: "nested-1-1-1",
+                        meta: { title: "嵌套路由1-1-1" },
+                        component: lazy(() => import("@/pages/index/nested-1-1-1")),
+                    },
+                ],
             },
         ],
+    },
+    {
+        path: "keep-alive",
+        name: "keep-alive",
+        meta: { title: "keep-alive(无Router示例)" },
+        component: lazy(() => import("@/pages/index/keep-alive")),
     },
     {
         path: "*",

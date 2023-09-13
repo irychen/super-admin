@@ -1,5 +1,5 @@
 import { Spin } from "antd"
-import {ReactNode, Suspense} from "react"
+import { ReactNode, Suspense } from "react"
 import { css } from "@emotion/react"
 
 export function Loading() {

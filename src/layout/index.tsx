@@ -1,21 +1,20 @@
-import {Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes} from "react-router-dom"
-import {Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState} from "react"
-import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons"
-import {map, isNil, reduce, last, filter, not, isEmpty} from "ramda"
-import {usePageContext} from "@/providers/PageManageProvider"
-import {SuspenseLoading} from "@/components/Loading"
-import {Button, Layout as ALayout, Menu, Tabs} from "antd"
-import type {ItemType} from "antd/lib/menu/hooks/useItems"
-import KeepAlive, {KeepAliveRef} from "@/components/KeepAlive"
+import { Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
+import { Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState } from "react"
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
+import { isNil, reduce, last, filter, not, isEmpty } from "ramda"
+import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
+import { SuspenseLoading } from "@/components/Loading"
+import { Button, Layout as ALayout, Menu, Tabs } from "antd"
+import type { ItemType } from "antd/lib/menu/hooks/useItems"
+import KeepAlive from "keepalive-for-react"
 
-import {RouteConfig} from "@/router/config"
-import {hasAllAuth, hasAnyAuth} from "@/utils/auth.ts";
+import { RouteConfig } from "@/router/config"
+import { hasAllAuth, hasAnyAuth } from "@/utils/auth.ts"
 
 function mergePath(path: string, paterPath = "") {
     path = path.startsWith("/") ? path : "/" + path
     return paterPath + path
 }
-
 
 function checkAuthPass(route: RouteConfig) {
     if (isNil(route.authority) || isEmpty(route.authority)) {
@@ -31,38 +30,49 @@ function checkAuthPass(route: RouteConfig) {
 }
 
 // 渲染导航栏
-function renderMenu(data: Array<RouteConfig>, path?: string) {
-    return reduce(
-        (items, route) => {
-            // 不在菜单显示
-            if (route.notMenu) {
+function renderMenuItems(data: Array<RouteConfig>, open: (info: PageConfig) => void, path?: string) {
+    function renderMenu(data: Array<RouteConfig>, path?: string) {
+        return reduce(
+            (items, route) => {
+                // 不在菜单显示
+                if (route.notMenu) {
+                    return items
+                }
+                // 权限验证 不通过不显示
+                if (!checkAuthPass(route)) {
+                    return items
+                }
+                const thisPath = mergePath(route.path, path)
+                const children = filter(route => not(route.notMenu), route.children ?? [])
+                const hasChildren = isNil(children) || isEmpty(children)
+                items.push({
+                    key: route.name,
+                    title: route.meta?.title,
+                    icon: route.icon,
+                    label: !hasChildren ? (
+                        <span className="a-black">{route.meta?.title}</span>
+                    ) : (
+                        <a
+                            onClick={() => {
+                                open({
+                                    key: thisPath,
+                                    label: route.meta?.title as string,
+                                })
+                            }}
+                            className="a-black"
+                        >
+                            {route.meta?.title}
+                        </a>
+                    ),
+                    children: hasChildren ? undefined : renderMenu(children, thisPath),
+                })
                 return items
-            }
-            // 权限验证 不通过不显示
-            if (!checkAuthPass(route)) {
-                return items
-            }
-            const thisPath = mergePath(route.path, path)
-            const children = filter(route => not(route.notMenu), route.children ?? [])
-            const hasChildren = isNil(children) || isEmpty(children)
-            items.push({
-                key: route.name,
-                title: route.meta?.title,
-                icon: route.icon,
-                label: !hasChildren ? (
-                    <span className="a-black">{route.meta?.title}</span>
-                ) : (
-                    <Link to={thisPath} className="a-black">
-                        {route.meta?.title}
-                    </Link>
-                ),
-                children: hasChildren ? undefined : renderMenu(children, thisPath),
-            })
-            return items
-        },
-        [] as ItemType[],
-        data,
-    )
+            },
+            [] as ItemType[],
+            data,
+        )
+    }
+    return renderMenu(data, path)
 }
 
 function getRouteContext(data: any): any {
@@ -132,7 +142,7 @@ function makeRouteObject(routes: RouteConfig[], upperPath?: string): Array<Route
             name: route.name,
             meta: route.meta,
             cache,
-            element: <route.component meta={route.meta}/>,
+            element: <route.component meta={route.meta} />,
             children: isNil(route.children) ? undefined : makeRouteObject(route.children, fullPath),
         }
         RouteObjectDtoList.push(routeObjectDto)
@@ -144,19 +154,24 @@ interface Props {
     route: RouteConfig
 }
 
-function Layout({route}: Props) {
+function Layout({ route }: Props) {
     const eleRef = useRef<ReactElement<any, string | JSXElementConstructor<any>> | null>()
-    const keepAliveRef = useRef<KeepAliveRef>(null)
     const location = useLocation()
-    const navigate = useNavigate()
-    const {pages, active, open, close} = usePageContext()
-
-    const [routes, items] = useMemo(() => {
+    const { pages, active, open, close, getKeepAliveRef } = usePageContext()
+    const keepAliveRef = getKeepAliveRef()
+    const routes = useMemo(() => {
         if (isNil(route.children)) {
-            return [[], []] as [RouteObjectDto[], ItemType[]]
+            return [] as RouteObjectDto[]
         }
-        return [makeRouteObject(route.children), renderMenu(route.children)]
+        return makeRouteObject(route.children)
     }, [route])
+
+    const items = useMemo(() => {
+        if (isNil(route.children)) {
+            return [] as ItemType[]
+        }
+        return renderMenuItems(route.children, open)
+    }, [route, routes, open])
 
     // 匹配 当前路径要渲染的路由
     const ele = useRoutes(routes, location)
@@ -167,28 +182,20 @@ function Layout({route}: Props) {
     }, [routes, location])
 
     useEffect(() => {
-        const {key, title, cache} = matchRouteObj ?? {}
-        if (!isNil(key)) {
-            const fullPath = location.pathname + location.search
+        if (matchRouteObj) {
             open({
-                // 没有缓存的路由，不需要打开多个tab
-                key: cache ? fullPath : key,
-                label: title as string,
-                cache,
-            })
+                key: matchRouteObj.key,
+                label: matchRouteObj.title,
+            } as PageConfig)
         }
-    }, [matchRouteObj, location])
-
-    const activeKey = useMemo(() => {
-        return location.pathname + location.search
-    }, [location])
+    }, [])
 
     const [collapsed, setCollapsed] = useState(false)
 
     return (
         <ALayout className={"w-full h-screen"}>
             <ALayout>
-                <ALayout.Sider collapsed={collapsed} width={220} theme="light">
+                <ALayout.Sider collapsed={collapsed} width={260} theme="light">
                     <div
                         className={
                             "px-[10px] w-full whitespace-nowrap overflow-hidden text-[#1C80FF] text-[20px] pb-0 py-[10px] font-semibold text-center"
@@ -228,7 +235,7 @@ function Layout({route}: Props) {
                                     setCollapsed(!collapsed)
                                 }}
                                 type={"link"}
-                                icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                             ></Button>
                         </div>
                     </ALayout.Header>
@@ -241,38 +248,36 @@ function Layout({route}: Props) {
                         hideAdd
                         type="editable-card"
                         onChange={key => {
-                            navigate({
-                                pathname: key,
-                            })
+                            const page = pages.find(item => item.key === key)
+                            if (page) {
+                                open(page)
+                            }
                         }}
                         onEdit={(targetKey, action) => {
                             if (action === "remove") {
-                                const willOpenKey = close(targetKey as string, () => {
-                                    keepAliveRef?.current?.removeCache(targetKey as string)
-                                })
-                                if (willOpenKey) {
-                                    navigate({
-                                        pathname: willOpenKey,
-                                    })
-                                }
+                                close(targetKey as string)
                             }
                         }}
                         activeKey={active}
                         items={pages}
                     />
-                    <ALayout.Content className="app-content px-[5px]">
+                    <ALayout.Content
+                        className="app-content px-[5px]"
+                        style={{
+                            overflow: "auto",
+                            paddingBottom: 5,
+                        }}
+                    >
                         <Fragment>
                             <SuspenseLoading>
                                 <KeepAlive
                                     aliveRef={keepAliveRef}
-                                    activeName={matchRouteObj?.cache ? activeKey : undefined}
+                                    cache={matchRouteObj?.cache}
+                                    activeName={active}
                                     maxLen={20}
                                 >
-                                    {matchRouteObj?.cache ? eleRef.current : null}
+                                    {eleRef.current}
                                 </KeepAlive>
-                                {matchRouteObj?.cache ? null : (
-                                    <div className={"page-content page-content-animate"}>{eleRef.current}</div>
-                                )}
                             </SuspenseLoading>
                         </Fragment>
                     </ALayout.Content>

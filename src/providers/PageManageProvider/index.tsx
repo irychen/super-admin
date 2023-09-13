@@ -1,12 +1,13 @@
-import { createContext, ReactNode, useContext, useMemo, useRef, useState } from "react"
+import { createContext, ReactNode, RefObject, useContext, useMemo, useRef, useState } from "react"
 import { message } from "antd"
 import useSessionStorageState from "@/hooks/useSessionStorageState.ts"
+import { KeepAliveRef } from "keepalive-for-react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 export type PageConfig = {
     label: string // 路由的名称
     // 路由的 path
     key: string
-    cache?: boolean
 }
 
 export interface PageManage {
@@ -16,6 +17,8 @@ export interface PageManage {
     pages: PageConfig[]
     close: (key: string, cb?: () => void) => string | null | undefined
     open: (info: PageConfig) => void
+    closeCurrent: (cb?: () => void) => string | null | undefined
+    getKeepAliveRef: () => RefObject<KeepAliveRef> | undefined
 }
 
 const PageContext = createContext<PageManage>({
@@ -29,6 +32,13 @@ const PageContext = createContext<PageManage>({
     open: (info: PageConfig) => {
         console.log(info)
     },
+    closeCurrent: (cb?: () => void) => {
+        cb && cb()
+        return null
+    },
+    getKeepAliveRef: () => {
+        return undefined
+    },
 })
 
 export const usePageContext = () => {
@@ -37,11 +47,17 @@ export const usePageContext = () => {
 
 const TabPageStorageKey = "admin_pages"
 
-export function Index(props: { children: ReactNode }) {
-    const [active, setActive] = useState("")
+export function PageManageProvider(props: { children: ReactNode }) {
+    const location = useLocation()
+    const [active, setActive] = useState(location.pathname + location.search)
+    const keepAliveRef = useRef<KeepAliveRef>(null)
     const [pages, setPages] = useSessionStorageState<PageConfig[]>(TabPageStorageKey, [])
     const [messageApi, messageEle] = message.useMessage()
     const lastOpenKey = useRef<string>("")
+    const navigate = useNavigate()
+    const getKeepAliveRef = () => {
+        return keepAliveRef
+    }
     /**
      * 关闭一个标签页
      * @param key 路由的 key
@@ -57,28 +73,38 @@ export function Index(props: { children: ReactNode }) {
             return null
         }
         cb && cb()
+        keepAliveRef.current?.removeCache(key)
         newPages.splice(index, 1)
         setPages(newPages)
+        let nextActiveKey = null
         if (active === key) {
             if (lastOpenKey.current) {
                 if (lastOpenKey.current === key) {
                     const activeKey = newPages[newPages.length - 1].key
                     setActive(activeKey)
-                    return activeKey
+                    nextActiveKey = activeKey
                 } else {
                     setActive(lastOpenKey.current)
-                    return lastOpenKey.current
+                    nextActiveKey = lastOpenKey.current
                 }
             } else {
                 const activeKey = newPages[newPages.length - 1].key
                 setActive(activeKey)
-                return activeKey
+                nextActiveKey = activeKey
             }
         }
-        return null
+        if (nextActiveKey) {
+            navigate({
+                pathname: nextActiveKey as string,
+            })
+        }
+        return nextActiveKey
     }
 
     const open = (info: PageConfig) => {
+        if (!info || !info.key) {
+            throw new Error(`路由信息不正确 ${JSON.stringify(info)}`)
+        }
         // 记住上一个打开的路由
         lastOpenKey.current = active
         const newPages = [...pages]
@@ -87,6 +113,18 @@ export function Index(props: { children: ReactNode }) {
         if (!existed) newPages.push(info)
         setPages(newPages)
         setActive(info.key)
+        navigate({
+            pathname: info.key,
+        })
+    }
+
+    /**
+     * 关闭当前的标签页
+     * @param cb
+     * @returns 返回下一个激活的路由 key
+     */
+    const closeCurrent = (cb?: () => void) => {
+        return close(active, cb)
     }
 
     const value = useMemo(() => {
@@ -95,6 +133,8 @@ export function Index(props: { children: ReactNode }) {
             pages,
             close,
             open,
+            closeCurrent,
+            getKeepAliveRef,
         }
     }, [active, pages])
 

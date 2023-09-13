@@ -1,1 +1,1 @@
-export const IsHashRouter = false
+export const IsHashRouter = true

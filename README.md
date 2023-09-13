@@ -1,17 +1,22 @@
-# super admin
+# Super Admin
 
-简介：管理后台解决方案，正在建设中 🔨... 
+[中文](./README.zh_CN.md) | English
+
+Introduction: Backend management solution under construction 🔨...
+
+Demo: [https://irychen.github.io/super-admin/](https://irychen.github.io/super-admin/)
 
 ## Features
-- [x] 基于React、TypeScript、Antd
-- [x] 基于KeepAlive组件实现 缓存页面机制
-- [x] 多Tab页签切换
-- [ ] 基于路由的权限控制 TODO
-- [ ] 封装自己的ProTable组件 (满足定制化，和良好性能需求) TODO
-- [ ] 动态主题切换+夜间模式 TODO
-- [ ] 登录页面 TODO
 
-## install dependencies
+- [x] Based on React, TypeScript, Antd
+- [x] Implemented page caching mechanism based on KeepAlive component
+- [x] Multi-tab page switching
+- [x] Route-based permission control
+- [ ] Encapsulate a ProTable component (to meet customization and performance requirements) TODO
+- [ ] Dynamic theme switching + night mode TODO
+- [ ] Login page TODO
+
+## Install dependencies
 
 ```bash
 pnpm install
