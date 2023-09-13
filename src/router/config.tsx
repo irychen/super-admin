@@ -4,7 +4,6 @@ import Children from "@/router/Children.tsx"
 import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
 import { HomeOutlined } from "@ant-design/icons"
-import Login from "@/pages/login";
 
 export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => JSX.Element>
 
@@ -22,6 +21,8 @@ export interface RouteConfig {
     children?: Array<this>
     checkToken?: boolean // 是否需要验证token
     redirect?: string // 重定向
+    authority?: string[] // 权限
+    authorityType?: "all" | "any" // 权限类型 all 全部通过 any 有一个通过 默认 all
 }
 
 const adminRoutes: Array<RouteConfig> = [
@@ -65,7 +66,14 @@ const adminRoutes: Array<RouteConfig> = [
             },
         ],
     },
-
+    {
+        path: "*",
+        redirect: "/404",
+        notMenu: true,
+        component: NotFound,
+        meta: { title: "404" },
+        name: "404",
+    },
 ]
 
 export const routes: Array<RouteConfig> = [

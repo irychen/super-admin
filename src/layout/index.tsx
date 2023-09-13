@@ -1,25 +1,45 @@
-import { Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
-import { Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState } from "react"
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
-import { map, isNil, reduce, last, filter, not, isEmpty } from "ramda"
-import { usePageContext } from "@/providers/PageManageProvider"
-import { SuspenseLoading } from "@/components/Loading"
-import { Button, Layout as ALayout, Menu, Tabs } from "antd"
-import type { ItemType } from "antd/lib/menu/hooks/useItems"
-import KeepAlive, { KeepAliveRef } from "@/components/KeepAlive"
+import {Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes} from "react-router-dom"
+import {Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState} from "react"
+import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons"
+import {map, isNil, reduce, last, filter, not, isEmpty} from "ramda"
+import {usePageContext} from "@/providers/PageManageProvider"
+import {SuspenseLoading} from "@/components/Loading"
+import {Button, Layout as ALayout, Menu, Tabs} from "antd"
+import type {ItemType} from "antd/lib/menu/hooks/useItems"
+import KeepAlive, {KeepAliveRef} from "@/components/KeepAlive"
 
-import { RouteConfig } from "@/router/config"
+import {RouteConfig} from "@/router/config"
+import {hasAllAuth, hasAnyAuth} from "@/utils/auth.ts";
 
 function mergePath(path: string, paterPath = "") {
     path = path.startsWith("/") ? path : "/" + path
     return paterPath + path
 }
 
+
+function checkAuthPass(route: RouteConfig) {
+    if (isNil(route.authority) || isEmpty(route.authority)) {
+        return true
+    }
+    const type = isNil(route.authorityType) ? "all" : route.authorityType
+    const authority = route.authority
+    if (type === "all") {
+        return hasAllAuth(authority)
+    } else {
+        return hasAnyAuth(authority)
+    }
+}
+
 // 渲染导航栏
 function renderMenu(data: Array<RouteConfig>, path?: string) {
     return reduce(
         (items, route) => {
+            // 不在菜单显示
             if (route.notMenu) {
+                return items
+            }
+            // 权限验证 不通过不显示
+            if (!checkAuthPass(route)) {
                 return items
             }
             const thisPath = mergePath(route.path, path)
@@ -98,30 +118,38 @@ export interface RouteObjectDto extends NonIndexRouteObject {
 }
 
 function makeRouteObject(routes: RouteConfig[], upperPath?: string): Array<RouteObjectDto> {
-    return map(route => {
+    const RouteObjectDtoList: Array<RouteObjectDto> = []
+    for (let i = 0; i < routes.length; i++) {
+        const route = routes[i]
         const fullPath = mergePath(route.path, upperPath)
         const cache = isNil(route.cache) ? false : route.cache
-        return {
+        // 检查权限 不通过不渲染
+        if (!checkAuthPass(route)) {
+            continue
+        }
+        const routeObjectDto: RouteObjectDto = {
             path: route.path,
             name: route.name,
             meta: route.meta,
             cache,
-            element: <route.component meta={route.meta} />,
+            element: <route.component meta={route.meta}/>,
             children: isNil(route.children) ? undefined : makeRouteObject(route.children, fullPath),
         }
-    }, routes)
+        RouteObjectDtoList.push(routeObjectDto)
+    }
+    return RouteObjectDtoList
 }
 
 interface Props {
     route: RouteConfig
 }
 
-function Layout({ route }: Props) {
+function Layout({route}: Props) {
     const eleRef = useRef<ReactElement<any, string | JSXElementConstructor<any>> | null>()
     const keepAliveRef = useRef<KeepAliveRef>(null)
     const location = useLocation()
     const navigate = useNavigate()
-    const { pages, active, open, close } = usePageContext()
+    const {pages, active, open, close} = usePageContext()
 
     const [routes, items] = useMemo(() => {
         if (isNil(route.children)) {
@@ -139,7 +167,7 @@ function Layout({ route }: Props) {
     }, [routes, location])
 
     useEffect(() => {
-        const { key, title, cache } = matchRouteObj ?? {}
+        const {key, title, cache} = matchRouteObj ?? {}
         if (!isNil(key)) {
             const fullPath = location.pathname + location.search
             open({
@@ -200,7 +228,7 @@ function Layout({ route }: Props) {
                                     setCollapsed(!collapsed)
                                 }}
                                 type={"link"}
-                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
                             ></Button>
                         </div>
                     </ALayout.Header>
