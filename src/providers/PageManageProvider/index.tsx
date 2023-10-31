@@ -77,22 +77,22 @@ export function PageManageProvider(props: { children: ReactNode }) {
         newPages.splice(index, 1)
         setPages(newPages)
         let nextActiveKey = null
+        // if close current page
         if (active === key) {
-            if (lastOpenKey.current) {
-                if (lastOpenKey.current === key) {
-                    const activeKey = newPages[newPages.length - 1].key
-                    setActive(activeKey)
-                    nextActiveKey = activeKey
-                } else {
-                    setActive(lastOpenKey.current)
-                    nextActiveKey = lastOpenKey.current
-                }
+            const lastKey = lastOpenKey.current
+            // if last open key is existed in pages
+            if (lastKey && newPages.some(item => item.key === lastKey)) {
+                // set last open key to active
+                nextActiveKey = lastKey
             } else {
+                // if last open key is not existed in pages or last open key is not existed
+                // set the last page to active page
                 const activeKey = newPages[newPages.length - 1].key
-                setActive(activeKey)
                 nextActiveKey = activeKey
             }
+            setActive(nextActiveKey)
         }
+        // if nextActiveKey is existed, navigate to nextActiveKey
         if (nextActiveKey) {
             navigate({
                 pathname: nextActiveKey as string,
