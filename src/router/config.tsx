@@ -3,6 +3,7 @@ import { lazy } from "react"
 import Children from "@/router/Children.tsx"
 import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
+import { HomeOutlined } from "@ant-design/icons"
 
 export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => JSX.Element>
 
@@ -31,19 +32,21 @@ const adminRoutes: Array<RouteConfig> = [
         meta: { title: "首页(带缓存)" },
         cache: true,
         component: lazy(() => import("@/pages/index/index")),
-        // icon: <HomeOutlined />,
+        icon: <HomeOutlined />,
     },
     {
         path: "no-cache",
         name: "no-cache",
         meta: { title: "无缓存页面" },
         component: lazy(() => import("@/pages/index/no-cache")),
+        icon: <HomeOutlined />,
     },
     {
         path: "nested-1",
         name: "nested-1",
         meta: { title: "嵌套路由1" },
         component: Children,
+        icon: <HomeOutlined />,
         children: [
             {
                 path: "nested-1-1",
@@ -65,6 +68,7 @@ const adminRoutes: Array<RouteConfig> = [
         path: "keep-alive",
         name: "keep-alive",
         meta: { title: "keep-alive(无Router示例)" },
+        icon: <HomeOutlined />,
         component: lazy(() => import("@/pages/index/keep-alive")),
     },
     {
@@ -91,6 +95,13 @@ export const routes: Array<RouteConfig> = [
         name: "login",
         meta: { title: "登录" },
         checkToken: false,
+    },
+    // about
+    {
+        path: "/about",
+        component: lazy(() => import("@/pages/about")),
+        name: "about",
+        meta: { title: "关于" },
     },
     {
         path: "/*",

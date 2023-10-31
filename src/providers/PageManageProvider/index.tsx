@@ -48,6 +48,7 @@ export const usePageContext = () => {
 const TabPageStorageKey = "admin_pages"
 
 export function PageManageProvider(props: { children: ReactNode }) {
+    console.log("PageManageProvider render")
     const location = useLocation()
     const [active, setActive] = useState(location.pathname + location.search)
     const keepAliveRef = useRef<KeepAliveRef>(null)
@@ -110,8 +111,12 @@ export function PageManageProvider(props: { children: ReactNode }) {
         const newPages = [...pages]
         // 如果已经存在，就不再添加
         const existed = newPages.some(item => item.key === info.key)
-        if (!existed) newPages.push(info)
-        setPages(newPages)
+        if (!existed) {
+            newPages.push(info)
+            setPages(newPages)
+        }
+        // prevent navigate to same page
+        if (info.key === active) return
         setActive(info.key)
         navigate({
             pathname: info.key,

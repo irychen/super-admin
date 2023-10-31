@@ -16,7 +16,7 @@ export function Loading() {
 }
 
 interface Props {
-    children: JSX.Element | ReactNode
+    children: ReactNode
 }
 export function SuspenseLoading({ children }: Props) {
     return <Suspense fallback={<Loading />}>{children}</Suspense>

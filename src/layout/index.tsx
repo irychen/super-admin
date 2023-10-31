@@ -1,10 +1,10 @@
-import { Link, NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
+import { NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
 import { Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState } from "react"
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
+import { MenuFoldOutlined, MenuUnfoldOutlined, PoweroffOutlined } from "@ant-design/icons"
 import { isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
 import { SuspenseLoading } from "@/components/Loading"
-import { Button, Layout as ALayout, Menu, Tabs } from "antd"
+import { Button, Layout as ALayout, Menu, Space, Tabs } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive from "keepalive-for-react"
 
@@ -155,10 +155,12 @@ interface Props {
 }
 
 function Layout({ route }: Props) {
+    console.log("Layout render")
     const eleRef = useRef<ReactElement<any, string | JSXElementConstructor<any>> | null>()
     const location = useLocation()
     const { pages, active, open, close, getKeepAliveRef } = usePageContext()
     const keepAliveRef = getKeepAliveRef()
+    const navigate = useNavigate()
     const routes = useMemo(() => {
         if (isNil(route.children)) {
             return [] as RouteObjectDto[]
@@ -195,7 +197,14 @@ function Layout({ route }: Props) {
     return (
         <ALayout className={"w-full h-screen"}>
             <ALayout>
-                <ALayout.Sider collapsed={collapsed} width={260} theme="light">
+                <ALayout.Sider
+                    style={{
+                        overflow: "auto",
+                    }}
+                    collapsed={collapsed}
+                    width={260}
+                    theme="light"
+                >
                     <div
                         className={
                             "px-[10px] w-full whitespace-nowrap overflow-hidden text-[#1C80FF] text-[20px] pb-0 py-[10px] font-semibold text-center"
@@ -237,6 +246,19 @@ function Layout({ route }: Props) {
                                 type={"link"}
                                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                             ></Button>
+                        </div>
+                        <div>
+                            <Space>
+                                <Button
+                                    danger
+                                    icon={<PoweroffOutlined />}
+                                    onClick={() => {
+                                        navigate("/login")
+                                    }}
+                                >
+                                    退出
+                                </Button>
+                            </Space>
                         </div>
                     </ALayout.Header>
                     <Tabs
