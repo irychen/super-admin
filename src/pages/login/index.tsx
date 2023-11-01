@@ -13,6 +13,7 @@ type LoginFormData = {
     remember: boolean
 }
 export default function Login() {
+    console.log("Login render")
     const navigate = useNavigate()
     const [messageApi, messageDom] = message.useMessage()
     const [formData, setFormData] = useState<LoginFormData>(() => {
@@ -46,7 +47,9 @@ export default function Login() {
         if (formData?.remember) {
             localStorage.setItem(LoginFormDataKey, JSON.stringify(formData))
         }
-        navigate("/")
+        navigate({
+            pathname: "/",
+        })
     }
 
     return (
@@ -147,7 +150,14 @@ export default function Login() {
                         记住密码
                     </Checkbox>
 
-                    <Button type={"link"} href={"/#/about"}>
+                    <Button
+                        type={"link"}
+                        onClick={() => {
+                            navigate({
+                                pathname: "/about",
+                            })
+                        }}
+                    >
                         关于我们
                     </Button>
                 </div>

@@ -48,12 +48,24 @@ function Home() {
                         ghost
                         onClick={() =>
                             open({
-                                key: "no-cache",
+                                key: "/no-cache",
                                 label: "无缓存页面",
                             })
                         }
                     >
-                        打开
+                        打开无缓存页面
+                    </Button>
+                    <Button
+                        type={"primary"}
+                        ghost
+                        onClick={() =>
+                            open({
+                                key: "/" + "?id=1",
+                                label: "有参数页面",
+                            })
+                        }
+                    >
+                        打开有参数首页
                     </Button>
                 </Space>
             </div>

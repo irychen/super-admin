@@ -1,5 +1,5 @@
 import { NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
-import { Fragment, JSXElementConstructor, ReactElement, useEffect, useMemo, useRef, useState } from "react"
+import { Fragment, JSXElementConstructor, memo, ReactElement, useEffect, useMemo, useRef, useState } from "react"
 import { MenuFoldOutlined, MenuUnfoldOutlined, PoweroffOutlined } from "@ant-design/icons"
 import { isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
@@ -10,6 +10,11 @@ import KeepAlive from "keepalive-for-react"
 
 import { RouteConfig } from "@/router/config"
 import { hasAllAuth, hasAnyAuth } from "@/utils/auth.ts"
+
+// to prevent re-rendering when user input a new url to navigate
+const MemoizedKeepAlive = memo(KeepAlive, (prev, next) => {
+    return prev.activeName === next.activeName
+})
 
 function mergePath(path: string, paterPath = "") {
     path = path.startsWith("/") ? path : "/" + path
@@ -179,18 +184,23 @@ function Layout({ route }: Props) {
     const ele = useRoutes(routes, location)
 
     const matchRouteObj = useMemo(() => {
+        console.log("matchRouteObj render")
         eleRef.current = ele
         return getMatchRouteObj(ele)
     }, [routes, location])
 
+    const routerPathKey = useMemo(() => {
+        return location.pathname + location.search
+    }, [location.pathname, location.search])
+
     useEffect(() => {
         if (matchRouteObj) {
             open({
-                key: matchRouteObj.key,
+                key: routerPathKey,
                 label: matchRouteObj.title,
             } as PageConfig)
         }
-    }, [])
+    }, [routerPathKey])
 
     const [collapsed, setCollapsed] = useState(false)
 
@@ -292,14 +302,14 @@ function Layout({ route }: Props) {
                     >
                         <Fragment>
                             <SuspenseLoading>
-                                <KeepAlive
+                                <MemoizedKeepAlive
                                     aliveRef={keepAliveRef}
                                     cache={matchRouteObj?.cache}
                                     activeName={active}
                                     maxLen={20}
                                 >
                                     {eleRef.current}
-                                </KeepAlive>
+                                </MemoizedKeepAlive>
                             </SuspenseLoading>
                         </Fragment>
                     </ALayout.Content>

@@ -5,8 +5,9 @@ import { KeepAliveRef } from "keepalive-for-react"
 import { useLocation, useNavigate } from "react-router-dom"
 
 export type PageConfig = {
-    label: string // 路由的名称
-    // 路由的 path
+    // 路由的名称
+    label: string
+    // 路由的 path 值 例如 /home /user?id=1
     key: string
 }
 
@@ -56,6 +57,16 @@ export function PageManageProvider(props: { children: ReactNode }) {
     const [messageApi, messageEle] = message.useMessage()
     const lastOpenKey = useRef<string>("")
     const navigate = useNavigate()
+
+    const navigateTo = (key: string) => {
+        const pathname = key.indexOf("?") > -1 ? key.split("?")[0] : key
+        const search = key.indexOf("?") > -1 ? key.split("?")[1] : ""
+        navigate({
+            pathname,
+            search,
+        })
+    }
+
     const getKeepAliveRef = () => {
         return keepAliveRef
     }
@@ -95,9 +106,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
         }
         // if nextActiveKey is existed, navigate to nextActiveKey
         if (nextActiveKey) {
-            navigate({
-                pathname: nextActiveKey as string,
-            })
+            navigateTo(nextActiveKey)
         }
         return nextActiveKey
     }
@@ -117,10 +126,8 @@ export function PageManageProvider(props: { children: ReactNode }) {
         }
         // prevent navigate to same page
         if (info.key === active) return
+        navigateTo(info.key)
         setActive(info.key)
-        navigate({
-            pathname: info.key,
-        })
     }
 
     /**
