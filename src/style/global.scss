@@ -37,17 +37,34 @@
 }
 
 
-.page-content {
+.keep-alive{
   width: 100%;
-  height: calc(100vh - 102px);
+  height: 100%;
   overflow: auto;
+  &::-webkit-scrollbar {
+    z-index: 0 !important;
+    width: 8px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0);
+  }
+  &::-webkit-scrollbar-corner {
+    z-index: 0;
+    background-color: rgba(255, 255, 255, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 8px;
+    height: 8px;
+    border-radius: 3px;
+    z-index: 0 !important;
+    background-color: #C6C6C6;
+  }
 }
 
-.page-content-animate {
-  animation: slidein 0.6s;
+.cache-component {
+  animation: slidein 0.3s;
   @keyframes slidein {
     0% {
-      transform: scale(0.96) translateX(-2%) translateY(-2%);
+      transform: scale(0.9) translateX(-0%) translateY(-2%);
       opacity: 0;
     }
     100% {

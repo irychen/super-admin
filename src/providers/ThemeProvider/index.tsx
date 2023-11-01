@@ -76,7 +76,7 @@ function ThemeProvider({ children }: { children: ReactNode }) {
     // antd 的主题配置
     const [themeConfig, setThemeConfig] = useState<ThemeConfig>({
         token: {
-            borderRadius: 0,
+            // borderRadius: 0,
             colorPrimary: "#1b80ff",
         },
     })
