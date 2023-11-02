@@ -61,7 +61,7 @@
 }
 
 .cache-component {
-  animation: slidein 0.3s;
+  animation: slidein 0.2s;
   @keyframes slidein {
     0% {
       transform: scale(0.9) translateX(-0%) translateY(-2%);
@@ -77,3 +77,21 @@
 .ant-menu{
   border-inline-end: none !important;
 }
+
+.ant-pro-table-search.ant-pro-table-search-query-filter{
+  margin-bottom: 0px !important;
+  border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.ant-pro-query-filter.ant-pro-query-filter{
+  padding: 18px !important;
+}
+
+.ant-pro-table-list-toolbar-container{
+  padding-block: 8px !important;
+}
+
+.ant-pro-query-filter-row{
+  row-gap: 12px !important;
+}
+

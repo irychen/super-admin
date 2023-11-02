@@ -9,6 +9,8 @@ export type PageConfig = {
     label: string
     // 路由的 path 值 例如 /home /user?id=1
     key: string
+    // 路由的参数
+    state?: any
 }
 
 export interface PageManage {
@@ -17,7 +19,7 @@ export interface PageManage {
     // 所有存在的路由 tabs
     pages: PageConfig[]
     close: (key: string, cb?: () => void) => string | null | undefined
-    open: (info: PageConfig) => void
+    open: (page: PageConfig) => void
     closeCurrent: (cb?: () => void) => string | null | undefined
     getKeepAliveRef: () => RefObject<KeepAliveRef> | undefined
 }
@@ -30,8 +32,8 @@ const PageContext = createContext<PageManage>({
         console.log(key)
         return key
     },
-    open: (info: PageConfig) => {
-        console.log(info)
+    open: (page: PageConfig) => {
+        console.log(page)
     },
     closeCurrent: (cb?: () => void) => {
         cb && cb()
@@ -58,13 +60,18 @@ export function PageManageProvider(props: { children: ReactNode }) {
     const lastOpenKey = useRef<string>("")
     const navigate = useNavigate()
 
-    const navigateTo = (key: string) => {
+    const navigateTo = (key: string, state?: any) => {
         const pathname = key.indexOf("?") > -1 ? key.split("?")[0] : key
         const search = key.indexOf("?") > -1 ? key.split("?")[1] : ""
-        navigate({
-            pathname,
-            search,
-        })
+        navigate(
+            {
+                pathname,
+                search,
+            },
+            {
+                state,
+            },
+        )
     }
 
     const getKeepAliveRef = () => {
@@ -111,23 +118,23 @@ export function PageManageProvider(props: { children: ReactNode }) {
         return nextActiveKey
     }
 
-    const open = (info: PageConfig) => {
-        if (!info || !info.key) {
-            throw new Error(`路由信息不正确 ${JSON.stringify(info)}`)
+    const open = (page: PageConfig) => {
+        if (!page || !page.key) {
+            throw new Error(`路由信息不正确 ${JSON.stringify(page)}`)
         }
         // 记住上一个打开的路由
         lastOpenKey.current = active
         const newPages = [...pages]
         // 如果已经存在，就不再添加
-        const existed = newPages.some(item => item.key === info.key)
+        const existed = newPages.some(item => item.key === page.key)
         if (!existed) {
-            newPages.push(info)
+            newPages.push(page)
             setPages(newPages)
         }
         // prevent navigate to same page
-        if (info.key === active) return
-        navigateTo(info.key)
-        setActive(info.key)
+        if (page.key === active) return
+        navigateTo(page.key, page.state)
+        setActive(page.key)
     }
 
     /**

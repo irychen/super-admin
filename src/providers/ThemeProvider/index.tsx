@@ -3,6 +3,7 @@ import { setCookie, parseCookies } from "nookies"
 import { ConfigProvider, theme } from "antd"
 import type { ThemeConfig } from "antd"
 import { isNil } from "ramda"
+import { primaryColor } from "@/config"
 
 export type IsAutoTheme = "yes" | "no" | undefined
 export type ThemeMode = "light" | "dark"
@@ -77,7 +78,8 @@ function ThemeProvider({ children }: { children: ReactNode }) {
     const [themeConfig, setThemeConfig] = useState<ThemeConfig>({
         token: {
             // borderRadius: 0,
-            colorPrimary: "#1b80ff",
+            colorPrimary: primaryColor,
+            colorLink: primaryColor,
         },
     })
 

@@ -23,6 +23,9 @@ export interface RouteConfig {
     redirect?: string // 重定向
     authority?: string[] // 权限
     authorityType?: "all" | "any" // 权限类型 all 全部通过 any 有一个通过 默认 all
+    search?: boolean // 是否可以被搜索到
+    searchParam?: string // 用于搜索跳转携带的参数 例如 type=search 会跳转到 /xxx?type=search
+    searchKeyWords?: string[] // 搜索关键字 用于搜索额外匹配 默认匹配 name 和 meta.title
 }
 
 const adminRoutes: Array<RouteConfig> = [
@@ -30,13 +33,16 @@ const adminRoutes: Array<RouteConfig> = [
         path: "",
         name: "home",
         meta: { title: "首页(带缓存)" },
+        search: true,
         cache: true,
         component: lazy(() => import("@/pages/index/index")),
         icon: <HomeOutlined />,
+        searchKeyWords: ["首页"],
     },
     {
         path: "no-cache",
         name: "no-cache",
+        search: true,
         meta: { title: "无缓存页面" },
         component: lazy(() => import("@/pages/index/no-cache")),
         icon: <HomeOutlined />,
@@ -58,6 +64,7 @@ const adminRoutes: Array<RouteConfig> = [
                         path: "nested-1-1-1",
                         name: "nested-1-1-1",
                         meta: { title: "嵌套路由1-1-1" },
+                        search: true,
                         component: lazy(() => import("@/pages/index/nested-1-1-1")),
                     },
                 ],
@@ -65,11 +72,22 @@ const adminRoutes: Array<RouteConfig> = [
         ],
     },
     {
+        path: "pro-table",
+        name: "pro-table",
+        cache: true,
+        meta: { title: "Pro Table 表格" },
+        search: true,
+        component: lazy(() => import("@/pages/index/pro-table")),
+        icon: <HomeOutlined />,
+    },
+    {
         path: "keep-alive",
         name: "keep-alive",
         meta: { title: "keep-alive(无Router示例)" },
+        search: true,
         icon: <HomeOutlined />,
         component: lazy(() => import("@/pages/index/keep-alive")),
+        searchParam: "type=search",
     },
     {
         path: "*",

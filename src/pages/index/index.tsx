@@ -16,27 +16,10 @@ function Home() {
     return (
         <Card title={"首页 (带缓存)"} ref={domRef}>
             <div className={"w-full h-full flex-col flex justify-center"}>
-                <Input
-                    style={{
-                        marginBottom: "20px",
-                    }}
-                    placeholder="输入一个值 然后切换tab组件不会被销毁"
-                ></Input>
-                <div
-                    className={"bg-amber-300 p-[20px] flex-col flex justify-center items-center w-full h-[400px]"}
-                    style={{
-                        backgroundColor: "#ffd81c",
-                    }}
-                >
-                    <div className={"font-extrabold text-[40px]"}>React KeepAlive💗</div>
-                    <p className={"text-2xl"}>
-                        {active ? <span className={"text-red-400 font-extrabold"}>{"active 💡"}</span> : "inactive"}
-                    </p>
-                </div>
-                <Space className={"mt-[100px]"}>
+                <Space className={"mb-[20px]"}>
                     <Button
+                        danger
                         type={"primary"}
-                        ghost
                         onClick={() => {
                             closeCurrent()
                         }}
@@ -45,7 +28,6 @@ function Home() {
                     </Button>
                     <Button
                         type={"primary"}
-                        ghost
                         onClick={() =>
                             open({
                                 key: "/no-cache",
@@ -68,6 +50,23 @@ function Home() {
                         打开有参数首页
                     </Button>
                 </Space>
+                <Input
+                    style={{
+                        marginBottom: "20px",
+                    }}
+                    placeholder="输入一个值 然后切换tab组件不会被销毁"
+                ></Input>
+                <div
+                    className={"bg-amber-300 p-[20px] flex-col flex justify-center items-center w-full h-[400px]"}
+                    style={{
+                        backgroundColor: "#ffd81c",
+                    }}
+                >
+                    <div className={"font-extrabold text-[40px]"}>React KeepAlive💗</div>
+                    <p className={"text-2xl"}>
+                        {active ? <span className={"text-red-400 font-extrabold"}>{"active 💡"}</span> : "inactive"}
+                    </p>
+                </div>
             </div>
         </Card>
     )
