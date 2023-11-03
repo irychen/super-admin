@@ -9,6 +9,7 @@ const columns: ProColumns<{
     address: string
     job: string
     phone: string
+    entryTime: string
 }>[] = [
     {
         title: "姓名",
@@ -16,11 +17,29 @@ const columns: ProColumns<{
         dataIndex: "name",
         key: "name",
     },
+    // 入职时间
+    {
+        title: "入职时间",
+        align: "center",
+        dataIndex: "entryTime",
+        key: "entryTime",
+        valueType: "dateRange",
+        render: (_, row) => <span>{row.entryTime}</span>,
+    },
     {
         title: "性别",
         align: "center",
         dataIndex: "sex",
         key: "sex",
+        valueType: "select",
+        valueEnum: {
+            男: {
+                text: "男",
+            },
+            女: {
+                text: "女",
+            },
+        },
     },
     {
         title: "年龄",
@@ -56,6 +75,7 @@ const dataSource = [
         address: "北京市朝阳区",
         job: "前端工程师",
         phone: "18888888888",
+        entryTime: "2021-01-01",
     },
     {
         name: "李四",
@@ -64,6 +84,7 @@ const dataSource = [
         address: "北京市海淀区",
         job: "后端工程师",
         phone: "18888888888",
+        entryTime: "2021-01-01",
     },
     {
         name: "王五",
@@ -72,6 +93,7 @@ const dataSource = [
         address: "北京市东城区",
         job: "测试工程师",
         phone: "18888888888",
+        entryTime: "2021-01-02",
     },
     {
         name: "赵六",
@@ -80,6 +102,7 @@ const dataSource = [
         address: "北京市西城区",
         job: "运维工程师",
         phone: "18888888888",
+        entryTime: "2021-01-07",
     },
 ]
 
