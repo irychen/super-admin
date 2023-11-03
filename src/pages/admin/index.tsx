@@ -1,10 +1,12 @@
 import { Button, Card, Input, Space } from "antd"
 import { useOnActive } from "keepalive-for-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePageContext } from "@/providers/PageManageProvider"
+import useKeepAliveKey from "@/hooks/useKeepAliveKey.ts"
 
 function Home() {
     const [active, setActive] = useState(false)
+    const homeKey = useKeepAliveKey()
     const domRef = useOnActive(() => {
         console.log("Home onActive")
         setActive(true)
@@ -12,6 +14,13 @@ function Home() {
             console.log("Home onInactive")
         }
     }, false)
+
+    useEffect(() => {
+        // throw new Error("this is an Err")
+        setTimeout(() => {
+            throw new Error("this is an Err")
+        }, 100)
+    }, [])
     const { closeCurrent, open } = usePageContext()
     return (
         <Card title={"首页 (带缓存)"} ref={domRef}>

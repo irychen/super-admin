@@ -1,5 +1,6 @@
 import { ProColumns, ProTable } from "@ant-design/pro-components"
 import { useLocation } from "react-router-dom"
+import { Watermark } from "antd"
 
 const columns: ProColumns<{
     name: string
@@ -87,20 +88,22 @@ function ProTablePage() {
     const key = location.pathname + location.search
     console.log("ProTablePage render", key)
     return (
-        <ProTable
-            form={{}}
-            columnsState={{
-                persistenceKey: key,
-                persistenceType: "sessionStorage",
-            }}
-            options={{
-                fullScreen: true,
-            }}
-            defaultSize={"small"}
-            rowKey={"name"}
-            columns={columns}
-            dataSource={dataSource}
-        ></ProTable>
+        <Watermark gap={[200, 200]} content={"我是水印"}>
+            <ProTable
+                form={{}}
+                columnsState={{
+                    persistenceKey: key,
+                    persistenceType: "sessionStorage",
+                }}
+                options={{
+                    fullScreen: true,
+                }}
+                defaultSize={"small"}
+                rowKey={"name"}
+                columns={columns}
+                dataSource={dataSource}
+            ></ProTable>
+        </Watermark>
     )
 }
 

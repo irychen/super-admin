@@ -16,6 +16,8 @@
     "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-components": "^2.6.34",
     "@emotion/react": "^11.11.1",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-react": "^1.0.6",
     "antd": "^5.10.3",
     "axios": "^1.6.0",
     "cross-env": "^7.0.3",
