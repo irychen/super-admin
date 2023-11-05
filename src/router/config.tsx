@@ -3,7 +3,14 @@ import { lazy } from "react"
 import Children from "@/router/Children.tsx"
 import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
-import { HomeOutlined } from "@ant-design/icons"
+import {
+    ApartmentOutlined,
+    ClearOutlined,
+    FileTextOutlined,
+    HomeOutlined,
+    PlaySquareOutlined,
+    TableOutlined,
+} from "@ant-design/icons"
 
 export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => JSX.Element>
 
@@ -45,14 +52,14 @@ const adminRoutes: Array<RouteConfig> = [
         search: true,
         meta: { title: "无缓存页面" },
         component: lazy(() => import("@/pages/admin/no-cache")),
-        icon: <HomeOutlined />,
+        icon: <ClearOutlined />,
     },
     {
         path: "nested-1",
         name: "nested-1",
         meta: { title: "嵌套路由1" },
         component: Children,
-        icon: <HomeOutlined />,
+        icon: <ApartmentOutlined />,
         children: [
             {
                 path: "nested-1-1",
@@ -78,14 +85,14 @@ const adminRoutes: Array<RouteConfig> = [
         meta: { title: "Pro Table 表格" },
         search: true,
         component: lazy(() => import("@/pages/admin/pro-table")),
-        icon: <HomeOutlined />,
+        icon: <TableOutlined />,
     },
     {
         path: "keep-alive",
         name: "keep-alive",
         meta: { title: "keep-alive(无Router示例)" },
         search: true,
-        icon: <HomeOutlined />,
+        icon: <PlaySquareOutlined />,
         component: lazy(() => import("@/pages/admin/keep-alive")),
         searchParam: "type=search",
     },
@@ -94,8 +101,16 @@ const adminRoutes: Array<RouteConfig> = [
         name: "rich-editor",
         meta: { title: "富文本编辑器" },
         search: true,
-        icon: <HomeOutlined />,
+        icon: <FileTextOutlined />,
         component: lazy(() => import("@/pages/admin/rich-editor")),
+    },
+    {
+        path: "oh-err",
+        name: "oh-err",
+        meta: { title: "页面错误" },
+        search: true,
+        icon: <ClearOutlined />,
+        component: lazy(() => import("@/pages/admin/oh-err")),
     },
     {
         path: "*",

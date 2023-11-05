@@ -5,8 +5,7 @@
     "type": "module",
     "lint-staged": {
         "src/**/*.{ts,tsx,scss}": [
-            "prettier --write",
-            "eslint --fix"
+            "prettier --write"
         ],
         "./*.{js,cjs,html,jsx,josn,md,ts,tsx}": [
             "prettier --write"
@@ -32,7 +31,7 @@
         "axios": "^1.6.0",
         "cross-env": "^7.0.3",
         "dayjs": "^1.11.10",
-        "keepalive-for-react": "^1.0.14",
+        "keepalive-for-react": "^1.0.17",
         "nookies": "^2.5.2",
         "nprogress": "^0.2.0",
         "ramda": "^0.29.1",

@@ -1,10 +1,11 @@
-import { BrowserRouter, HashRouter, Route, Routes, useRouteError } from "react-router-dom"
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom"
 import { routes } from "@/router/config"
 import { map } from "ramda"
 import { IsHashRouter } from "@/config"
 import { LazyExoticComponent, JSX } from "react"
-import { SuspenseLoading } from "@/components/Loading"
+import { SuspenseLoading } from "@/components/SuspenseLoading"
 import { PageManageProvider } from "@/providers/PageManageProvider"
+import { ErrorBoundary } from "@ant-design/pro-components"
 
 const Router = IsHashRouter ? HashRouter : BrowserRouter
 

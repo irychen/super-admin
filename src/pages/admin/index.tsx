@@ -16,11 +16,9 @@ function Home() {
     }, false)
 
     useEffect(() => {
-        // throw new Error("this is an Err")
-        setTimeout(() => {
-            throw new Error("this is an Err")
-        }, 100)
+        console.log("HomeKey ------->", homeKey)
     }, [])
+
     const { closeCurrent, open } = usePageContext()
     return (
         <Card title={"首页 (带缓存)"} ref={domRef}>

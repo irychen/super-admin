@@ -1,5 +1,4 @@
 import { Spin } from "antd"
-import { ReactNode, Suspense } from "react"
 import { css } from "@emotion/react"
 
 export function Loading() {
@@ -13,11 +12,4 @@ export function Loading() {
             <Spin size="large" />
         </div>
     )
-}
-
-interface Props {
-    children: ReactNode
-}
-export function SuspenseLoading({ children }: Props) {
-    return <Suspense fallback={<Loading />}>{children}</Suspense>
 }

@@ -1,37 +1,23 @@
 import { NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
-import {
-    Fragment,
-    JSXElementConstructor,
-    memo,
-    ReactElement,
-    ReactNode,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
+import { Fragment, JSXElementConstructor, memo, ReactElement, useEffect, useMemo, useRef, useState } from "react"
 import { MenuFoldOutlined, MenuUnfoldOutlined, PoweroffOutlined, SearchOutlined } from "@ant-design/icons"
 import { isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
-import { SuspenseLoading } from "@/components/Loading"
-import { Breadcrumb, Button, Divider, Input, Layout as ALayout, Menu, Modal, Space, Tabs } from "antd"
+import { SuspenseLoading } from "@/components/SuspenseLoading"
+import { Breadcrumb, Button, Layout as ALayout, Menu, Space, Tabs } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive from "keepalive-for-react"
-
 import { RouteConfig } from "@/router/config"
-import { hasAllAuth, hasAnyAuth } from "@/utils/auth.ts"
-import { classNames } from "@/utils"
+import { hasAllAuth, hasAnyAuth } from "@/utils/auth"
 import { primaryColor } from "@/config"
+import { ErrorBoundary } from "@ant-design/pro-components"
+import mergePath from "@/utils/mergePath"
+import SearchBox from "@/layout/components/SearchBox"
 
 // to prevent re-rendering when user input a new url to navigate
 const MemoizedKeepAlive = memo(KeepAlive, (prev, next) => {
     return prev.activeName === next.activeName
 })
-
-function mergePath(path: string, paterPath = "") {
-    path = path.startsWith("/") ? path : "/" + path
-    return paterPath + path
-}
 
 function checkAuthPass(route: RouteConfig) {
     if (isNil(route.authority) || isEmpty(route.authority)) {
@@ -44,41 +30,6 @@ function checkAuthPass(route: RouteConfig) {
     } else {
         return hasAnyAuth(authority)
     }
-}
-
-type SearchListItemType = {
-    name: string
-    title: string
-    path: string
-    icon?: ReactNode | null
-    keys: string[]
-}
-
-function getSearchMap(route: RouteConfig) {
-    const searchList: SearchListItemType[] = []
-    function getSearchList(routes: RouteConfig[], path?: string) {
-        for (let i = 0; i < routes.length; i++) {
-            const route = routes[i]
-            const thisPath = mergePath(route.path, path)
-            if (route.search && isNil(route.children)) {
-                const keys = route.searchKeyWords ?? []
-                keys.push(route.name)
-                !isNil(route.meta?.title) && keys.push(route.meta?.title as string)
-                searchList.push({
-                    name: route.name,
-                    title: route.meta?.title ?? "",
-                    path: thisPath + (route.searchParam ? "?" + route.searchParam : ""),
-                    icon: route.icon,
-                    keys: keys,
-                })
-            }
-            if (!isNil(route.children)) {
-                getSearchList(route.children, thisPath)
-            }
-        }
-    }
-    getSearchList(route.children || [])
-    return searchList
 }
 
 // 渲染导航栏
@@ -124,6 +75,7 @@ function renderMenuItems(data: Array<RouteConfig>, open: (info: PageConfig) => v
             data,
         )
     }
+
     return renderMenu(data, path)
 }
 
@@ -229,10 +181,9 @@ interface Props {
 
 function Layout({ route }: Props) {
     console.log("Layout render")
+    const [showSearch, setShowSearch] = useState(false)
     const eleRef = useRef<ReactElement<any, string | JSXElementConstructor<any>> | null>()
     const location = useLocation()
-    const [showSearch, setShowSearch] = useState(false)
-    const [searchKeyWord, setSearchKeyWord] = useState<string | undefined>(undefined)
     const { pages, active, open, close, getKeepAliveRef } = usePageContext()
     const keepAliveRef = getKeepAliveRef()
     const navigate = useNavigate()
@@ -242,25 +193,6 @@ function Layout({ route }: Props) {
         }
         return makeRouteObject(route.children)
     }, [route])
-
-    const searchMap = useMemo(() => {
-        return getSearchMap(route)
-    }, [route])
-
-    const showSearchResult = useMemo(() => {
-        if (!searchKeyWord) {
-            return []
-        }
-        return filter(item => {
-            for (let i = 0; i < item.keys.length; i++) {
-                const key = item.keys[i]
-                if (key.includes(searchKeyWord)) {
-                    return true
-                }
-            }
-            return false
-        }, searchMap)
-    }, [searchKeyWord, searchMap])
 
     const items = useMemo(() => {
         if (isNil(route.children)) {
@@ -295,65 +227,13 @@ function Layout({ route }: Props) {
 
     return (
         <Fragment>
-            <Modal
-                title="搜索"
+            <SearchBox
                 open={showSearch}
-                onCancel={() => {
+                onClose={() => {
                     setShowSearch(false)
                 }}
-                footer={null}
-                styles={{
-                    body: {
-                        padding: 0,
-                        paddingTop: 10,
-                    },
-                }}
-            >
-                <div className={"query-input px-[10px]"}>
-                    <Input
-                        allowClear
-                        size={"large"}
-                        value={searchKeyWord}
-                        onChange={e => {
-                            setSearchKeyWord(e.target.value)
-                        }}
-                        placeholder={"请输入关键字, 支持路由名称和路由标题"}
-                    />
-                </div>
-                <div className={"query-result mt-[20px] max-h-[300px] overflow-y-auto"}>
-                    {showSearchResult.map(item => {
-                        return (
-                            <Fragment key={item.path}>
-                                <div
-                                    key={item.path}
-                                    className={classNames(
-                                        "query-result-item cursor-pointer flex px-[10px] py-[8px] ",
-                                        "hover:bg-[#F0F2F5] active:bg-[#F0F2F5] rounded-md",
-                                        "transition duration-200 ease-in-out",
-                                    )}
-                                    style={{}}
-                                    onClick={() => {
-                                        open({
-                                            key: item.path,
-                                            label: item.title,
-                                        } as PageConfig)
-                                        setShowSearch(false)
-                                    }}
-                                >
-                                    {item.icon && <div className={"query-result-item-icon mr-[10px]"}>{item.icon}</div>}
-                                    <div className={"query-result-item-title"}>{item.title}</div>
-                                </div>
-                                <Divider
-                                    style={{
-                                        margin: 0,
-                                        padding: 0,
-                                    }}
-                                ></Divider>
-                            </Fragment>
-                        )
-                    })}
-                </div>
-            </Modal>
+                route={route}
+            ></SearchBox>
             <ALayout className={"w-full h-screen"}>
                 <ALayout>
                     <ALayout.Sider
@@ -408,7 +288,7 @@ function Layout({ route }: Props) {
                                     type={"link"}
                                     icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                                 ></Button>
-                                <div className={"crumbs pb-[2px] ml-[10px]"}>
+                                <div className={"crumbs flex-shrink-0 pb-[2px] ml-[10px]"}>
                                     <Breadcrumb items={matchRouteObj?.crumbs}></Breadcrumb>
                                 </div>
                             </div>
@@ -467,18 +347,17 @@ function Layout({ route }: Props) {
                                 paddingBottom: 5,
                             }}
                         >
-                            <Fragment>
-                                <SuspenseLoading>
-                                    <MemoizedKeepAlive
-                                        aliveRef={keepAliveRef}
-                                        cache={matchRouteObj?.cache}
-                                        activeName={active}
-                                        maxLen={20}
-                                    >
-                                        {eleRef.current}
-                                    </MemoizedKeepAlive>
-                                </SuspenseLoading>
-                            </Fragment>
+                            <SuspenseLoading>
+                                <MemoizedKeepAlive
+                                    errorElement={ErrorBoundary as any}
+                                    aliveRef={keepAliveRef}
+                                    cache={matchRouteObj?.cache}
+                                    activeName={active}
+                                    maxLen={20}
+                                >
+                                    {eleRef.current}
+                                </MemoizedKeepAlive>
+                            </SuspenseLoading>
                         </ALayout.Content>
                     </ALayout>
                 </ALayout>

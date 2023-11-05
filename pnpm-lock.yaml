@@ -36,8 +36,8 @@ dependencies:
     specifier: ^1.11.10
     version: 1.11.10
   keepalive-for-react:
-    specifier: ^1.0.14
-    version: 1.0.14(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^1.0.17
+    version: 1.0.17(react-dom@18.2.0)(react@18.2.0)
   nookies:
     specifier: ^2.5.2
     version: 2.5.2
@@ -2893,8 +2893,8 @@ packages:
     hasBin: true
     dev: true
 
-  /keepalive-for-react@1.0.14(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-Jq2Mc5RrGeQX7O985WdWM9HAlPU10V/+xB/JU2MD1gazx311rLsEnbO8L4jx0KYr9OgU+jSkufNVjtaY21myWw==}
+  /keepalive-for-react@1.0.17(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-5KIMZyfwpUjexmehrerLyhkijwz+AZ/qTDGBi5Zc/IBmfQ6Fl+wHAh2vneMGYXEURZFima1YQvT3Nz+MxGPw4Q==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
