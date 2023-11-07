@@ -1,6 +1,13 @@
 import SpinIcon from "@/assets/Spin-1s-200px.svg"
 import { css } from "@emotion/react"
-function SpottedLoading({ disableAnimation = false, transparent = true, fullScreen = true }) {
+
+function SpottedLoading({
+    disableAnimation = false,
+    transparent = true,
+    fullScreen = true,
+    showMessage = true,
+    message = "正在拼命加载...",
+}) {
     return (
         <div
             css={css`
@@ -14,7 +21,9 @@ function SpottedLoading({ disableAnimation = false, transparent = true, fullScre
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                flex-direction: column;
                 user-select: none;
+                color: #3985dc;
                 // 淡入
                 animation: ${disableAnimation ? "none" : "fadeIn 0.3s ease-in-out"};
                 @keyframes fadeIn {
@@ -28,7 +37,30 @@ function SpottedLoading({ disableAnimation = false, transparent = true, fullScre
             `}
             className="my-loading "
         >
-            <img src={SpinIcon} className={"w-[80px] h-[80px]"} alt="spin" />
+            <Loading />
+            {showMessage && (
+                <div
+                    css={css`
+                        margin-top: 16px;
+                    `}
+                >
+                    {message}
+                </div>
+            )}
+        </div>
+    )
+}
+
+type LoadingProps = {
+    size?: number
+    className?: string
+}
+
+export function Loading(props: LoadingProps) {
+    const { size = 80, className = "" } = props
+    return (
+        <div className={"flex justify-center items-center " + className}>
+            <img src={SpinIcon} style={{ width: size, height: size }} alt="spin" />
         </div>
     )
 }

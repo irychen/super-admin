@@ -1,6 +1,6 @@
 import type { ComponentType, LazyExoticComponent, ReactNode } from "react"
 import { lazy } from "react"
-import Children from "@/router/Children.tsx"
+import Children from "@/components/Children"
 import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
 import {
@@ -8,7 +8,9 @@ import {
     ClearOutlined,
     FileTextOutlined,
     HomeOutlined,
+    LoadingOutlined,
     PlaySquareOutlined,
+    SoundOutlined,
     TableOutlined,
 } from "@ant-design/icons"
 
@@ -109,8 +111,22 @@ const adminRoutes: Array<RouteConfig> = [
         name: "oh-err",
         meta: { title: "页面错误" },
         search: true,
-        icon: <ClearOutlined />,
+        icon: <SoundOutlined />,
         component: lazy(() => import("@/pages/admin/oh-err")),
+    },
+    {
+        path: "loading",
+        name: "loading",
+        meta: { title: "全局loading" },
+        icon: <LoadingOutlined />,
+        search: true,
+        component: lazy(() => import("@/pages/admin/loading")),
+    },
+    {
+        path: "-404",
+        meta: { title: "404" },
+        name: "404",
+        component: lazy(() => import("@/pages/admin/404")),
     },
     {
         path: "*",

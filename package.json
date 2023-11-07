@@ -43,7 +43,7 @@
     "devDependencies": {
         "@emotion/babel-preset-css-prop": "^11.11.0",
         "@types/node": "^20.8.10",
-        "@types/nprogress": "^0.2.2",
+        "@types/nprogress": "^0.2.3",
         "@types/ramda": "^0.29.7",
         "@types/react": "^18.2.36",
         "@types/react-dom": "^18.2.14",
