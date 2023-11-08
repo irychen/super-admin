@@ -205,7 +205,6 @@ function Layout({ route }: Props) {
     const ele = useRoutes(routes, location)
 
     const matchRouteObj = useMemo(() => {
-        console.log("matchRouteObj render")
         eleRef.current = ele
         return getMatchRouteObj(ele)
     }, [routes, location])
@@ -214,6 +213,7 @@ function Layout({ route }: Props) {
         return location.pathname + location.search
     }, [location.pathname, location.search])
 
+    // listen url change to open page
     useEffect(() => {
         if (matchRouteObj) {
             open({

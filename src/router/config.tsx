@@ -120,6 +120,7 @@ const adminRoutes: Array<RouteConfig> = [
         meta: { title: "全局loading" },
         icon: <LoadingOutlined />,
         search: true,
+        cache: true,
         component: lazy(() => import("@/pages/admin/loading")),
     },
     {
