@@ -264,21 +264,16 @@ function Layout({ route }: Props) {
                             mode={"inline"}
                         />
                     </ALayout.Sider>
-                    <ALayout
-                        style={{
-                            background: "#F0F2F5",
-                        }}
-                    >
-                        <ALayout.Header
+                    <ALayout className={"bg-{#F0F2F5} dark:bg-[#191919]"}>
+                        <div
                             style={{
                                 height: 50,
-                                background: "#fff",
                                 display: "flex",
                                 padding: "0 10px",
                                 alignItems: "center",
                                 justifyContent: "space-between",
                             }}
-                            className="app-header"
+                            className="app-header bg-white dark:bg-[#111]"
                         >
                             <div className={"header-left flex items-center"}>
                                 <Button
@@ -316,7 +311,7 @@ function Layout({ route }: Props) {
                                     </Button>
                                 </Space>
                             </div>
-                        </ALayout.Header>
+                        </div>
                         <Tabs
                             className="app-tabs"
                             style={{

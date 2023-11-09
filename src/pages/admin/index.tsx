@@ -3,9 +3,12 @@ import { useOnActive } from "keepalive-for-react"
 import { useEffect, useState } from "react"
 import { usePageContext } from "@/providers/PageManageProvider"
 import useKeepAliveKey from "@/hooks/useKeepAliveKey.ts"
+import { useThemeContext } from "@/providers/ThemeProvider"
 
 function Home() {
     const [active, setActive] = useState(false)
+
+    const { toggleTheme } = useThemeContext()
     const homeKey = useKeepAliveKey()
     const domRef = useOnActive(() => {
         console.log("Home onActive")
@@ -24,6 +27,14 @@ function Home() {
         <Card title={"首页 (带缓存)"} ref={domRef}>
             <div className={"w-full h-full flex-col flex justify-center"}>
                 <Space className={"mb-[20px]"}>
+                    <Button
+                        type={"primary"}
+                        onClick={() => {
+                            toggleTheme()
+                        }}
+                    >
+                        切换主题
+                    </Button>
                     <Button
                         danger
                         type={"primary"}

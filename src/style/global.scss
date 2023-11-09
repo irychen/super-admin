@@ -2,100 +2,148 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .ant-layout {
-  .ant-tabs {
-    .ant-tabs-nav {
-      margin: 0;
+    .ant-tabs {
+        .ant-tabs-nav {
+            margin: 0;
+        }
     }
-  }
 }
 
 // fade in animation
 .fade-in {
-  animation: fadein 0.5s;
-  @keyframes fadein {
-    from {
-      opacity: 0;
+    animation: fadein 0.5s;
+    @keyframes fadein {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
-    to {
-      opacity: 1;
-    }
-  }
 }
 
 .slide-in {
-  animation: slidein 0.5s;
-  @keyframes slidein {
-    from {
-      transform: translateY(-100%);
+    animation: slidein 0.5s;
+    @keyframes slidein {
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(0);
+        }
     }
-    to {
-      transform: translateY(0);
-    }
-  }
 }
 
-.keep-alive{
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+.keep-alive {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
-.cache-component{
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  &::-webkit-scrollbar {
-    z-index: 0 !important;
-    width: 8px;
-    height: 8px;
-    background-color: rgba(255, 255, 255, 0);
-  }
-  &::-webkit-scrollbar-corner {
-    z-index: 0;
-    background-color: rgba(255, 255, 255, 0);
-  }
-  &::-webkit-scrollbar-thumb {
-    width: 8px;
-    height: 8px;
-    border-radius: 3px;
-    z-index: 0 !important;
-    background-color: #C6C6C6;
-  }
+.cache-component {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        z-index: 0 !important;
+        width: 8px;
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0);
+    }
+    &::-webkit-scrollbar-corner {
+        z-index: 0;
+        background-color: rgba(255, 255, 255, 0);
+    }
+    &::-webkit-scrollbar-thumb {
+        width: 8px;
+        height: 8px;
+        border-radius: 3px;
+        z-index: 0 !important;
+        background-color: #c6c6c6;
+    }
 }
 
 .cache-component {
-  animation: slidein 0.3s;
-  @keyframes slidein {
-    0% {
-      transform: scale(0.9) translateX(-2%) translateY(-6%);
-      opacity: 0;
+    animation: slidein 0.3s;
+    @keyframes slidein {
+        0% {
+            transform: scale(0.9) translateX(-2%) translateY(-6%);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1) translateX(-0%) translateY(-0%);
+            opacity: 1;
+        }
     }
-    100% {
-      transform: scale(1) translateX(-0%) translateY(-0%);
-      opacity: 1;
+}
+
+.ant-menu {
+    border-inline-end: none !important;
+}
+
+.ant-pro-table-search.ant-pro-table-search-query-filter {
+    margin-bottom: 0px !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.ant-pro-query-filter.ant-pro-query-filter {
+    padding: 18px !important;
+}
+
+.ant-pro-table-list-toolbar-container {
+    padding-block: 8px !important;
+}
+
+.ant-pro-query-filter-row {
+    row-gap: 12px !important;
+}
+
+* {
+    transition: background-color 0s;
+}
+
+body {
+    .ant-layout {
+        .ant-menu {
+            .ant-menu-item {
+                //transition: none !important;
+            }
+        }
     }
-  }
 }
 
-.ant-menu{
-  border-inline-end: none !important;
+.ant-input {
+    transition: none !important;
+}
+.ant-tabs-tab {
+    transition: none !important;
 }
 
-.ant-pro-table-search.ant-pro-table-search-query-filter{
-  margin-bottom: 0px !important;
-  border-bottom: 1px solid #e5e5e5 !important;
+.ant-tabs-tab-btn {
+    transition: none !important;
+}
+//.ant-menu-title-content{
+//  transition: none !important;
+//}
+//.ant-menu-submenu{
+//  transition: none !important;
+//}
+//.ant-menu-submenu-title{
+//  transition: none !important;
+//}
+//.ant-menu-submenu-arrow{
+//  transition: none !important;
+//}
+//.ant-menu-item-icon{
+//  transition: none !important;
+//}
+a {
+    transition: none !important;
 }
 
-.ant-pro-query-filter.ant-pro-query-filter{
-  padding: 18px !important;
+.dark {
+    color-scheme: dark;
+    .ant-pro-table-search.ant-pro-table-search-query-filter {
+        border-bottom: 1px solid #303030 !important;
+    }
 }
-
-.ant-pro-table-list-toolbar-container{
-  padding-block: 8px !important;
-}
-
-.ant-pro-query-filter-row{
-  row-gap: 12px !important;
-}
-
