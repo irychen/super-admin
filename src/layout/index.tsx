@@ -1,10 +1,20 @@
 import { NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
-import { Fragment, JSXElementConstructor, memo, ReactElement, useEffect, useMemo, useRef, useState } from "react"
+import {
+    Fragment,
+    JSXElementConstructor,
+    memo,
+    ReactElement,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 import { MenuFoldOutlined, MenuUnfoldOutlined, PoweroffOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons"
 import { isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
 import { SuspenseLoading } from "@/components/SuspenseLoading"
-import { Avatar, Breadcrumb, Button, Input, Layout as ALayout, Menu, Space, Tabs } from "antd"
+import { Avatar, Breadcrumb, Button, Drawer, Input, Layout as ALayout, Menu, Space, Tabs } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive from "keepalive-for-react"
 import { RouteConfig } from "@/router/config"
@@ -224,6 +234,29 @@ function Layout({ route }: Props) {
     }, [routerPathKey])
 
     const [collapsed, setCollapsed] = useState(false)
+    const [showSide, setShowSide] = useState(true)
+
+    useLayoutEffect(() => {
+        function onResize() {
+            const width = window.innerWidth
+            if (width < 768) {
+                setCollapsed(true)
+            }
+            if (width > 1400) {
+                setCollapsed(false)
+            }
+            if (width < 560) {
+                setShowSide(false)
+            } else {
+                setShowSide(true)
+            }
+        }
+        onResize()
+        window.addEventListener("resize", onResize)
+        return () => {
+            window.removeEventListener("resize", onResize)
+        }
+    }, [setCollapsed, setShowSide])
 
     return (
         <Fragment>
@@ -234,36 +267,64 @@ function Layout({ route }: Props) {
                 }}
                 route={route}
             ></SearchBox>
+            {!showSide && (
+                <Drawer
+                    title={"Super Admin"}
+                    placement={"left"}
+                    width={240}
+                    styles={{
+                        body: {
+                            padding: 0,
+                        },
+                    }}
+                    onClose={() => {
+                        setCollapsed(true)
+                    }}
+                    open={!collapsed}
+                >
+                    <Menu
+                        style={{
+                            padding: "10px 10px",
+                        }}
+                        selectedKeys={matchRouteObj?.selectedKeys}
+                        defaultOpenKeys={matchRouteObj?.selectedKeys}
+                        items={items}
+                        mode={"inline"}
+                    />
+                </Drawer>
+            )}
             <ALayout className={"w-full h-screen"}>
                 <ALayout>
-                    <ALayout.Sider
-                        style={{
-                            overflow: "auto",
-                        }}
-                        collapsed={collapsed}
-                        width={240}
-                        theme="light"
-                    >
-                        <div
-                            className={
-                                "px-[10px] w-full whitespace-nowrap overflow-hidden text-[20px] pb-0 py-[10px] font-semibold text-center"
-                            }
+                    {showSide && (
+                        <ALayout.Sider
                             style={{
-                                color: primaryColor,
+                                overflow: "auto",
                             }}
+                            collapsed={collapsed}
+                            width={240}
+                            theme="light"
                         >
-                            {collapsed ? "S" : "Super Admin"}
-                        </div>
-                        <Menu
-                            style={{
-                                padding: "10px 10px",
-                            }}
-                            selectedKeys={matchRouteObj?.selectedKeys}
-                            defaultOpenKeys={matchRouteObj?.selectedKeys}
-                            items={items}
-                            mode={"inline"}
-                        />
-                    </ALayout.Sider>
+                            <div
+                                className={
+                                    "px-[10px] w-full whitespace-nowrap overflow-hidden text-[20px] pb-0 py-[10px] font-semibold text-center"
+                                }
+                                style={{
+                                    color: primaryColor,
+                                }}
+                            >
+                                {collapsed ? "S" : "Super Admin"}
+                            </div>
+                            <Menu
+                                style={{
+                                    padding: "10px 10px",
+                                }}
+                                selectedKeys={matchRouteObj?.selectedKeys}
+                                defaultOpenKeys={matchRouteObj?.selectedKeys}
+                                items={items}
+                                mode={"inline"}
+                            />
+                        </ALayout.Sider>
+                    )}
                     <ALayout className={"bg-{#F0F2F5} dark:bg-[#191919]"}>
                         <div
                             style={{
