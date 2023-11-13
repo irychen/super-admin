@@ -328,7 +328,8 @@ function Layout({ route }: Props) {
                         <Tabs
                             className="app-tabs"
                             style={{
-                                margin: 5,
+                                margin: "0 5px",
+                                marginTop: 5,
                             }}
                             destroyInactiveTabPane
                             size={"small"}

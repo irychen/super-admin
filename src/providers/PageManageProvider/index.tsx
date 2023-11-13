@@ -2,7 +2,7 @@ import { createContext, ReactNode, RefObject, useContext, useMemo, useRef, useSt
 import { message } from "antd"
 import useSessionStorageState from "@/hooks/useSessionStorageState.ts"
 import { KeepAliveRef } from "keepalive-for-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { NavigateOptions, useLocation, useNavigate } from "react-router-dom"
 
 export type PageConfig = {
     // 路由的名称
@@ -60,7 +60,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
     const lastOpenKey = useRef<string>("")
     const navigate = useNavigate()
 
-    const navigateTo = (key: string, state?: any) => {
+    const navigateTo = (key: string, options?: NavigateOptions) => {
         const pathname = key.indexOf("?") > -1 ? key.split("?")[0] : key
         const search = key.indexOf("?") > -1 ? key.split("?")[1] : ""
         navigate(
@@ -68,9 +68,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
                 pathname,
                 search,
             },
-            {
-                state,
-            },
+            options,
         )
     }
 
@@ -113,7 +111,9 @@ export function PageManageProvider(props: { children: ReactNode }) {
         }
         // if nextActiveKey is existed, navigate to nextActiveKey
         if (nextActiveKey) {
-            navigateTo(nextActiveKey)
+            navigateTo(nextActiveKey, {
+                replace: true,
+            })
         }
         return nextActiveKey
     }
@@ -133,7 +133,9 @@ export function PageManageProvider(props: { children: ReactNode }) {
         }
         // prevent navigate to same page
         if (page.key === active) return
-        navigateTo(page.key, page.state)
+        navigateTo(page.key, {
+            state: page.state,
+        })
         setActive(page.key)
     }
 
