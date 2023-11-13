@@ -38,11 +38,6 @@
 .keep-alive {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-}
-.cache-component {
-    width: 100%;
-    height: 100%;
     overflow: auto;
     &::-webkit-scrollbar {
         z-index: 0 !important;
@@ -61,6 +56,11 @@
         z-index: 0 !important;
         background-color: #c6c6c6;
     }
+}
+.cache-component {
+    min-width: 700px;
+    min-height: 400px;
+    width: 100%;
 }
 
 .cache-component {
