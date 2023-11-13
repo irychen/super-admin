@@ -5,6 +5,7 @@ import mergePath from "@/utils/mergePath.ts"
 import { Divider, Input, InputRef, Modal } from "antd"
 import { classNames } from "@/utils"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
+import { css } from "@emotion/react"
 
 export type SearchBoxListItemType = {
     name: string
@@ -173,13 +174,17 @@ function SearchBox(props: SearchBoxProps) {
                             <div
                                 key={item.path}
                                 className={classNames(
-                                    "query-result-item justify-between cursor-pointer flex px-[10px] py-[8px] ",
-                                    "hover:bg-[#F0F2F5] active:bg-[#F0F2F5] rounded-md",
-                                    "transition duration-200 ease-in-out",
+                                    "flex  items-center query-result-item justify-between cursor-pointer  px-[10px] py-[8px] ",
+                                    "rounded-md",
+                                    "transition duration-200 ease-in-out mb-2",
+                                    {
+                                        "bg-[#2571D2] active:bg-[#2571D2] shadow-md": selectedIndex === index,
+                                        "hover:bg-[#f1f1f1] active:bg-[#f1f1f1] bg-[#f9f9f9]": selectedIndex !== index,
+                                        "dark:bg-[#2571D2] dark:active:bg-[#2571D2]  text-white":
+                                            selectedIndex === index,
+                                        "dark:hover:bg-[#303133] dark:active:bg-[#303133]": selectedIndex !== index,
+                                    },
                                 )}
-                                style={{
-                                    backgroundColor: selectedIndex === index ? "#e3eefd" : "",
-                                }}
                                 onClick={() => {
                                     open({
                                         key: item.path,
@@ -188,22 +193,12 @@ function SearchBox(props: SearchBoxProps) {
                                     props.onClose && props.onClose()
                                 }}
                             >
-                                <div className={"flex"}>
+                                <div className={"flex items-center"}>
                                     {item.icon && <div className={"query-result-item-icon mr-[10px]"}>{item.icon}</div>}
                                     <div className={"query-result-item-title"}>{item.title}</div>
                                 </div>
-                                <div>
-                                    <div className={"text-[12px] text-[#ccc] query-result-item-path"}>
-                                        {item.crumbs.join(" / ")}
-                                    </div>
-                                </div>
+                                <div className={"text-[12px] inline-block"}>{item.crumbs.join(" / ")}</div>
                             </div>
-                            <Divider
-                                style={{
-                                    margin: 0,
-                                    padding: 0,
-                                }}
-                            ></Divider>
                         </Fragment>
                     )
                 })}

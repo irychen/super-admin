@@ -245,7 +245,7 @@ function Layout({ route }: Props) {
             if (width > 1400) {
                 setCollapsed(false)
             }
-            if (width < 560) {
+            if (width < 660) {
                 setShowSide(false)
             } else {
                 setShowSide(true)
@@ -344,9 +344,11 @@ function Layout({ route }: Props) {
                                     type={"link"}
                                     icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                                 ></Button>
-                                <div className={"crumbs flex-shrink-0 pb-[2px] ml-[10px]"}>
-                                    <Breadcrumb items={matchRouteObj?.crumbs}></Breadcrumb>
-                                </div>
+                                {showSide && (
+                                    <div className={"crumbs flex-shrink-0 pb-[2px] ml-[10px]"}>
+                                        <Breadcrumb items={matchRouteObj?.crumbs}></Breadcrumb>
+                                    </div>
+                                )}
                             </div>
                             <div>
                                 <Space>
@@ -359,9 +361,7 @@ function Layout({ route }: Props) {
                                         onClick={() => {
                                             setShowSearch(true)
                                         }}
-                                    >
-                                        搜索
-                                    </Button>
+                                    ></Button>
 
                                     <span className={"flex-shrink-0"}>
                                         Hi, <span className={"font-bold"}>Rychen</span>
