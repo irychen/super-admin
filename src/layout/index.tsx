@@ -1,10 +1,10 @@
 import { NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
 import { Fragment, JSXElementConstructor, memo, ReactElement, useEffect, useMemo, useRef, useState } from "react"
-import { MenuFoldOutlined, MenuUnfoldOutlined, PoweroffOutlined, SearchOutlined } from "@ant-design/icons"
+import { MenuFoldOutlined, MenuUnfoldOutlined, PoweroffOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons"
 import { isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
 import { SuspenseLoading } from "@/components/SuspenseLoading"
-import { Breadcrumb, Button, Layout as ALayout, Menu, Space, Tabs } from "antd"
+import { Avatar, Breadcrumb, Button, Input, Layout as ALayout, Menu, Space, Tabs } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive from "keepalive-for-react"
 import { RouteConfig } from "@/router/config"
@@ -273,7 +273,7 @@ function Layout({ route }: Props) {
                                 alignItems: "center",
                                 justifyContent: "space-between",
                             }}
-                            className="app-header bg-white dark:bg-[#111]"
+                            className="app-header flex-shrink-0 bg-white dark:bg-[#111]"
                         >
                             <div className={"header-left flex items-center"}>
                                 <Button
@@ -288,9 +288,11 @@ function Layout({ route }: Props) {
                                 </div>
                             </div>
                             <div>
-                                <Space size={1}>
+                                <Space>
                                     {/*search*/}
+
                                     <Button
+                                        size={"small"}
                                         type={"link"}
                                         icon={<SearchOutlined />}
                                         onClick={() => {
@@ -299,16 +301,27 @@ function Layout({ route }: Props) {
                                     >
                                         搜索
                                     </Button>
+
+                                    <span className={"flex-shrink-0"}>
+                                        Hi, <span className={"font-bold"}>Rychen</span>
+                                    </span>
+                                    <Avatar
+                                        size={"small"}
+                                        style={{
+                                            backgroundColor: primaryColor,
+                                        }}
+                                        icon={<UserOutlined />}
+                                    />
                                     <Button
-                                        type={"link"}
+                                        shape={"circle"}
                                         danger
+                                        type={"primary"}
+                                        size={"small"}
                                         icon={<PoweroffOutlined />}
                                         onClick={() => {
                                             navigate("/login")
                                         }}
-                                    >
-                                        退出
-                                    </Button>
+                                    ></Button>
                                 </Space>
                             </div>
                         </div>
