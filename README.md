@@ -6,6 +6,10 @@ Introduction: Backend management solution under construction 🔨...
 
 Demo: [https://irychen.github.io/super-admin/](https://irychen.github.io/super-admin/)
 
+![demo](./images/admin-00.jpg)
+
+![demo](./images/admin-01.jpg)
+
 ## Features
 
 -   [x] Based on React, TypeScript, Antd
