@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom"
-import { css } from "@emotion/react"
+import { css, Global } from "@emotion/react"
 import { classNames } from "@/utils"
-import { Button, Checkbox, message } from "antd"
+import { Button, Checkbox, Form, Input, message } from "antd"
 import { useState } from "react"
+import workImage from "@/assets/work.png"
 
 const inputClassNames = classNames("h-10 leading-10 px-[15px] border-2 border-[#3A83F7] rounded-[20px]")
 const LoginFormDataKey = "memo_login_form_data"
@@ -54,134 +55,84 @@ export default function Login() {
 
     return (
         <div
+            className={"login flex justify-center items-center bg-[#edf5fa] dark:bg-[#333]"}
             css={css`
                 width: 100%;
-                background-color: #fafafa;
+                height: 100vh;
                 min-height: 100vh;
+                padding: 20px;
                 min-height: calc(100vh - env(safe-area-inset-bottom));
             `}
         >
             {messageDom}
             <div
+                className={"card shadow-xl bg-[#fff] flex rounded-xl"}
                 css={css`
-                    margin: 0 auto;
-                    max-width: 340px;
-                    padding: 0 20px;
-                    padding-top: 20vh;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-
-                    input {
-                        background-color: #f8f8f8;
-
-                        &:focus {
-                            outline: none;
-                            border-color: #2067c4;
-                        }
-                    }
+                    width: 100%;
+                    max-width: 800px;
+                    min-height: 500px;
+                    overflow: hidden;
                 `}
             >
-                <h2
-                    className={"text-center font-extrabold text-2xl"}
-                    css={css`
-                        background-image: linear-gradient(to right, #39adff, #1f68ff);
-                        -webkit-background-clip: text;
-                        color: transparent;
-                        font-size: 27px;
-                    `}
-                >
-                    Super Admin
-                </h2>
-                <p
-                    className={"text-center mt-[10px]"}
-                    css={css`
-                        color: #60a9ef;
-                    `}
-                >
-                    A Super Admin for Anythings
-                </p>
-                <form className={" mt-[30px]  w-full"}>
-                    <label className={"flex flex-col mb-[20px]"}>
-                        <input
-                            type="text"
-                            value={formData?.email}
-                            onChange={e => {
-                                setFormData(formData => {
-                                    return {
-                                        ...formData,
-                                        email: e.target.value,
-                                    }
-                                })
-                            }}
-                            placeholder={"Email"}
-                            className={inputClassNames}
-                        />
-                    </label>
-                    <label className={"flex flex-col mb-[20px]"}>
-                        <input
-                            type="password"
-                            value={formData?.password}
-                            onChange={e => {
-                                setFormData(formData => {
-                                    return {
-                                        ...formData,
-                                        password: e.target.value,
-                                    }
-                                })
-                            }}
-                            placeholder={"Password"}
-                            className={inputClassNames}
-                        />
-                    </label>
-                </form>
-                <div className={"w-full flex justify-between items-center"}>
-                    <Checkbox
-                        checked={formData?.remember}
-                        onChange={e => {
-                            setFormData(formData => {
-                                return {
-                                    ...formData,
-                                    remember: e.target.checked,
-                                }
-                            })
-                        }}
-                    >
-                        记住密码
-                    </Checkbox>
-
-                    <Button
-                        type={"link"}
-                        onClick={() => {
-                            navigate({
-                                pathname: "/about",
-                            })
-                        }}
-                    >
-                        关于我们
-                    </Button>
+                <div className={"left w-[50%] p-[10px] sm:block hidden cover-img-login"}>
+                    <img style={{ objectFit: "contain" }} src={workImage} className={"w-full h-full cover"}></img>
                 </div>
-                <button
-                    onClick={handleLogin}
-                    css={css`
-                        width: 100%;
-                        height: 46px;
-                        background-image: linear-gradient(to right, #35bcf6, #4e85fc);
-                        color: #fff;
-                        border-radius: 20px;
-                        font-weight: bold;
-                        font-size: 16px;
-                        max-width: 290px;
-                        box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.2);
-                        margin-top: 20px;
-
-                        &:active {
-                            box-shadow: none;
-                        }
-                    `}
-                >
-                    立即登录
-                </button>
+                <div className={"right  w-full px-[20px] pt-[40px] sm:w-[50%] bg-[#fbfdff] dark:bg-[#222]"}>
+                    <h1 className={"text-center text-[24px] font-bold"}>Super Admin Login</h1>
+                    <p className={"text-center text-[14px] mt-[10px] text-[#999]"}>Welcome to Super Admin</p>
+                    <div className={"mt-[30px] px-[30px]"}>
+                        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout={"vertical"}>
+                            <Form.Item label={"账户"}>
+                                <Input
+                                    value={formData?.email}
+                                    onChange={e => {
+                                        setFormData({
+                                            ...formData,
+                                            email: e.target.value,
+                                        })
+                                    }}
+                                    placeholder={"请输入邮箱"}
+                                ></Input>
+                            </Form.Item>
+                            <Form.Item label={"密码"}>
+                                <Input.Password
+                                    value={formData?.password}
+                                    onChange={e => {
+                                        setFormData({
+                                            ...formData,
+                                            password: e.target.value,
+                                        })
+                                    }}
+                                    placeholder={"请输入密码"}
+                                ></Input.Password>
+                            </Form.Item>
+                            <Form.Item>
+                                <Checkbox
+                                    checked={formData?.remember}
+                                    onChange={e => {
+                                        setFormData({
+                                            ...formData,
+                                            remember: e.target.checked,
+                                        })
+                                    }}
+                                >
+                                    记住我
+                                </Checkbox>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button
+                                    onClick={() => {
+                                        handleLogin()
+                                    }}
+                                    type={"primary"}
+                                    className={"w-full"}
+                                >
+                                    登录
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </div>
             </div>
         </div>
     )
