@@ -13,12 +13,9 @@ Demo: [https://irychen.github.io/super-admin/](https://irychen.github.io/super-a
 ## Features
 
 -   [x] Based on React, TypeScript, Antd
--   [x] Implemented page caching mechanism based on KeepAlive component
--   [x] Multi-tab page switching
+-   [x] keep-alive multi-tab routing
+-   [x] Ant Design Pro Components
 -   [x] Route-based permission control
--   [ ] Encapsulate a ProTable component (to meet customization and performance requirements) TODO
--   [ ] Dynamic theme switching + night mode TODO
--   [ ] Login page TODO
 
 ## Install dependencies
 
