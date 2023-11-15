@@ -46,7 +46,7 @@ const adminRoutes: Array<RouteConfig> = [
         meta: { title: "首页(带缓存)" },
         search: true,
         cache: true,
-        component: Home,
+        component: lazy(() => import("@/pages/admin")),
         icon: <HomeOutlined />,
         searchKeyWords: ["首页"],
     },
