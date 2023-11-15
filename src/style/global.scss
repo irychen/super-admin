@@ -39,46 +39,23 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    &::-webkit-scrollbar {
-        z-index: 0 !important;
-        width: 8px;
-        height: 8px;
-        background-color: rgba(255, 255, 255, 0);
-    }
-    &::-webkit-scrollbar-corner {
-        z-index: 0;
-        background-color: rgba(255, 255, 255, 0);
-    }
-    &::-webkit-scrollbar-thumb {
-        width: 8px;
-        height: 8px;
-        border-radius: 3px;
-        z-index: 0 !important;
-        background-color: #c6c6c6;
-    }
 }
 .cache-component {
-    min-width: 700px;
-    min-height: 400px;
     width: 100%;
+    min-height: 600px;
+    min-width: 600px;
 }
 
 .cache-component {
-    animation: slidein 0.3s;
-    @keyframes slidein {
+    animation: fade-in 0.5s;
+    @keyframes fade-in {
         0% {
-            transform: scale(0.9) translateX(-6%) translateY(-6%);
             opacity: 0;
         }
         100% {
-            transform: scale(1) translateX(-0%) translateY(-0%);
             opacity: 1;
         }
     }
-}
-
-.ant-menu {
-    border-inline-end: none !important;
 }
 
 .ant-pro-table-search.ant-pro-table-search-query-filter {
@@ -99,7 +76,10 @@
 }
 
 * {
-    transition: background-color 0s;
+    transition:
+        background-color 0.1s,
+        color 0.1s,
+        border-color 0.1s !important;
 }
 
 body {
@@ -112,34 +92,6 @@ body {
     }
 }
 
-.ant-input {
-    transition: none !important;
-}
-.ant-tabs-tab {
-    transition: none !important;
-}
-
-.ant-tabs-tab-btn {
-    transition: none !important;
-}
-//.ant-menu-title-content{
-//  transition: none !important;
-//}
-//.ant-menu-submenu{
-//  transition: none !important;
-//}
-//.ant-menu-submenu-title{
-//  transition: none !important;
-//}
-//.ant-menu-submenu-arrow{
-//  transition: none !important;
-//}
-//.ant-menu-item-icon{
-//  transition: none !important;
-//}
-a {
-    transition: none !important;
-}
 .dark {
     color: #f2f2f2;
 }
@@ -149,4 +101,8 @@ a {
     .ant-pro-table-search.ant-pro-table-search-query-filter {
         border-bottom: 1px solid #303030 !important;
     }
+}
+
+.ant-tabs-nav::before {
+    border-bottom: none !important;
 }

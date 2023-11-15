@@ -411,10 +411,9 @@ function Layout({ route }: Props) {
                             items={pages}
                         />
                         <ALayout.Content
-                            className="app-content px-[5px]"
+                            className="app-content p-[5px]"
                             style={{
                                 overflow: "auto",
-                                paddingBottom: 5,
                             }}
                         >
                             <SuspenseLoading>

@@ -1,5 +1,5 @@
 import type { ComponentType, LazyExoticComponent, ReactNode } from "react"
-import { lazy } from "react"
+import { lazy, ReactElement } from "react"
 import Children from "@/components/Children"
 import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
@@ -14,7 +14,7 @@ import {
     TableOutlined,
 } from "@ant-design/icons"
 
-export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => JSX.Element>
+export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => ReactElement>
 
 export interface RouteConfig {
     path: string
@@ -37,6 +37,8 @@ export interface RouteConfig {
     searchKeyWords?: string[] // 搜索关键字 用于搜索额外匹配 默认匹配 name 和 meta.title
 }
 
+import Home from "@/pages/admin"
+
 const adminRoutes: Array<RouteConfig> = [
     {
         path: "",
@@ -44,7 +46,7 @@ const adminRoutes: Array<RouteConfig> = [
         meta: { title: "首页(带缓存)" },
         search: true,
         cache: true,
-        component: lazy(() => import("../pages/admin")),
+        component: Home,
         icon: <HomeOutlined />,
         searchKeyWords: ["首页"],
     },
@@ -145,16 +147,13 @@ export const routes: Array<RouteConfig> = [
         component: NotFound,
         name: "404",
         meta: { title: "404" },
-        checkToken: false,
     },
     {
         path: "/login",
         component: lazy(() => import("@/pages/login")),
         name: "login",
         meta: { title: "登录" },
-        checkToken: false,
     },
-    // about
     {
         path: "/about",
         component: lazy(() => import("@/pages/about")),

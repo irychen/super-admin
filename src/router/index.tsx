@@ -5,7 +5,6 @@ import { IsHashRouter } from "@/config"
 import { LazyExoticComponent, JSX } from "react"
 import { SuspenseLoading } from "@/components/SuspenseLoading"
 import { PageManageProvider } from "@/providers/PageManageProvider"
-import { ErrorBoundary } from "@ant-design/pro-components"
 
 const Router = IsHashRouter ? HashRouter : BrowserRouter
 
