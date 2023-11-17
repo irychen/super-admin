@@ -6,10 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Super Admin</title>
         <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
+            body,
             html {
                 margin: 0;
                 padding: 0;
@@ -30,19 +27,23 @@
 
             #root {
                 width: 100%;
-                height: 100vh;
-                overflow: auto;
             }
 
             .loading-spinner-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
                 width: 100%;
-                height: 100%;
+                height: 100vh;
                 display: flex;
                 justify-content: center;
                 align-items: center;
             }
 
             .loading-spinner {
+                flex-shrink: 0;
                 display: inline-block;
                 width: 50px;
                 height: 50px;
@@ -56,10 +57,17 @@
     </head>
     <body>
         <div id="root">
-            <div class="loading-spinner-container">
+            <div class="loading-spinner-container" id="loading-spinner-container">
                 <div class="loading-spinner"></div>
             </div>
         </div>
+        <script>
+            var spinnerDiv = document.getElementById("loading-spinner-container")
+            var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+            if (systemDark && spinnerDiv) {
+                spinnerDiv.style.backgroundColor = "#121212"
+            }
+        </script>
         <script type="module" src="/src/main.tsx"></script>
     </body>
 </html>

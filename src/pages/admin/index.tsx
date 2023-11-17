@@ -1,11 +1,12 @@
 import { Button, Card, Input, Space } from "antd"
-import { useOnActive } from "keepalive-for-react"
-import { useEffect, useState } from "react"
+import { useOnActive, useOnActiveByRef } from "keepalive-for-react"
+import { useEffect, useRef, useState } from "react"
 import { usePageContext } from "@/providers/PageManageProvider"
 import useKeepAliveKey from "@/hooks/useKeepAliveKey.ts"
 import { useThemeContext } from "@/providers/ThemeProvider"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { decrement, increment } from "@/features/counter/counterSlice"
+import useMemoKeepAliveScroll from "@/hooks/useMemoKeepAliveScroll"
 
 function Home() {
     const [active, setActive] = useState(false)
@@ -13,13 +14,22 @@ function Home() {
     const dispatch = useAppDispatch()
     const { toggleTheme } = useThemeContext()
     const homeKey = useKeepAliveKey()
-    const domRef = useOnActive(() => {
-        console.log("Home onActive")
-        setActive(true)
-        return () => {
-            console.log("Home onInactive")
-        }
-    }, false)
+
+    const domRef = useRef<HTMLDivElement>(null)
+
+    useMemoKeepAliveScroll(domRef)
+
+    useOnActiveByRef(
+        domRef,
+        () => {
+            console.log("Home onActive")
+            setActive(true)
+            return () => {
+                console.log("Home onInactive")
+            }
+        },
+        false,
+    )
 
     useEffect(() => {
         console.log("HomeKey ------->", homeKey)

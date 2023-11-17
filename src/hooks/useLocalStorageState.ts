@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
+import useStorageState from "@/hooks/useStorageState.ts"
 
 interface Options<T> {
     serializer?: (value: T) => string
@@ -15,20 +16,7 @@ function useLocalStorageState<T>(
         deserializer: JSON.parse,
         ...options,
     }
-
-    const [state, setState] = useState<T>(() => {
-        const valueInLocalStorage = window.localStorage.getItem(key)
-        if (valueInLocalStorage) {
-            return deserializer(valueInLocalStorage)
-        }
-        return value instanceof Function ? value() : value
-    })
-
-    useEffect(() => {
-        window.localStorage.setItem(key, serializer(state))
-    }, [key, state, serializer])
-
-    return [state, setState]
+    return useStorageState(key, value, { serializer, deserializer, storage: "local" })
 }
 
 export default useLocalStorageState
