@@ -11,6 +11,7 @@
                 margin: 0;
                 padding: 0;
             }
+
             @keyframes spin {
                 to {
                     transform: rotate(360deg);
@@ -37,16 +38,16 @@
                 bottom: 0;
                 width: 100%;
                 height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                z-index: 999;
+                background-color: #fff;
+                transition: opacity 0.3s ease-in-out;
             }
 
-            .loading-spinner {
-                flex-shrink: 0;
-                display: inline-block;
-                width: 50px;
-                height: 50px;
+            .loading-spinner-circle {
+                margin: 38vh auto 0;
+                width: 60px;
+                height: 60px;
+                box-sizing: border-box;
                 border: 4px solid rgba(195, 195, 195, 0.6);
                 border-radius: 50%;
                 border-top-color: #497df1;
@@ -56,17 +57,33 @@
         </style>
     </head>
     <body>
-        <div id="root">
-            <div class="loading-spinner-container" id="loading-spinner-container">
-                <div class="loading-spinner"></div>
-            </div>
+        <div class="loading-spinner-container" id="loading-spinner-container">
+            <div class="loading-spinner-circle"></div>
         </div>
+        <div id="root"></div>
         <script>
-            var spinnerDiv = document.getElementById("loading-spinner-container")
-            var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-            if (systemDark && spinnerDiv) {
-                spinnerDiv.style.backgroundColor = "#121212"
+            function initLoadingSpinner() {
+                var spinnerDiv = document.getElementById("loading-spinner-container")
+                var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+                if (systemDark && spinnerDiv) {
+                    spinnerDiv.style.backgroundColor = "#121212"
+                }
+                var rootDiv = document.getElementById("root")
+                // listen if rootDiv has children, remove the spinner
+                var observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        if (mutation.addedNodes.length) {
+                            spinnerDiv.style.opacity = "0"
+                            setTimeout(function () {
+                                spinnerDiv.remove()
+                                observer.disconnect()
+                            }, 1000)
+                        }
+                    })
+                })
+                observer.observe(rootDiv, { childList: true })
             }
+            initLoadingSpinner()
         </script>
         <script type="module" src="/src/main.tsx"></script>
     </body>
