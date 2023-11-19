@@ -32,6 +32,7 @@
 
             .loading-spinner-container {
                 position: fixed;
+                display: none;
                 top: 0;
                 left: 0;
                 right: 0;
@@ -65,6 +66,11 @@
             function initLoadingSpinner() {
                 var spinnerDiv = document.getElementById("loading-spinner-container")
                 var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+                var loadingSpinner = window.sessionStorage.getItem("loading-spinner")
+                if (loadingSpinner === "removed") {
+                    return
+                }
+                spinnerDiv.style.display = "flex"
                 if (systemDark && spinnerDiv) {
                     spinnerDiv.style.backgroundColor = "#121212"
                 }
@@ -77,6 +83,7 @@
                             setTimeout(function () {
                                 spinnerDiv.remove()
                                 observer.disconnect()
+                                window.sessionStorage.setItem("loading-spinner", "removed")
                             }, 1000)
                         }
                     })
