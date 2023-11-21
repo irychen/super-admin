@@ -17,17 +17,14 @@ import {
 export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => ReactElement>
 
 export interface RouteConfig {
-    path: string
-    models?: () => Array<PromiseLike<any>>
-    component: Component
-    exact?: boolean // 完全匹配 has  routes 必须false
-    name: string
-    icon?: ReactNode
+    path: string // 路由路径
+    component: Component // 路由组件
+    name: string // 唯一key
+    icon?: ReactNode // 菜单图标
     cache?: boolean // 不填默认缓存
-    noTags?: boolean
-    meta?: { title: string }
+    meta?: { title: string } // 路由元信息
     notMenu?: boolean // 不在菜单显示
-    children?: Array<this>
+    children?: Array<this> // 子路由
     checkToken?: boolean // 是否需要验证token
     redirect?: string // 重定向
     authority?: string[] // 权限

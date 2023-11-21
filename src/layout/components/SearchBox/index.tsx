@@ -182,7 +182,8 @@ function SearchBox(props: SearchBoxProps) {
                                         "hover:bg-[#f1f1f1] active:bg-[#f1f1f1] bg-[#f9f9f9]": selectedIndex !== index,
                                         "dark:bg-[#2571D2] dark:active:bg-[#2571D2]  text-white":
                                             selectedIndex === index,
-                                        "dark:hover:bg-[#303133] dark:active:bg-[#303133]": selectedIndex !== index,
+                                        "dark:hover:bg-[#303133] dark:bg-[#262626] dark:active:bg-[#303133]":
+                                            selectedIndex !== index,
                                     },
                                 )}
                                 onClick={() => {

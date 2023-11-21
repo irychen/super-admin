@@ -96,10 +96,10 @@ function getRouteContext(data: any): any {
     return isNil(data.routeContext) ? getRouteContext(data.children.props) : data.routeContext
 }
 
-function getLatchRouteByEle(ele: ReactElement): RouteMatch[] | null {
+function getMatchRouteByEle(ele: ReactElement): RouteMatch[] | null {
     if (ele) {
         const data = getRouteContext(ele.props)
-        return isNil(data?.outlet) ? (data?.matches as RouteMatch[]) : getLatchRouteByEle(data?.outlet)
+        return isNil(data?.outlet) ? (data?.matches as RouteMatch[]) : getMatchRouteByEle(data?.outlet)
     }
     return null
 }
@@ -108,7 +108,7 @@ function getMatchRouteObj(ele: ReactElement | null) {
     if (isNil(ele)) {
         return null
     }
-    const matchRoutes = getLatchRouteByEle(ele)
+    const matchRoutes = getMatchRouteByEle(ele)
     if (isNil(matchRoutes)) {
         return null
     }
@@ -213,6 +213,8 @@ function Layout({ route }: Props) {
 
     // 匹配 当前路径要渲染的路由
     const ele = useRoutes(routes, location)
+
+    console.log("ele", ele)
 
     const matchRouteObj = useMemo(() => {
         eleRef.current = ele
