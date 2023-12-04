@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react"
 import { DatePicker, Form, Radio, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import * as dayjs from "dayjs"
+import { default as dayjs } from "dayjs"
 import useLocalStorageState from "@/hooks/useLocalStorageState.ts"
 
 const tabs = [
