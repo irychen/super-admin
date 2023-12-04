@@ -4,7 +4,7 @@ import { ConfigProvider, theme } from "antd"
 import type { ThemeConfig } from "antd"
 import { isNil } from "ramda"
 import { primaryColor } from "@/config"
-
+import zhCN from "antd/locale/zh_CN"
 export type IsAutoTheme = "yes" | "no" | undefined
 export type ThemeMode = "light" | "dark"
 
@@ -140,7 +140,11 @@ function ThemeProvider({ children }: { children: ReactNode }) {
 
 function AntdThemeProvider({ children }: { children?: ReactNode }) {
     const { themeConfig } = useThemeContext()
-    return <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>
+    return (
+        <ConfigProvider locale={zhCN} theme={themeConfig}>
+            {children}
+        </ConfigProvider>
+    )
 }
 
 export function AppThemeProvider({ children }: { children?: ReactNode }) {

@@ -158,6 +158,12 @@ export const routes: Array<RouteConfig> = [
         meta: { title: "关于" },
     },
     {
+        path: "/debt",
+        component: lazy(() => import("@/pages/debt")),
+        name: "debt",
+        meta: { title: "债务" },
+    },
+    {
         path: "/*",
         component: Layout,
         name: "admin",
