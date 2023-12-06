@@ -5,6 +5,7 @@ import NotFound from "@/components/NotFound"
 import Layout from "@/layout"
 import {
     ApartmentOutlined,
+    BarChartOutlined,
     ClearOutlined,
     FileTextOutlined,
     HomeOutlined,
@@ -123,6 +124,15 @@ const adminRoutes: Array<RouteConfig> = [
         component: lazy(() => import("@/pages/admin/loading")),
     },
     {
+        path: "debt",
+        component: lazy(() => import("@/pages/debt")),
+        name: "debt",
+        icon: <BarChartOutlined />,
+        search: true,
+        cache: true,
+        meta: { title: "房贷计算器" },
+    },
+    {
         path: "-404",
         meta: { title: "404" },
         name: "404",
@@ -156,12 +166,6 @@ export const routes: Array<RouteConfig> = [
         component: lazy(() => import("@/pages/about")),
         name: "about",
         meta: { title: "关于" },
-    },
-    {
-        path: "/debt",
-        component: lazy(() => import("@/pages/debt")),
-        name: "debt",
-        meta: { title: "债务" },
     },
     {
         path: "/*",

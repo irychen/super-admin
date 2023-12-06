@@ -23,7 +23,7 @@ function Debt() {
     const [activeKey, setActiveKey] = useState("combination")
     return (
         <Fragment>
-            <div className={"flex flex-col w-full items-center p-[20px]"}>
+            <div className={"flex bg-white flex-col w-full items-center p-[20px]"}>
                 <Tab
                     onChange={key => {
                         setActiveKey(key)
@@ -320,7 +320,7 @@ function Combination() {
                                     value={repaymentMode}
                                 >
                                     <Radio value={1}>等额本息</Radio>
-                                    <Radio value={2}>等额本金</Radio>
+                                    {/*<Radio value={2}>等额本金</Radio>*/}
                                 </Radio.Group>
                             </Form.Item>
                             {/*开始还款时间*/}
@@ -348,7 +348,7 @@ function Combination() {
                         bordered
                         size={"small"}
                         pagination={{
-                            defaultPageSize: 400,
+                            defaultPageSize: 100,
                         }}
                         columns={columns}
                         dataSource={dataSource}
