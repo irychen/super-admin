@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from "react"
-import { DatePicker, Form, Radio, Table } from "antd"
+import { Card, DatePicker, Form, Radio, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { default as dayjs } from "dayjs"
 import useLocalStorageState from "@/hooks/useLocalStorageState.ts"
@@ -23,14 +23,7 @@ function Debt() {
     const [activeKey, setActiveKey] = useState("combination")
     return (
         <Fragment>
-            <div className={"flex bg-white flex-col w-full items-center p-[20px]"}>
-                <Tab
-                    onChange={key => {
-                        setActiveKey(key)
-                    }}
-                    activeKey={activeKey}
-                    tabs={tabs}
-                />
+            <Card className={"flex flex-col w-full items-center p-[20px]"}>
                 <div className={"p-[15px] w-full"}>
                     <div
                         style={{
@@ -50,7 +43,7 @@ function Debt() {
                         <Combination />
                     </div>
                 </div>
-            </div>
+            </Card>
         </Fragment>
     )
 }
@@ -416,7 +409,7 @@ function Input(props: {
                 }
             }}
             style={{
-                backgroundColor: props.readonly ? "#f5f5f5" : "transparent",
+                backgroundColor: props.readonly ? "rgba(159,157,157,0.24)" : "transparent",
             }}
             type={type || "text"}
             className={"border w-[100px] border-gray-300 rounded h-full outline-none px-[10px] py-[6px]"}
