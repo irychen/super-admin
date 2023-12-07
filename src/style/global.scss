@@ -103,3 +103,7 @@ body {
 .ant-menu {
     border-inline-end: none !important;
 }
+
+.ant-tabs-tab-btn {
+    user-select: none;
+}

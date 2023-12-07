@@ -1,5 +1,5 @@
 import { NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } from "react-router-dom"
-import {
+import React, {
     Fragment,
     JSXElementConstructor,
     memo,
@@ -23,7 +23,35 @@ import { primaryColor } from "@/config"
 import { ErrorBoundary } from "@ant-design/pro-components"
 import mergePath from "@/utils/mergePath"
 import SearchBox from "@/layout/components/SearchBox"
+import type { DragEndEvent } from "@dnd-kit/core"
+import { DndContext, PointerSensor, useSensor } from "@dnd-kit/core"
+import { arrayMove, horizontalListSortingStrategy, SortableContext, useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 
+interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
+    "data-node-key": string
+}
+
+const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+        id: props["data-node-key"],
+    })
+
+    const style: React.CSSProperties = {
+        ...props.style,
+        transform: CSS.Transform.toString(transform && { ...transform, scaleX: 1 }),
+        transition,
+        cursor: "default",
+    }
+
+    return React.cloneElement(props.children as React.ReactElement, {
+        ref: setNodeRef,
+        className,
+        style,
+        ...attributes,
+        ...listeners,
+    })
+}
 // to prevent re-rendering when user input a new url to navigate
 const MemoizedKeepAlive = memo(KeepAlive, (prev, next) => {
     return prev.activeName === next.activeName
@@ -194,7 +222,20 @@ function Layout({ route }: Props) {
     const [showSearch, setShowSearch] = useState(false)
     const eleRef = useRef<ReactElement<any, string | JSXElementConstructor<any>> | null>()
     const location = useLocation()
-    const { pages, active, open, close, getKeepAliveRef } = usePageContext()
+    const { pages, setPages, active, open, close, getKeepAliveRef } = usePageContext()
+
+    const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
+
+    const onDragEnd = ({ active, over }: DragEndEvent) => {
+        if (active.id !== over?.id) {
+            setPages(prev => {
+                const activeIndex = prev.findIndex(i => i.key === active.id)
+                const overIndex = prev.findIndex(i => i.key === over?.id)
+                return arrayMove(prev, activeIndex, overIndex)
+            })
+        }
+    }
+
     const keepAliveRef = getKeepAliveRef()
     const navigate = useNavigate()
     const routes = useMemo(() => {
@@ -213,8 +254,6 @@ function Layout({ route }: Props) {
 
     // 匹配 当前路径要渲染的路由
     const ele = useRoutes(routes, location)
-
-    console.log("ele", ele)
 
     const matchRouteObj = useMemo(() => {
         eleRef.current = ele
@@ -411,6 +450,22 @@ function Layout({ route }: Props) {
                             }}
                             activeKey={active}
                             items={pages}
+                            renderTabBar={(tabBarProps, DefaultTabBar) => (
+                                <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
+                                    <SortableContext
+                                        items={pages.map(i => i.key)}
+                                        strategy={horizontalListSortingStrategy}
+                                    >
+                                        <DefaultTabBar {...tabBarProps}>
+                                            {node => (
+                                                <DraggableTabNode {...node.props} key={node.key}>
+                                                    {node}
+                                                </DraggableTabNode>
+                                            )}
+                                        </DefaultTabBar>
+                                    </SortableContext>
+                                </DndContext>
+                            )}
                         />
                         <ALayout.Content
                             className="app-content p-[5px]"

@@ -1,4 +1,14 @@
-import { createContext, ReactNode, RefObject, useContext, useMemo, useRef, useState } from "react"
+import {
+    createContext,
+    Dispatch,
+    ReactNode,
+    RefObject,
+    SetStateAction,
+    useContext,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 import { message } from "antd"
 import useSessionStorageState from "@/hooks/useSessionStorageState.ts"
 import { KeepAliveRef } from "keepalive-for-react"
@@ -18,6 +28,7 @@ export interface PageManage {
     active: string
     // 所有存在的路由 tabs
     pages: PageConfig[]
+    setPages: Dispatch<SetStateAction<PageConfig[]>>
     close: (key: string, cb?: () => void) => string | null | undefined
     open: (page: PageConfig) => void
     closeCurrent: (cb?: () => void) => string | null | undefined
@@ -27,6 +38,9 @@ export interface PageManage {
 const PageContext = createContext<PageManage>({
     active: "",
     pages: [],
+    setPages: () => {
+        console.log("setPages")
+    },
     close: (key: string, cb?: () => void) => {
         cb && cb()
         console.log(key)
@@ -152,12 +166,13 @@ export function PageManageProvider(props: { children: ReactNode }) {
         return {
             active,
             pages,
+            setPages,
             close,
             open,
             closeCurrent,
             getKeepAliveRef,
         }
-    }, [active, pages])
+    }, [active, pages, setPages])
 
     return (
         <PageContext.Provider value={value}>
