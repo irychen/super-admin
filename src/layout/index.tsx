@@ -14,7 +14,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined, PoweroffOutlined, SearchOutlined,
 import { isNil, reduce, last, filter, not, isEmpty } from "ramda"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
 import { SuspenseLoading } from "@/components/SuspenseLoading"
-import { Avatar, Breadcrumb, Button, Drawer, Input, Layout as ALayout, Menu, Space, Tabs } from "antd"
+import { Avatar, Breadcrumb, Button, Drawer, Layout as ALayout, Menu, Space, Tabs, TabsProps } from "antd"
 import type { ItemType } from "antd/lib/menu/hooks/useItems"
 import KeepAlive from "keepalive-for-react"
 import { RouteConfig } from "@/router/config"
@@ -23,35 +23,53 @@ import { primaryColor } from "@/config"
 import { ErrorBoundary } from "@ant-design/pro-components"
 import mergePath from "@/utils/mergePath"
 import SearchBox from "@/layout/components/SearchBox"
-import type { DragEndEvent } from "@dnd-kit/core"
-import { DndContext, PointerSensor, useSensor } from "@dnd-kit/core"
-import { arrayMove, horizontalListSortingStrategy, SortableContext, useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
+
+import { DndProvider, useDrag, useDrop } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
+import useSessionStorageState from "@/hooks/useSessionStorageState"
+
+const type = "DraggableTabNode"
 
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
-    "data-node-key": string
+    index: React.Key
+    moveNode: (dragIndex: React.Key, hoverIndex: React.Key) => void
 }
 
-const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-        id: props["data-node-key"],
+const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) => {
+    const ref = useRef<HTMLDivElement>(null)
+    const [{ isOver, dropClassName }, drop] = useDrop({
+        accept: type,
+        collect: monitor => {
+            const { index: dragIndex } = monitor.getItem() || {}
+            if (dragIndex === index) {
+                return {}
+            }
+            return {
+                isOver: monitor.isOver(),
+                dropClassName: "dropping",
+            }
+        },
+        drop: (item: { index: React.Key }) => {
+            moveNode(item.index, index)
+        },
     })
 
-    const style: React.CSSProperties = {
-        ...props.style,
-        transform: CSS.Transform.toString(transform && { ...transform, scaleX: 1 }),
-        transition,
-        cursor: "default",
-    }
-
-    return React.cloneElement(props.children as React.ReactElement, {
-        ref: setNodeRef,
-        className,
-        style,
-        ...attributes,
-        ...listeners,
+    const [, drag] = useDrag({
+        type,
+        item: { index },
+        collect: monitor => ({
+            isDragging: monitor.isDragging(),
+        }),
     })
+    drop(drag(ref))
+
+    return (
+        <div ref={ref} className={isOver ? dropClassName : ""}>
+            {children}
+        </div>
+    )
 }
+
 // to prevent re-rendering when user input a new url to navigate
 const MemoizedKeepAlive = memo(KeepAlive, (prev, next) => {
     return prev.activeName === next.activeName
@@ -222,19 +240,55 @@ function Layout({ route }: Props) {
     const [showSearch, setShowSearch] = useState(false)
     const eleRef = useRef<ReactElement<any, string | JSXElementConstructor<any>> | null>()
     const location = useLocation()
+    const [order, setOrder] = useSessionStorageState<React.Key[]>("tabs_order", [])
     const { pages, setPages, active, open, close, getKeepAliveRef } = usePageContext()
 
-    const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
+    const moveTabNode = (dragKey: React.Key, hoverKey: React.Key) => {
+        const newOrder = order.slice()
 
-    const onDragEnd = ({ active, over }: DragEndEvent) => {
-        if (active.id !== over?.id) {
-            setPages(prev => {
-                const activeIndex = prev.findIndex(i => i.key === active.id)
-                const overIndex = prev.findIndex(i => i.key === over?.id)
-                return arrayMove(prev, activeIndex, overIndex)
-            })
-        }
+        pages.forEach(item => {
+            if (item.key && newOrder.indexOf(item.key) === -1) {
+                newOrder.push(item.key)
+            }
+        })
+
+        const dragIndex = newOrder.indexOf(dragKey)
+        const hoverIndex = newOrder.indexOf(hoverKey)
+
+        newOrder.splice(dragIndex, 1)
+        newOrder.splice(hoverIndex, 0, dragKey)
+
+        setOrder(newOrder)
     }
+
+    const renderTabBar: TabsProps["renderTabBar"] = (tabBarProps, DefaultTabBar) => (
+        <DefaultTabBar {...tabBarProps}>
+            {node => (
+                <DraggableTabNode key={node.key} index={node.key!} moveNode={moveTabNode}>
+                    {node}
+                </DraggableTabNode>
+            )}
+        </DefaultTabBar>
+    )
+
+    const orderItems = [...pages].sort((a, b) => {
+        const orderA = order.indexOf(a.key!)
+        const orderB = order.indexOf(b.key!)
+
+        if (orderA !== -1 && orderB !== -1) {
+            return orderA - orderB
+        }
+        if (orderA !== -1) {
+            return -1
+        }
+        if (orderB !== -1) {
+            return 1
+        }
+
+        const ia = pages.indexOf(a)
+        const ib = pages.indexOf(b)
+        return ia - ib
+    })
 
     const keepAliveRef = getKeepAliveRef()
     const navigate = useNavigate()
@@ -427,46 +481,34 @@ function Layout({ route }: Props) {
                                 </Space>
                             </div>
                         </div>
-                        <Tabs
-                            className="app-tabs"
-                            style={{
-                                margin: "0 5px",
-                                marginTop: 5,
-                            }}
-                            destroyInactiveTabPane
-                            size={"small"}
-                            hideAdd
-                            type="editable-card"
-                            onChange={key => {
-                                const page = pages.find(item => item.key === key)
-                                if (page) {
-                                    open(page)
-                                }
-                            }}
-                            onEdit={(targetKey, action) => {
-                                if (action === "remove") {
-                                    close(targetKey as string)
-                                }
-                            }}
-                            activeKey={active}
-                            items={pages}
-                            renderTabBar={(tabBarProps, DefaultTabBar) => (
-                                <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
-                                    <SortableContext
-                                        items={pages.map(i => i.key)}
-                                        strategy={horizontalListSortingStrategy}
-                                    >
-                                        <DefaultTabBar {...tabBarProps}>
-                                            {node => (
-                                                <DraggableTabNode {...node.props} key={node.key}>
-                                                    {node}
-                                                </DraggableTabNode>
-                                            )}
-                                        </DefaultTabBar>
-                                    </SortableContext>
-                                </DndContext>
-                            )}
-                        />
+                        <DndProvider backend={HTML5Backend}>
+                            <Tabs
+                                className="app-tabs"
+                                style={{
+                                    margin: "0 5px",
+                                    marginTop: 5,
+                                }}
+                                destroyInactiveTabPane
+                                size={"small"}
+                                hideAdd
+                                type="editable-card"
+                                onChange={key => {
+                                    const page = pages.find(item => item.key === key)
+                                    if (page) {
+                                        open(page)
+                                    }
+                                }}
+                                onEdit={(targetKey, action) => {
+                                    if (action === "remove") {
+                                        close(targetKey as string)
+                                    }
+                                }}
+                                activeKey={active}
+                                items={orderItems}
+                                renderTabBar={renderTabBar}
+                            />
+                        </DndProvider>
+
                         <ALayout.Content
                             className="app-content p-[5px]"
                             style={{
