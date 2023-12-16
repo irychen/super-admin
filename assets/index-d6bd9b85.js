@@ -1,0 +1,1 @@
+import{j as e}from"./index-04493f89.js";import{C as t}from"./index-33e142c9.js";function l(){return e(t,null,e("div",{className:"h-full"},e("h1",{className:"text-2xl text-blue-700 text-center"},"Nested 1-1-1")))}export{l as default};
