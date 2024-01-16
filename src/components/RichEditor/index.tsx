@@ -3,7 +3,7 @@ import "@wangeditor/editor/dist/css/style.css" // 引入 css
 import React, { useState, useEffect, Fragment, memo } from "react"
 import { Editor, Toolbar } from "@wangeditor/editor-for-react"
 import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor"
-import { classNames } from "@/utils"
+import classNames from "@/utils/classNames"
 
 type Props = {
     value?: string

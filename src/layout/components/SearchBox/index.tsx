@@ -3,7 +3,7 @@ import { RouteConfig } from "@/router/config.tsx"
 import { filter, isNil } from "ramda"
 import mergePath from "@/utils/mergePath.ts"
 import { Divider, Input, InputRef, Modal } from "antd"
-import { classNames } from "@/utils"
+import classNames from "@/utils/classNames"
 import { PageConfig, usePageContext } from "@/providers/PageManageProvider"
 import { css } from "@emotion/react"
 

@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom"
 import { css, Global } from "@emotion/react"
-import { classNames } from "@/utils"
+import classNames from "@/utils/classNames"
 import { Button, Checkbox, Form, Input, message } from "antd"
 import { useState } from "react"
 import workImage from "@/assets/work.png"
+import request from "@/utils/request.ts"
 
 const inputClassNames = classNames("h-10 leading-10 px-[15px] border-2 border-[#3A83F7] rounded-[20px]")
 const LoginFormDataKey = "memo_login_form_data"
@@ -48,9 +49,14 @@ export default function Login() {
         if (formData?.remember) {
             localStorage.setItem(LoginFormDataKey, JSON.stringify(formData))
         }
-        navigate({
-            pathname: "/",
-        })
+
+        request
+            .post("admin/login", formData, {
+                needToken: false,
+            })
+            .then(res => {
+                console.log(res)
+            })
     }
 
     return (

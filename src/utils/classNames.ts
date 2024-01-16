@@ -1,4 +1,4 @@
-export function classNames(...args: any[]): string {
+function classNames(...args: any[]): string {
     const classes = []
     for (let i = 0; i < args.length; i++) {
         const arg = args[i]
@@ -18,3 +18,5 @@ export function classNames(...args: any[]): string {
     }
     return classes.join(" ")
 }
+
+export default classNames
