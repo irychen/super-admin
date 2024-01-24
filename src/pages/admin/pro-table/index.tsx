@@ -109,7 +109,6 @@ const dataSource = [
 function ProTablePage() {
     const location = useLocation()
     const key = location.pathname + location.search
-    console.log("ProTablePage render", key)
     return (
         <Watermark gap={[200, 200]} content={"我是水印"}>
             <ProTable

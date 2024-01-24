@@ -31,10 +31,6 @@ function Home() {
         false,
     )
 
-    useEffect(() => {
-        console.log("HomeKey ------->", homeKey)
-    }, [])
-
     const { closeCurrent, open } = usePageContext()
     return (
         <Card title={"首页 (带缓存)"} ref={domRef}>

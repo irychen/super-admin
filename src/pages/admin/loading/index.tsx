@@ -10,14 +10,12 @@ function LoadingPage() {
     const scrollContainerRef = useRef<HTMLDivElement>(null)
 
     const domRef = useOnActive(() => {
-        console.log("LoadingPage onActive")
         function onScroll() {
             historyScrollTop.current = scrollContainerRef.current?.scrollTop || 0
         }
         scrollContainerRef.current?.scrollTo(0, historyScrollTop.current)
         scrollContainerRef.current?.addEventListener("scroll", onScroll)
         return () => {
-            console.log("LoadingPage onInactive")
             scrollContainerRef.current?.removeEventListener("scroll", onScroll)
         }
     }, false)

@@ -4,8 +4,6 @@ import { useEffect, useState } from "react"
 function OhErr() {
     const [showErr, setShowErr] = useState(false)
 
-    console.log("OhErr render")
-
     return (
         <Card title={"page err 渲染错误捕获"}>
             <Button

@@ -236,7 +236,6 @@ interface Props {
 }
 
 function Layout({ route }: Props) {
-    console.log("Layout render")
     const [showSearch, setShowSearch] = useState(false)
     const eleRef = useRef<ReactElement<any, string | JSXElementConstructor<any>> | null>()
     const location = useLocation()
@@ -515,17 +514,16 @@ function Layout({ route }: Props) {
                                 overflow: "auto",
                             }}
                         >
-                            <SuspenseLoading>
-                                <MemoizedKeepAlive
-                                    errorElement={ErrorBoundary as any}
-                                    aliveRef={keepAliveRef}
-                                    cache={matchRouteObj?.cache}
-                                    activeName={active}
-                                    maxLen={20}
-                                >
-                                    {eleRef.current}
-                                </MemoizedKeepAlive>
-                            </SuspenseLoading>
+                            <MemoizedKeepAlive
+                                suspenseElement={SuspenseLoading}
+                                errorElement={ErrorBoundary as any}
+                                aliveRef={keepAliveRef}
+                                cache={matchRouteObj?.cache}
+                                activeName={active}
+                                maxLen={20}
+                            >
+                                {eleRef.current}
+                            </MemoizedKeepAlive>
                         </ALayout.Content>
                     </ALayout>
                 </ALayout>

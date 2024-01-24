@@ -65,7 +65,6 @@ export const usePageContext = () => {
 const TabPageStorageKey = "admin_pages"
 
 export function PageManageProvider(props: { children: ReactNode }) {
-    console.log("PageManageProvider render")
     const location = useLocation()
     const [active, setActive] = useState(location.pathname + location.search)
     const keepAliveRef = useRef<KeepAliveRef>(null)
