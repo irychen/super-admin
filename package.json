@@ -39,6 +39,7 @@
         "dayjs": "^1.11.10",
         "fortea": "^1.0.2",
         "i18next-browser-languagedetector": "^7.2.0",
+        "keepalive-for-react": "^1.0.22",
         "nookies": "^2.5.2",
         "nprogress": "^0.2.0",
         "qs": "^6.11.2",
