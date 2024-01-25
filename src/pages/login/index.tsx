@@ -3,7 +3,7 @@ import { css, Global } from "@emotion/react"
 import classNames from "@/utils/classNames"
 import { Button, Checkbox, Form, Input, message } from "antd"
 import { useState } from "react"
-import workImage from "@/assets/work.png"
+import LogoImage from "@/assets/super_admin_logo.png"
 import request from "@/utils/request.ts"
 
 const inputClassNames = classNames("h-10 leading-10 px-[15px] border-2 border-[#3A83F7] rounded-[20px]")
@@ -61,7 +61,7 @@ export default function Login() {
 
     return (
         <div
-            className={"login flex justify-center items-center bg-[#edf5fa] dark:bg-[#333]"}
+            className={"login flex justify-center items-center bg-[#D2E7F6] dark:bg-[#333]"}
             css={css`
                 width: 100%;
                 height: 100vh;
@@ -72,16 +72,17 @@ export default function Login() {
         >
             {messageDom}
             <div
-                className={"card shadow-xl bg-[#fff] flex rounded-xl"}
+                className={"card shadow-xl flex rounded-xl"}
                 css={css`
                     width: 100%;
                     max-width: 800px;
                     min-height: 500px;
                     overflow: hidden;
+                    background-color: #49b6f1;
                 `}
             >
-                <div className={"left w-[50%] p-[10px] sm:block hidden cover-img-login"}>
-                    <img style={{ objectFit: "contain" }} src={workImage} className={"w-full h-full cover"}></img>
+                <div className={"left w-[50%] p-[70px] sm:block hidden cover-img-login"}>
+                    <img style={{ objectFit: "contain" }} src={LogoImage} className={"w-full h-full cover"}></img>
                 </div>
                 <div className={"right  w-full px-[20px] pt-[40px] sm:w-[50%] bg-[#fbfdff] dark:bg-[#222]"}>
                     <h1 className={"text-center text-[24px] font-bold"}>Super Admin Login</h1>

@@ -2,13 +2,14 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import { getToken, setToken } from "@/utils/token.ts"
 import { message as antdMessage } from "antd"
 import mergePath from "@/utils/mergePath.ts"
+import { toNumber } from "fortea"
 
 const { VITE_API_MAX_TIMEOUT, VITE_API_BASE_URL } = import.meta.env
 
 const baseUrl = VITE_API_BASE_URL || "http://localhost:3000"
 
 export const baseRequestInstance = axios.create({
-    timeout: VITE_API_MAX_TIMEOUT ? Number(VITE_API_MAX_TIMEOUT) : 10000,
+    timeout: VITE_API_MAX_TIMEOUT ? toNumber(VITE_API_MAX_TIMEOUT) : 10000,
 })
 
 interface RequestConfig extends AxiosRequestConfig {

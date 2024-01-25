@@ -23,6 +23,7 @@ import { primaryColor } from "@/config"
 import { ErrorBoundary } from "@ant-design/pro-components"
 import mergePath from "@/utils/mergePath"
 import SearchBox from "@/layout/components/SearchBox"
+import LogoImage from "@/assets/super_admin_logo.png"
 
 import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
@@ -398,9 +399,28 @@ function Layout({ route }: Props) {
                             width={240}
                             theme="light"
                         >
+                            <div className={"flex w-full mt-[10px] justify-center"}>
+                                <div
+                                    style={{
+                                        width: 50,
+                                        height: 50,
+                                        borderRadius: "50%",
+                                    }}
+                                >
+                                    <img
+                                        src={LogoImage}
+                                        alt={"logo"}
+                                        style={{
+                                            objectFit: "contain",
+                                        }}
+                                        className={"w-full h-full"}
+                                    ></img>
+                                </div>
+                            </div>
+
                             <div
                                 className={
-                                    "px-[10px] w-full whitespace-nowrap overflow-hidden text-[20px] pb-0 py-[10px] font-semibold text-center"
+                                    "px-[10px] w-full whitespace-nowrap overflow-hidden pt-[5px] text-[20px] pb-0 py-[10px] font-semibold text-center"
                                 }
                                 style={{
                                     color: primaryColor,

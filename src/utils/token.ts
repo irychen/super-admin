@@ -1,3 +1,5 @@
+import { isTokenExpired } from "fortea"
+
 const { VITE_TOKEN_KEY } = import.meta.env
 
 const tokenKey = VITE_TOKEN_KEY || "SUPER_ADMIN_TOKEN_KEY"
@@ -6,7 +8,15 @@ const tokenKey = VITE_TOKEN_KEY || "SUPER_ADMIN_TOKEN_KEY"
  * 获取 token
  */
 export function getToken(): string | null {
-    return localStorage.getItem(tokenKey)
+    const token = localStorage.getItem(tokenKey)
+    if (!token) return null
+    const isExpired = isTokenExpired(token)
+    if (isExpired) {
+        clearToken()
+        return null
+    } else {
+        return token
+    }
 }
 
 /**
