@@ -110,22 +110,20 @@ function ProTablePage() {
     const location = useLocation()
     const key = location.pathname + location.search
     return (
-        <Watermark gap={[200, 200]} content={"我是水印"}>
-            <ProTable
-                form={{}}
-                columnsState={{
-                    persistenceKey: key,
-                    persistenceType: "sessionStorage",
-                }}
-                options={{
-                    fullScreen: true,
-                }}
-                defaultSize={"small"}
-                rowKey={"name"}
-                columns={columns}
-                dataSource={dataSource}
-            ></ProTable>
-        </Watermark>
+        <ProTable
+            form={{}}
+            columnsState={{
+                persistenceKey: key,
+                persistenceType: "sessionStorage",
+            }}
+            options={{
+                fullScreen: true,
+            }}
+            defaultSize={"small"}
+            rowKey={"name"}
+            columns={columns}
+            dataSource={dataSource}
+        ></ProTable>
     )
 }
 

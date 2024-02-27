@@ -2,7 +2,6 @@ import { NonIndexRouteObject, RouteMatch, useLocation, useNavigate, useRoutes } 
 import React, {
     Fragment,
     JSXElementConstructor,
-    memo,
     ReactElement,
     useEffect,
     useLayoutEffect,
@@ -70,11 +69,6 @@ const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) 
         </div>
     )
 }
-
-// to prevent re-rendering when user input a new url to navigate
-const MemoizedKeepAlive = memo(KeepAlive, (prev, next) => {
-    return prev.activeName === next.activeName
-})
 
 function checkAuthPass(route: RouteConfig) {
     if (isNil(route.authority) || isEmpty(route.authority)) {
@@ -534,7 +528,7 @@ function Layout({ route }: Props) {
                                 overflow: "auto",
                             }}
                         >
-                            <MemoizedKeepAlive
+                            <KeepAlive
                                 suspenseElement={SuspenseLoading}
                                 errorElement={ErrorBoundary as any}
                                 aliveRef={keepAliveRef}
@@ -543,7 +537,7 @@ function Layout({ route }: Props) {
                                 maxLen={20}
                             >
                                 {eleRef.current}
-                            </MemoizedKeepAlive>
+                            </KeepAlive>
                         </ALayout.Content>
                     </ALayout>
                 </ALayout>
