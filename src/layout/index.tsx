@@ -393,24 +393,24 @@ function Layout({ route }: Props) {
                             width={240}
                             theme="light"
                         >
-                            <div className={"flex w-full mt-[10px] justify-center"}>
-                                <div
-                                    style={{
-                                        width: 50,
-                                        height: 50,
-                                        borderRadius: "50%",
-                                    }}
-                                >
-                                    <img
-                                        src={LogoImage}
-                                        alt={"logo"}
-                                        style={{
-                                            objectFit: "contain",
-                                        }}
-                                        className={"w-full h-full"}
-                                    ></img>
-                                </div>
-                            </div>
+                            {/*<div className={"flex w-full mt-[10px] justify-center"}>*/}
+                            {/*    <div*/}
+                            {/*        style={{*/}
+                            {/*            width: 50,*/}
+                            {/*            height: 50,*/}
+                            {/*            borderRadius: "50%",*/}
+                            {/*        }}*/}
+                            {/*    >*/}
+                            {/*        <img*/}
+                            {/*            src={LogoImage}*/}
+                            {/*            alt={"logo"}*/}
+                            {/*            style={{*/}
+                            {/*                objectFit: "contain",*/}
+                            {/*            }}*/}
+                            {/*            className={"w-full h-full"}*/}
+                            {/*        ></img>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
                             <div
                                 className={
