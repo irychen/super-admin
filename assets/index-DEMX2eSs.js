@@ -1,0 +1,1 @@
+import{R as t,e as n,f as c,g as a}from"./index-ChJlMMZ_.js";function r(e=t){const o=e===t?n:c(e);return function(){const{store:s}=o();return s}}const p=r();function i(e=t){const o=e===t?p:r(e);return function(){return o().dispatch}}const x=i(),R=x,S=a;export{R as a,S as u};

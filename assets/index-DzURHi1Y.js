@@ -1,0 +1,1 @@
+import{j as e}from"./index-ChJlMMZ_.js";import{C as t}from"./index-CI44PMha.js";function l(){return e(t,null,e("div",{className:"h-full"},e("h1",{className:"text-2xl text-blue-700 text-center"},"Nested 1-1-1")))}export{l as default};
