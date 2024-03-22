@@ -530,7 +530,7 @@ function Layout({ route }: Props) {
                         >
                             <KeepAlive
                                 suspenseElement={SuspenseLoading}
-                                errorElement={ErrorBoundary as any}
+                                errorElement={ErrorBoundary}
                                 aliveRef={keepAliveRef}
                                 cache={matchRouteObj?.cache}
                                 activeName={active}
