@@ -38,25 +38,27 @@ export default function Login() {
     })
 
     const handleLogin = async () => {
-        if (!formData?.email) {
-            messageApi.error("请输入邮箱")
-            return
-        }
-        if (!formData?.password) {
-            messageApi.error("请输入密码")
-            return
-        }
+        // if (!formData?.email) {
+        //     messageApi.error("请输入邮箱")
+        //     return
+        // }
+        // if (!formData?.password) {
+        //     messageApi.error("请输入密码")
+        //     return
+        // }
         if (formData?.remember) {
             localStorage.setItem(LoginFormDataKey, JSON.stringify(formData))
         }
 
-        request
-            .post("admin/login", formData, {
-                needToken: false,
-            })
-            .then(res => {
-                console.log(res)
-            })
+        navigate("/")
+
+        // request
+        //     .post("admin/login", formData, {
+        //         needToken: false,
+        //     })
+        //     .then(res => {
+        //         console.log(res)
+        //     })
     }
 
     return (
