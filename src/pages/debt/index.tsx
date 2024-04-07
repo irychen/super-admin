@@ -321,7 +321,7 @@ function Combination() {
                                 <DatePicker
                                     value={startRepaymentTime ? dayjs(startRepaymentTime, "YYYY-MM-DD") : undefined}
                                     onChange={(_, dateString) => {
-                                        setStartRepaymentTime(dateString)
+                                        setStartRepaymentTime(dateString as string)
                                     }}
                                 />
                             </Form.Item>
