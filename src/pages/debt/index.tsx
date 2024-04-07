@@ -23,7 +23,7 @@ function Debt() {
     const [activeKey, setActiveKey] = useState("combination")
     return (
         <Fragment>
-            <Card className={"flex w-min-[800px] flex-col w-full items-center p-[20px]"}>
+            <div className={"flex w-min-[800px] flex-col w-full items-center p-[10px] bg-white min-w-[1000px]"}>
                 <div className={"p-[15px] w-full"}>
                     <div
                         style={{
@@ -43,7 +43,7 @@ function Debt() {
                         <Combination />
                     </div>
                 </div>
-            </Card>
+            </div>
         </Fragment>
     )
 }
