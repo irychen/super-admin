@@ -23,7 +23,7 @@ function Debt() {
     const [activeKey, setActiveKey] = useState("combination")
     return (
         <Fragment>
-            <Card className={"flex flex-col w-full items-center p-[20px]"}>
+            <Card className={"flex w-min-[800px] flex-col w-full items-center p-[20px]"}>
                 <div className={"p-[15px] w-full"}>
                     <div
                         style={{
