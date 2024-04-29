@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { createJSONStorage, persist } from "zustand/middleware"
 import { storageKeys } from "@/constants"
 
 interface AppAuth {
@@ -32,6 +32,8 @@ export const useAppAuth = create(
         {
             name: storageKeys.auth,
             version: 1,
+            // set with sessionStorage
+            // storage: createJSONStorage(() => sessionStorage),
         },
     ),
 )

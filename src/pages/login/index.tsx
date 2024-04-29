@@ -11,7 +11,7 @@ function Login() {
     return (
         <div
             className={
-                "bg-[#FAFBFE] w-full mobile:block mobile:p-0 mobile:bg-transparent dark:bg-[#222] h-screen py-[20px] flex justify-center items-center"
+                "bg-[#FAFBFE] w-full mobile:block mobile:p-0 mobile:bg-transparent dark:bg-[#161C24] h-screen py-[20px] flex justify-center items-center"
             }
         >
             <div
@@ -32,7 +32,7 @@ function Login() {
                 </div>
                 <div
                     className={
-                        "w-1/2 pad:w-full dark:bg-[#282828] p-[15px] mobile:pt-[40px] flex flex-col mobile:justify-start items-center justify-center"
+                        "w-1/2 pad:w-full dark:bg-[#1F252D] p-[15px] mobile:pt-[40px] flex flex-col mobile:justify-start items-center justify-center"
                     }
                 >
                     <div className={"logo flex justify-center h-[50px] my-[10px]"}>
@@ -78,7 +78,14 @@ function Login() {
                                 onClick={() => {
                                     update(config => {
                                         config.token = "token"
-                                        config.permissions = ["admin", "welcome", "table"]
+                                        config.permissions = [
+                                            "admin",
+                                            "welcome",
+                                            "table",
+                                            "nested",
+                                            "error",
+                                            "pro_table",
+                                        ]
                                     })
                                     navigate("/")
                                 }}

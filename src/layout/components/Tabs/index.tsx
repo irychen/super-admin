@@ -2,7 +2,8 @@ import { css } from "@emotion/react"
 import { IconX } from "@tabler/icons-react"
 import { useEffect, useRef } from "react"
 import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from "react-beautiful-dnd"
-import { usePageContext } from "@/components/AdminPagesProvider"
+import { base64 } from "fortea"
+import usePageContext from "@/components/AdminPagesProvider/usePageContext"
 
 interface TabsProps {
     active: string
@@ -12,25 +13,23 @@ interface TabsProps {
 }
 
 function Tabs(props: TabsProps) {
-    const scrollContainer = useRef<HTMLDivElement>(null)
     const { active, onChange, items, onClose } = props
     const { setPages, pages } = usePageContext()
 
+    const scrollContainer = useRef<HTMLDivElement>(null)
     // listen wheel event to scroll
     useEffect(() => {
-        const handleWheel = (e: WheelEvent) => {
-            e.preventDefault()
-            if (scrollContainer.current) {
-                scrollContainer.current.scrollLeft += +e.deltaY
+        const container = scrollContainer.current
+        if (container) {
+            const handleWheel = (e: WheelEvent) => {
+                e.preventDefault()
+                const x_abs = Math.abs(e.deltaX)
+                const y_abs = Math.abs(e.deltaY)
+                container.scrollLeft += x_abs > y_abs ? e.deltaX : e.deltaY
             }
-        }
-        if (scrollContainer.current) {
-            scrollContainer.current.addEventListener("wheel", handleWheel)
-        }
-
-        return () => {
-            if (scrollContainer.current) {
-                scrollContainer.current.removeEventListener("wheel", handleWheel)
+            container.addEventListener("wheel", handleWheel)
+            return () => {
+                container.removeEventListener("wheel", handleWheel)
             }
         }
     }, [])
@@ -51,6 +50,20 @@ function Tabs(props: TabsProps) {
         setPages(newTabs)
     }
 
+    // scroll to active tab
+    useEffect(() => {
+        const container = scrollContainer.current
+        if (container) {
+            const activeTab = container.querySelector(`#tab-${base64.encode(active)?.replace(/=/g, "")}`)
+            if (activeTab) {
+                activeTab.scrollIntoView({
+                    block: "nearest",
+                    behavior: "smooth",
+                })
+            }
+        }
+    }, [active])
+
     return (
         <div className={"tabs w-full"}>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -58,13 +71,17 @@ function Tabs(props: TabsProps) {
                     {provided => (
                         <div className={"w-full"} {...provided.droppableProps} ref={provided.innerRef}>
                             <div
+                                className={"px-[7px]"}
                                 css={css`
                                     width: 100%;
                                     display: flex;
                                     overflow-x: auto;
                                     scrollbar-width: none;
                                     border-bottom: 1px solid #eee;
-
+                                    ::-webkit-scrollbar {
+                                        display: none;
+                                    }
+                                    -webkit-overflow-scrolling: touch;
                                     .dark & {
                                         border-color: #303030;
                                     }
@@ -79,18 +96,21 @@ function Tabs(props: TabsProps) {
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
                                                 className={"mx-[2px]"}
+                                                id={`tab-${base64.encode(item.key)?.replace(/=/g, "")}`}
+                                                data-key={item.key}
                                                 css={css`
-                                                    padding: 0 10px;
+                                                    padding: 0 16px;
                                                     display: flex;
                                                     min-width: 70px;
                                                     align-items: center;
                                                     flex-shrink: 0;
-                                                    height: 36px;
+                                                    height: 32px;
                                                     color: ${active === item.key ? "#1890ff" : "#555"};
                                                     border: 1px solid #eee;
                                                     border-bottom: 0 none;
-                                                    background-color: ${active === item.key ? "#fff" : "#f5f5f5"};
+                                                    background-color: ${active === item.key ? "#fff" : "#f8f8f8"};
                                                     border-radius: 8px 8px 0 0;
+                                                    transition: background-color 0.2s;
 
                                                     .dark & {
                                                         border-color: #303030;
@@ -98,6 +118,16 @@ function Tabs(props: TabsProps) {
                                                         background-color: ${active === item.key
                                                             ? "#212B36"
                                                             : "#161C24"};
+                                                    }
+
+                                                    &:hover {
+                                                        color: #1890ff;
+                                                        background-color: #fff;
+
+                                                        .dark & {
+                                                            color: #1890ff;
+                                                            background-color: #212b36;
+                                                        }
                                                     }
                                                 `}
                                                 onClick={() => {

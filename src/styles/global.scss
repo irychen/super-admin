@@ -2,15 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    box-sizing: border-box;
+}
 
 @mixin light {
     --color-primary: #2872e0;
     --color-dark-bg: #212b36;
+
+    --scrollbar-thumb: #eceef1;
+    --scrollbar-thumb-hover: #e8e8e8;
+    --scrollbar-thumb-hover-border: #eceef1;
 }
 
 @mixin dark {
     --color-primary: #2ba1ea;
     --color-dark-bg: #212b36;
+
+    --scrollbar-thumb: #27394b;
+    --scrollbar-thumb-hover: rgb(79, 79, 79);
+    --scrollbar-thumb-hover-border: rgb(140, 140, 140);
 }
 
 :root {
@@ -19,8 +30,11 @@
 
 .dark {
     @include dark;
-}
 
+    .ant-pro-table-search.ant-pro-table-search-query-filter {
+        border-bottom: 1px solid #303030 !important;
+    }
+}
 
 .colorful-bg {
     background: linear-gradient(217deg, rgba(238, 44, 44, 0.8), rgba(255, 0, 0, 0) 70.71%),
@@ -28,14 +42,73 @@
         linear-gradient(336deg, rgba(56, 165, 255, 0.8), rgba(0, 0, 255, 0) 70.71%);
 }
 
+.ant-pro-table-search.ant-pro-table-search-query-filter {
+    margin-bottom: 0px !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.ant-pro-query-filter.ant-pro-query-filter {
+    padding: 18px !important;
+}
+
+.ant-pro-table-list-toolbar-container {
+    padding-block: 8px !important;
+}
+
+.ant-pro-query-filter-row {
+    row-gap: 12px !important;
+}
+
 .keep-alive-render {
     width: 100%;
     height: 100%;
     overflow: hidden;
+}
 
-    .cache-component {
-        width: 100%;
-        height: 100%;
-        overflow: auto;
+.cache-component {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.cache-component {
+    animation: fade-in 0.3s ease-in-out;
+}
+
+.scrollbar {
+    &::-webkit-scrollbar {
+        z-index: 0 !important;
+        width: 8px;
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0);
+    }
+
+    &::-webkit-scrollbar-corner {
+        z-index: 0;
+        background-color: rgba(255, 255, 255, 0);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        width: 8px;
+        height: 8px;
+        border-radius: 3px;
+        z-index: 1 !important;
+        background-color: var(--scrollbar-thumb);
+        border: 1px solid rgba(0, 0, 0, 0);
+
+        &:hover {
+            background-color: var(--scrollbar-thumb-hover);
+            border: 1px solid var(--scrollbar-thumb-hover-border);
+        }
     }
 }

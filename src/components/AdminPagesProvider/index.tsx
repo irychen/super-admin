@@ -1,17 +1,12 @@
-import {
-    createContext,
-    MutableRefObject,
-    ReactNode,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-} from "react"
-import useSessionStorageState from "@/hooks/useSessionStorageState.ts"
+import { createContext, MutableRefObject, ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { NavigateOptions, useLocation, useNavigate } from "react-router-dom"
 import { useKeepaliveRef } from "keepalive-for-react"
 import { message } from "antd"
 import { findAdminRouteByUrl } from "@/router/config.tsx"
+import { useTranslation } from "react-i18next"
+import { useAppAuth } from "@/store/auth.ts"
+import { routeAuthCheck } from "@/utils/auth.ts"
+import { useSessionStorageState } from "ahooks"
 
 export type PageItem = {
     // 路由的名称
@@ -20,7 +15,6 @@ export type PageItem = {
     url: string
     // 路由的参数
     state?: any
-    reload?: boolean
 }
 
 export interface PageManage {
@@ -33,7 +27,7 @@ export interface PageManage {
     setPages: (pages: PageItem[]) => void
 }
 
-const PageContext = createContext<PageManage>({
+export const PageContext = createContext<PageManage>({
     active: "",
     pages: [],
     close: () => {},
@@ -45,19 +39,20 @@ const PageContext = createContext<PageManage>({
     setPages: () => {},
 })
 
-export const usePageContext = () => {
-    return useContext(PageContext)
-}
-
 const TabPageStorageKey = "super_admin_pages"
 
 export function PageManageProvider(props: { children: ReactNode }) {
+    const { t } = useTranslation()
+
     const [messageApi, messageEle] = message.useMessage()
     const keepAliveRef = useKeepaliveRef()
     const lastOpenUrl = useRef<string>("")
     const location = useLocation()
     const { children } = props
-    const [pages, setPages] = useSessionStorageState<PageItem[]>(TabPageStorageKey, [])
+    const [pages = [], setPages] = useSessionStorageState<PageItem[]>(TabPageStorageKey, {
+        defaultValue: [],
+    })
+
     const navigate = useNavigate()
 
     const active = useMemo(() => {
@@ -86,7 +81,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
         }
         // 记住上一个打开的路由
         lastOpenUrl.current = active
-        setPages(prev => {
+        setPages((prev = []) => {
             const existed = prev.some(item => item.url === page.url)
             if (!existed) {
                 return [...prev, page]
@@ -131,11 +126,14 @@ export function PageManageProvider(props: { children: ReactNode }) {
         }
     }
 
+    const { permissions } = useAppAuth()
+
     useEffect(() => {
         const route = findAdminRouteByUrl(active)
         if (route) {
+            const authOk = routeAuthCheck(route, permissions)
             open({
-                label: route.meta?.title as string,
+                label: authOk ? t(`layout.menu.${route.meta?.title}`) : "403",
                 url: active,
             })
         }

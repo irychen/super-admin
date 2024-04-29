@@ -5,6 +5,8 @@ import { create } from "zustand"
 type ThemeMode = "light" | "dark" | "system"
 
 interface AppConfig {
+    collapsed: boolean
+    showBreadcrumb: boolean
     themeMode: ThemeMode
     isDark: boolean
     locale: string
@@ -13,8 +15,10 @@ interface AppConfig {
 }
 
 export const DEFAULT_CONFIG = {
+    collapsed: false,
+    showBreadcrumb: true,
     themeMode: "system" as ThemeMode,
-    locale: "zh-CN",
+    locale: "zh",
     isDark: false,
 }
 

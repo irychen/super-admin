@@ -38,7 +38,13 @@ function ThemeSwitch(props: ThemeSwitchProps) {
     const Icon = IconMap[themeMode || "light"]
 
     return (
-        <button className={classNames(className, "flex items-center")} onClick={toggleTheme}>
+        <button
+            className={classNames(
+                className,
+                "flex items-center justify-center p-[8px] hover:bg-[#f5f5f5] rounded-[50%] dark:hover:bg-[#212B36]",
+            )}
+            onClick={toggleTheme}
+        >
             <Icon size={size} stroke={stroke} />
         </button>
     )

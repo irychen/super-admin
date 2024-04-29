@@ -1,0 +1,41 @@
+{
+  "welcome": "Welcome to my app!",
+  "greeting": "Hello, {{name}}!",
+  "layout": {
+    "menu": {
+      "welcome": "Welcome",
+      "v_table": "Virtual Table",
+      "pro_table": "Pro Table",
+      "my_table": "My Table",
+      "error": "Error Page",
+      "error_404": "404",
+      "error_403": "403",
+      "error_500": "500",
+      "nested": "Nested Routes",
+      "nested_menu1": "Menu 1",
+      "nested_menu2": "Menu 2",
+      "nested_menu2_1": "Menu 2-1",
+      "nested_menu2_2": "Menu 2-2",
+      "no_search_result": "No Search Result",
+      "to_navigate": "to navigate",
+      "to_open": "to open",
+      "items_number": "Total {{total}} items",
+      "super_table": "Super Table",
+      "virtual_table": "Virtual Table"
+    },
+    "drawer": {
+      "close": "Close",
+      "open": "Open",
+      "settings": "Settings",
+      "notifications": "Notifications",
+      "theme_mode": "Theme Mode",
+      "others": "Others",
+      "breadcrumb": "Breadcrumb",
+      "theme_dark": "Dark",
+      "theme_light": "Light",
+      "theme_system": "System",
+      "screen_full": "Full Screen",
+      "screen_exit": "Exit Full Screen"
+    }
+  }
+}

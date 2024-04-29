@@ -14,7 +14,7 @@ function ErrorBoundary() {
                 <h2 className={"text-2xl text-[#222] dark:text-[#aaa] font-bold mb-[10px]"}>
                     Oops! Something went wrong.
                 </h2>
-                <p className={"max-w-[400px] px-[15px] text-[#777777] text-center leading-[1.8]"}>
+                <p className={"max-w-[460px] px-[15px] text-[#777777] text-center leading-[1.8]"}>
                     Please try refreshing the page or send feedback to us.
                 </p>
                 <div className={"mt-[30px]"}>

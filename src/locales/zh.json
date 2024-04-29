@@ -1,0 +1,41 @@
+{
+  "welcome": "欢迎使用我的应用！",
+  "greeting": "你好，{{name}}！",
+  "layout": {
+    "menu": {
+      "welcome": "欢迎页",
+      "v_table": "虚拟表格",
+      "pro_table": "Pro 表格",
+      "my_table": "我的表格",
+      "error": "错误页",
+      "error_404": "404",
+      "error_403": "403",
+      "error_500": "500",
+      "nested": "嵌套路由",
+      "nested_menu1": "菜单1",
+      "nested_menu2": "菜单2",
+      "nested_menu2_1": "菜单2-1",
+      "nested_menu2_2": "菜单2-2",
+      "no_search_result": "无搜索结果",
+      "to_navigate": "选择",
+      "to_open": "打开",
+      "items_number": "共 {{total}} 条",
+      "super_table": "超级表格",
+      "virtual_table": "虚拟表格"
+    },
+    "drawer": {
+      "close": "关闭",
+      "open": "打开",
+      "settings": "设置",
+      "notifications": "通知",
+      "theme_mode": "主题模式",
+      "others": "其他",
+      "breadcrumb": "面包屑",
+      "theme_dark": "暗色主题",
+      "theme_light": "亮色主题",
+      "theme_system": "跟随系统",
+      "screen_full": "全屏",
+      "screen_exit": "退出全屏"
+    }
+  }
+}
