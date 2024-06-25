@@ -1,0 +1,1 @@
+import{j as e,D as t}from"./index-Cm7qsubP.js";function s(){return e("div",{className:"p-[20px]"},e("h1",{className:"text-center text-2xl"},"Menu1"),e(t,null),e("p",{className:"text-center text-[#999] dark:text-[#ccc]"},"This is a demo page for nested routing."))}export{s as default};

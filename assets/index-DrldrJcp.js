@@ -1,0 +1,1 @@
+import{j as l,bf as a}from"./index-Cm7qsubP.js";import{C as u}from"./index-D6K3Lx3A.js";function t(){return l("div",{className:"w-full h-full p-[8px]"},l(u,{bordered:!1,className:"w-full h-full",title:"Menus2 Layout"},l(a,null)))}export{t as default};
