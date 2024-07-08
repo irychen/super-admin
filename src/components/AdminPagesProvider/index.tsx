@@ -10,7 +10,7 @@ import { useSessionStorageState } from "ahooks"
 
 export type PageItem = {
     // 路由的名称
-    label: string
+    label?: string
     // 路由的 path 值 例如 /home /user?id=1
     url: string
     // 路由的参数
@@ -25,6 +25,7 @@ export interface PageManage {
     closeCurrent: () => void
     getKeepAliveRef: () => MutableRefObject<any> | undefined
     setPages: (pages: PageItem[]) => void
+    closeOther: () => void
 }
 
 export const PageContext = createContext<PageManage>({
@@ -36,6 +37,7 @@ export const PageContext = createContext<PageManage>({
     getKeepAliveRef: () => {
         return undefined
     },
+    closeOther: () => {},
     setPages: () => {},
 })
 
@@ -79,6 +81,10 @@ export function PageManageProvider(props: { children: ReactNode }) {
         if (!page || !page.url) {
             throw new Error(`route info error ${JSON.stringify(page)}`)
         }
+        const route = findAdminRouteByUrl(page.url)
+        if (route && !page.label) {
+            page.label = t(`layout.menu.${route.meta?.title}`)
+        }
         // 记住上一个打开的路由
         lastOpenUrl.current = active
         setPages((prev = []) => {
@@ -94,6 +100,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
     }
 
     const close = (url: string) => {
+        console.log("close", url)
         const index = pages.findIndex(item => item.url === url)
         if (index === -1) return
         const newPages = [...pages]
@@ -143,6 +150,17 @@ export function PageManageProvider(props: { children: ReactNode }) {
         return close(active)
     }
 
+    const closeOther = () => {
+        const newPages = [...pages]?.filter(item => item.url === active)
+        const removeUrls = [...pages]?.filter(item => item.url !== active).map(item => item.url)
+        // remove cache
+        removeUrls.forEach(url => {
+            keepAliveRef.current?.removeCache(url)
+        })
+        lastOpenUrl.current = active
+        setPages(newPages)
+    }
+
     return (
         <PageContext.Provider
             value={{
@@ -153,6 +171,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
                 open,
                 closeCurrent,
                 getKeepAliveRef,
+                closeOther,
             }}
         >
             {messageEle}

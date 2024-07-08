@@ -137,7 +137,7 @@ function Layout() {
                                 items={pages.map(page => {
                                     return {
                                         key: page.url,
-                                        label: page.label,
+                                        label: page.label as string,
                                     }
                                 })}
                             ></Tabs>

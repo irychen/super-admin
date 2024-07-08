@@ -4,7 +4,7 @@ import {
     SuperTableDatePickerColumnType,
     SuperTableDateRangePickerColumnType,
 } from "@/components/SuperTable"
-import { RefObject, useEffect, useImperativeHandle, useRef, useState } from "react"
+import { ReactNode, RefObject, useEffect, useImperativeHandle, useRef, useState } from "react"
 import { isFunc, isNil, isString } from "fortea"
 
 import { RangePickerProps } from "antd/es/date-picker"
@@ -15,6 +15,7 @@ export interface SearchFormRef {
     getFieldsValue: () => Record<string, any> | undefined
     resetFields: () => void
     getParams: () => Record<string, any> | undefined
+    setFieldsValue: (values: Record<string, any>) => void
 }
 
 interface SearchFormProps<RecordType> {
@@ -26,6 +27,9 @@ interface SearchFormProps<RecordType> {
     onSearch?: () => void
     searchFormRef?: RefObject<SearchFormRef>
     size?: SizeType
+    hideCollapseButton?: boolean
+    hideResetButton?: boolean
+    extraNodes?: ReactNode[]
 }
 
 const SearchForm = <T extends object>({ ...props }: SearchFormProps<T>) => {
@@ -37,7 +41,10 @@ const SearchForm = <T extends object>({ ...props }: SearchFormProps<T>) => {
         defaultExpandSearchForm = false,
         formGridGap = 16,
         formGridWidth = 280,
+        hideResetButton = false,
+        hideCollapseButton = false,
         size,
+        extraNodes = [],
     } = props
     const initialValues: any = {}
     const formContainerRef = useRef<HTMLDivElement>(null)
@@ -48,7 +55,7 @@ const SearchForm = <T extends object>({ ...props }: SearchFormProps<T>) => {
         }
     })
 
-    const [expandSearchForm, setExpandSearchForm] = useState(defaultExpandSearchForm)
+    const [expandSearchForm, setExpandSearchForm] = useState(hideCollapseButton ? true : defaultExpandSearchForm)
     const [maxCol, setMaxCol] = useState(1)
     const [form] = Form.useForm()
 
@@ -116,6 +123,9 @@ const SearchForm = <T extends object>({ ...props }: SearchFormProps<T>) => {
                 })
                 return params
             },
+            setFieldsValue: (values: Record<string, any>) => {
+                form.setFieldsValue(values)
+            },
         }),
         [],
     )
@@ -138,64 +148,74 @@ const SearchForm = <T extends object>({ ...props }: SearchFormProps<T>) => {
                         gridTemplateColumns: `repeat(${maxCol}, 1fr)`,
                     }}
                 >
-                    {[...items].slice(0, expandSearchForm ? items.length : maxCol - 1).map((column, index) => (
-                        <Form.Item
-                            style={{
-                                marginInlineEnd: 0,
-                            }}
-                            name={isString(column.dataIndex) ? column.dataIndex : ""}
-                            label={isString(column.title) ? column.title : isFunc(column.title) ? "" : column.title}
-                            {...(column?.formItemProps || {})}
-                            key={column.key || index}
-                        >
-                            {(isNil(column.valueType) || column.valueType === "input") && (
-                                <Input
-                                    placeholder={isString(column.title) ? `请输入${column.title}` : "请输入"}
-                                    {...((column.fieldProps as InputProps) || {})}
-                                />
-                            )}
-                            {column.valueType === "select" && (
-                                <Select
-                                    getPopupContainer={triggerNode => triggerNode.parentNode}
-                                    options={column.selectOptions || []}
-                                    placeholder={isString(column.title) ? `请选择${column.title}` : "请选择"}
-                                    {...((column.fieldProps as SelectProps<T>) || {})}
-                                />
-                            )}
-                            {column.valueType === "date" && (
-                                <DatePicker
-                                    style={{ width: "100%" }}
-                                    getPopupContainer={() => formContainerRef.current as HTMLElement}
-                                    {...((column.fieldProps as DatePickerProps) || {})}
-                                />
-                            )}
-                            {column.valueType === "dateRange" && (
-                                <DatePicker.RangePicker
-                                    getPopupContainer={() => formContainerRef.current as HTMLElement}
-                                    {...((column.fieldProps as RangePickerProps) || {})}
-                                />
-                            )}
-                        </Form.Item>
-                    ))}
-                    <EmptyFormItemsSpace maxCol={maxCol} total={items.length} expandSearchForm={expandSearchForm} />
+                    {[...items]
+                        .slice(0, expandSearchForm ? items.length : maxCol - extraNodes.length - 1)
+                        .map((column, index) => (
+                            <Form.Item
+                                style={{
+                                    marginInlineEnd: 0,
+                                }}
+                                name={isString(column.dataIndex) ? column.dataIndex : ""}
+                                label={isString(column.title) ? column.title : isFunc(column.title) ? "" : column.title}
+                                {...(column?.formItemProps || {})}
+                                key={column.key || index}
+                            >
+                                {(isNil(column.valueType) || column.valueType === "input") && (
+                                    <Input
+                                        placeholder={isString(column.title) ? `请输入${column.title}` : "请输入"}
+                                        {...((column.fieldProps as InputProps) || {})}
+                                    />
+                                )}
+                                {column.valueType === "select" && (
+                                    <Select
+                                        getPopupContainer={triggerNode => triggerNode.parentNode}
+                                        options={column.selectOptions || []}
+                                        placeholder={isString(column.title) ? `请选择${column.title}` : "请选择"}
+                                        {...((column.fieldProps as SelectProps<T>) || {})}
+                                    />
+                                )}
+                                {column.valueType === "date" && (
+                                    <DatePicker
+                                        style={{ width: "100%" }}
+                                        getPopupContainer={() => formContainerRef.current as HTMLElement}
+                                        {...((column.fieldProps as DatePickerProps) || {})}
+                                    />
+                                )}
+                                {column.valueType === "dateRange" && (
+                                    <DatePicker.RangePicker
+                                        getPopupContainer={() => formContainerRef.current as HTMLElement}
+                                        {...((column.fieldProps as RangePickerProps) || {})}
+                                    />
+                                )}
+                            </Form.Item>
+                        ))}
+                    {extraNodes}
+                    <EmptyFormItemsSpace
+                        maxCol={maxCol}
+                        total={items.length + extraNodes.length}
+                        expandSearchForm={expandSearchForm}
+                    />
+
                     <div className={"search-form-control flex justify-end"}>
                         <Space>
                             <Button type={"primary"} onClick={onSearch} icon={<SearchOutlined />}>
                                 查询
                             </Button>
-                            <Button
-                                type={"primary"}
-                                ghost
-                                icon={<ReloadOutlined />}
-                                onClick={() => {
-                                    form.resetFields()
-                                    onReset && onReset()
-                                }}
-                            >
-                                重置
-                            </Button>
 
-                            {maxCol < items.length + 1 && (
+                            {hideResetButton !== true && (
+                                <Button
+                                    type={"primary"}
+                                    ghost
+                                    icon={<ReloadOutlined />}
+                                    onClick={() => {
+                                        form.resetFields()
+                                        onReset && onReset()
+                                    }}
+                                >
+                                    重置
+                                </Button>
+                            )}
+                            {maxCol < items.length + extraNodes.length + 1 && !hideCollapseButton && (
                                 <Button
                                     type={"primary"}
                                     onClick={() => {

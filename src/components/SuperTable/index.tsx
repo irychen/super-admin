@@ -1,9 +1,11 @@
 import { Card, DatePickerProps, Form, FormItemProps, InputProps, SelectProps, Table, TableProps } from "antd"
 import SearchForm, { SearchFormRef } from "./components/SearchForm"
 import {
+    Dispatch,
     Key,
     ReactNode,
     RefObject,
+    SetStateAction,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -12,10 +14,12 @@ import {
     useState,
 } from "react"
 import { ColumnTitle, ColumnType } from "antd/es/table/interface"
-import { isNil } from "fortea"
+import { cloneDeep, isNil } from "fortea"
 import { RangePickerProps } from "antd/es/date-picker"
 import { Dayjs } from "dayjs"
 import { SizeType } from "antd/es/config-provider/SizeContext"
+import { v4 } from "uuid"
+import { useVirtualScrollMemo } from "@/hooks"
 
 export type ScrollConfig = {
     index?: number
@@ -30,7 +34,9 @@ function useActionRef() {
 interface Action extends SearchFormRef {
     scrollTo?: (config: ScrollConfig) => void
     nativeElement?: HTMLDivElement
-    reload?: (reset?: boolean) => void
+    reload: (reset?: boolean) => void
+    setDataSource: Dispatch<SetStateAction<any[]>>
+    getDataSource: () => any[]
 }
 
 export interface SuperTableProps<RecordType> extends TableProps<RecordType> {
@@ -65,6 +71,11 @@ export interface SuperTableProps<RecordType> extends TableProps<RecordType> {
     params?: any
 
     /**
+     * 是否在挂载时请求数据
+     */
+    mountedFetch?: boolean
+
+    /**
      * transform pagination params before passing to request
      * 转换分页参数
      * @default { pageNoKey: 'pageNo', pageSizeKey: 'pageSize' }
@@ -80,6 +91,10 @@ export interface SuperTableProps<RecordType> extends TableProps<RecordType> {
     tableHeadRight?: ReactNode
 
     onExport?: (params: any, selectedRows: RecordType[]) => Promise<void>
+
+    hideCollapseButton?: boolean
+    hideResetButton?: boolean
+    extraSearchBoxNodes?: ReactNode[]
 }
 
 interface SuperTableColumnTypeBase<RecordType, ValueType extends SuperTableValueType = "input">
@@ -189,6 +204,10 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
         size,
         tableHeadLeft,
         tableHeadRight,
+        mountedFetch = true,
+        hideResetButton = false,
+        hideCollapseButton = false,
+        extraSearchBoxNodes,
         ...restProps
     } = props
     const superTableRef = useRef<HTMLDivElement>(null)
@@ -199,6 +218,7 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
     const [total, setTotal] = useState<number>(0)
     const searchFormRef = useRef<SearchFormRef>(null)
     const [loading, setLoading] = useState<boolean>(false)
+    const onScroll = useVirtualScrollMemo(props.virtual ? tblRef.current?.scrollTo : undefined)
 
     const getData = useCallback(() => {
         const { pageNoKey, pageSizeKey } = paginationTransform || { pageNoKey: "pageNo", pageSizeKey: "pageSize" }
@@ -212,7 +232,14 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
             setLoading(true)
             request(allParams)
                 .then(res => {
-                    setDataSource(res.data)
+                    let data = res.data || []
+                    data = data?.map(item => {
+                        return {
+                            ...item,
+                            uid: v4(),
+                        }
+                    })
+                    setDataSource(data)
                     setTotal(res.total || res.data.length || 0)
                 })
                 .finally(() => {
@@ -231,14 +258,24 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
             getFieldsValue: () => searchFormRef.current?.getFieldsValue(),
             reload: (reset = false) => {
                 if (reset) {
-                    searchFormRef.current?.resetFields()
-                    setPageNo(1)
+                    setPageNo(prev => {
+                        if (prev === 1) {
+                            getData()
+                        }
+                        return 1
+                    })
+                    tblRef.current?.scrollTo({ top: 0 })
                 } else {
                     getData()
                 }
             },
+            setFieldsValue: (values: any) => {
+                searchFormRef.current?.setFieldsValue(values)
+            },
+            setDataSource: setDataSource,
+            getDataSource: () => cloneDeep(dataSource),
         }),
-        [],
+        [dataSource],
     )
 
     const showTableColumns = useMemo(() => {
@@ -279,8 +316,10 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
     }, [columns])
 
     useEffect(() => {
-        getData()
-    }, [params, pageNo, pageSize])
+        if (mountedFetch) {
+            getData()
+        }
+    }, [params, pageNo, pageSize, mountedFetch])
 
     return (
         <div className="super-table" ref={superTableRef}>
@@ -295,6 +334,9 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
                     style={{ marginBottom: 12 }}
                 >
                     <SearchForm<T>
+                        extraNodes={extraSearchBoxNodes}
+                        hideCollapseButton={hideCollapseButton}
+                        hideResetButton={hideResetButton}
                         size={size}
                         searchFormRef={searchFormRef}
                         formGridGap={searchFormGridGap}
@@ -325,22 +367,30 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
                     </div>
                 ) : null}
                 <Table<T>
+                    onScroll={props.virtual ? onScroll : undefined}
+                    rootClassName={"super-table-inner"}
                     showSorterTooltip={false}
+                    rowClassName={"super-table-row"}
                     loading={loading}
                     size={"small"}
                     ref={tblRef}
-                    pagination={{
-                        pageSize: pageSize,
-                        total: total,
-                        current: pageNo,
-                        onChange: (page, pageSize) => {
-                            setPageNo(page)
-                            setPageSize(pageSize)
-                        },
-                    }}
+                    pagination={
+                        props.virtual === true
+                            ? false
+                            : {
+                                  pageSize: pageSize,
+                                  total: total,
+                                  current: pageNo,
+                                  onChange: (page, pageSize) => {
+                                      setPageNo(page)
+                                      setPageSize(pageSize)
+                                  },
+                              }
+                    }
                     {...restProps}
                     columns={showTableColumns}
                     dataSource={dataSource}
+                    rowKey={props?.rowKey || "uid"}
                 />
             </Card>
         </div>

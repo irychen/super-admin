@@ -1,9 +1,10 @@
 import { css } from "@emotion/react"
-import { IconX } from "@tabler/icons-react"
+import { IconDots, IconX } from "@tabler/icons-react"
 import { useEffect, useRef } from "react"
 import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from "react-beautiful-dnd"
 import { base64 } from "fortea"
 import usePageContext from "@/components/AdminPagesProvider/usePageContext"
+import { Dropdown, MenuProps } from "antd"
 
 interface TabsProps {
     active: string
@@ -65,26 +66,31 @@ function Tabs(props: TabsProps) {
     }, [active])
 
     return (
-        <div className={"tabs w-full"}>
+        <div className={"tabs w-full h-full  flex pb-[2px]"}>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="tabs" direction="horizontal">
                     {provided => (
-                        <div className={"w-full"} {...provided.droppableProps} ref={provided.innerRef}>
+                        <div
+                            className={"w-full flex-shrink-1"}
+                            css={css`
+                                width: calc(100% - 42px);
+                            `}
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
                             <div
-                                className={"px-[7px]"}
+                                className={""}
                                 css={css`
-                                    width: 100%;
                                     display: flex;
                                     overflow-x: auto;
                                     scrollbar-width: none;
-                                    border-bottom: 1px solid #eee;
+                                    border-bottom: 1px solid transparent;
+
                                     ::-webkit-scrollbar {
                                         display: none;
                                     }
+
                                     -webkit-overflow-scrolling: touch;
-                                    .dark & {
-                                        border-color: #303030;
-                                    }
                                 `}
                                 ref={scrollContainer}
                             >
@@ -95,37 +101,37 @@ function Tabs(props: TabsProps) {
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
-                                                className={"mx-[2px]"}
                                                 id={`tab-${base64.encode(item.key)?.replace(/=/g, "")}`}
                                                 data-key={item.key}
                                                 css={css`
                                                     padding: 0 16px;
+                                                    flex-shrink: 0;
                                                     display: flex;
                                                     min-width: 70px;
                                                     align-items: center;
-                                                    flex-shrink: 0;
-                                                    height: 32px;
-                                                    color: ${active === item.key ? "#1890ff" : "#555"};
-                                                    border: 1px solid #eee;
-                                                    border-bottom: 0 none;
-                                                    background-color: ${active === item.key ? "#fff" : "#f8f8f8"};
-                                                    border-radius: 8px 8px 0 0;
+                                                    height: 36px;
+                                                    color: ${active === item.key ? "var(--color-primary)" : "#555"};
+                                                    margin-right: 2px;
+                                                    background-color: ${active === item.key ? "#fff" : "#FDFCFC"};
+                                                    border-radius: 4px;
                                                     transition: background-color 0.2s;
 
                                                     .dark & {
                                                         border-color: #303030;
-                                                        color: ${active === item.key ? "#1890ff" : "#DCDDDE"};
+                                                        color: ${active === item.key
+                                                            ? "var(--color-primary)"
+                                                            : "#DCDDDE"};
                                                         background-color: ${active === item.key
                                                             ? "#212B36"
                                                             : "#161C24"};
                                                     }
 
                                                     &:hover {
-                                                        color: #1890ff;
+                                                        color: var(--color-primary);
                                                         background-color: #fff;
 
                                                         .dark & {
-                                                            color: #1890ff;
+                                                            color: var(--color-primary);
                                                             background-color: #212b36;
                                                         }
                                                     }
@@ -166,7 +172,41 @@ function Tabs(props: TabsProps) {
                     )}
                 </Droppable>
             </DragDropContext>
+            <div className={"w-[42px] h-full flex justify-end items-center flex-shrink-0"} css={css``}>
+                <PagesController />
+            </div>
         </div>
+    )
+}
+
+function PagesController() {
+    const { closeOther } = usePageContext()
+
+    const items: MenuProps["items"] = [
+        {
+            key: "close-others",
+            label: "关闭其他",
+            onClick: () => {
+                console.log("close others")
+                closeOther()
+            },
+        },
+    ]
+
+    return (
+        <Dropdown
+            menu={{
+                items,
+            }}
+        >
+            <div
+                className={
+                    "w-[36px] h-[34px] rounded bg-[#FDFCFC] dark:bg-[#161C24] flex items-center justify-center cursor-pointer"
+                }
+            >
+                <IconDots stroke={1.5} size={16} />
+            </div>
+        </Dropdown>
     )
 }
 
