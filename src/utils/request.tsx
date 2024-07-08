@@ -114,9 +114,16 @@ const baseRequest = function (method = "GET", url: string, data: any = {}, confi
                 }
             })
             .catch(err => {
-                const { response, config, message } = err
-                const msg = response?.data?.message || response?.data?.msg || response?.data?.error?.message || message
-                if (response.status === 401) {
+                console.log(err)
+                const { response, message } = err
+                const msg =
+                    response?.data?.error ||
+                    response?.data?.message ||
+                    response?.data?.msg ||
+                    response?.data?.error?.message ||
+                    response?.data ||
+                    message
+                if (response?.status === 401) {
                     redirectToLogin()
                 }
                 if (message === "Network Error") {
