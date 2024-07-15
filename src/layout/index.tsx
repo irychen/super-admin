@@ -122,7 +122,7 @@ function Layout() {
                                 </Space>
                             </div>
                         </header>
-                        <div className={"pages-tabs h-[33px]"}>
+                        <div className={"pages-tabs h-[37px]"}>
                             <Tabs
                                 active={active}
                                 onChange={key => {
@@ -146,7 +146,7 @@ function Layout() {
                             className={"body w-full"}
                             style={{
                                 overflow: "hidden",
-                                height: "calc(100vh - 93px)",
+                                height: "calc(100vh - 97px)",
                             }}
                         >
                             <KeepAliveOutlet />

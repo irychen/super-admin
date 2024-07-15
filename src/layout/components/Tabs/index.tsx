@@ -66,7 +66,15 @@ function Tabs(props: TabsProps) {
     }, [active])
 
     return (
-        <div className={"tabs w-full h-full  flex pb-[2px]"}>
+        <div
+            className={"tabs w-full h-full  flex"}
+            css={css`
+                border-bottom: 1px solid #eee;
+                .dark & {
+                    border-color: #303030;
+                }
+            `}
+        >
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="tabs" direction="horizontal">
                     {provided => (
@@ -84,7 +92,6 @@ function Tabs(props: TabsProps) {
                                     display: flex;
                                     overflow-x: auto;
                                     scrollbar-width: none;
-                                    border-bottom: 1px solid transparent;
 
                                     ::-webkit-scrollbar {
                                         display: none;
@@ -105,15 +112,16 @@ function Tabs(props: TabsProps) {
                                                 data-key={item.key}
                                                 css={css`
                                                     padding: 0 16px;
+                                                    padding-right: 8px;
                                                     flex-shrink: 0;
                                                     display: flex;
                                                     min-width: 70px;
                                                     align-items: center;
                                                     height: 36px;
                                                     color: ${active === item.key ? "var(--color-primary)" : "#555"};
-                                                    margin-right: 2px;
-                                                    background-color: ${active === item.key ? "#fff" : "#FDFCFC"};
-                                                    border-radius: 4px;
+                                                    margin-right: 4px;
+                                                    background-color: ${active === item.key ? "#f5f7f8" : "#f8f8f8"};
+                                                    border-radius: 4px 4px 0 0;
                                                     transition: background-color 0.2s;
 
                                                     .dark & {
@@ -123,17 +131,32 @@ function Tabs(props: TabsProps) {
                                                             : "#DCDDDE"};
                                                         background-color: ${active === item.key
                                                             ? "#212B36"
-                                                            : "#161C24"};
+                                                            : "#1b232c"};
                                                     }
 
                                                     &:hover {
                                                         color: var(--color-primary);
-                                                        background-color: #fff;
+                                                        background-color: #f5f7f8;
 
                                                         .dark & {
                                                             color: var(--color-primary);
                                                             background-color: #212b36;
                                                         }
+                                                    }
+
+                                                    &:hover {
+                                                        .tab-close-btn {
+                                                            opacity: 1;
+                                                        }
+                                                    }
+                                                    &:active {
+                                                        .tab-close-btn {
+                                                            opacity: 1;
+                                                        }
+                                                    }
+
+                                                    .tab-close-btn {
+                                                        opacity: ${active === item.key ? 1 : 0};
                                                     }
                                                 `}
                                                 onClick={() => {
@@ -152,7 +175,9 @@ function Tabs(props: TabsProps) {
                                                     <div className={"flex-shrink-0 select-none"}>{item.label}</div>
                                                     {items.length > 1 && (
                                                         <div
-                                                            className={"ml-[5px] p-[2px] flex-shrink-0 cursor-pointer"}
+                                                            className={
+                                                                "tab-close-btn ml-[5px] p-[6px] flex-shrink-0 cursor-pointer opacity-0"
+                                                            }
                                                             onClick={e => {
                                                                 e.stopPropagation()
                                                                 onClose && onClose(item.key)
