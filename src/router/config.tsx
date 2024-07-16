@@ -3,6 +3,13 @@ import { IconAlertOctagonFilled, IconHomeFilled, IconLayout2Filled, IconTableFil
 import { mergePath } from "fortea"
 import Layout from "@/layout"
 
+// import pages
+import WelcomePage from "@/pages/index/welcome"
+import TablePage from "@/pages/index/table"
+import SuperTablePage from "@/pages/index/super_table"
+import Error404 from "@/pages/index/error/404"
+import Error500 from "@/pages/index/error/500"
+
 export type Component = ComponentType<any> | LazyExoticComponent<any> | LazyExoticComponent<() => ReactElement>
 
 export interface RouteConfig {
@@ -48,7 +55,7 @@ export const adminRoutes: Array<RouteConfig> = [
         path: "/",
         meta: { title: "welcome" },
         cache: true,
-        component: lazy(() => import("@/pages/index/welcome")),
+        component: WelcomePage,
         checkToken: true,
         search: true,
         searchKeyWords: ["欢迎页", "welcome"],
@@ -60,7 +67,7 @@ export const adminRoutes: Array<RouteConfig> = [
         path: "/virtual-table",
         meta: { title: "virtual_table" },
         cache: true,
-        component: lazy(() => import("@/pages/index/table")),
+        component: TablePage,
         checkToken: true,
         search: true,
         authority: ["admin"],
@@ -71,7 +78,7 @@ export const adminRoutes: Array<RouteConfig> = [
         path: "/super-table",
         meta: { title: "super_table" },
         cache: true,
-        component: lazy(() => import("@/pages/index/super_table")),
+        component: SuperTablePage,
         checkToken: true,
         search: true,
         authority: ["admin"],
@@ -92,7 +99,7 @@ export const adminRoutes: Array<RouteConfig> = [
                 meta: { title: "error_404" },
                 cache: true,
                 search: true,
-                component: lazy(() => import("@/pages/index/error/404")),
+                component: Error404,
                 checkToken: true,
                 authority: ["admin", "error"],
             },
@@ -101,7 +108,7 @@ export const adminRoutes: Array<RouteConfig> = [
                 meta: { title: "error_500" },
                 cache: true,
                 search: true,
-                component: lazy(() => import("@/pages/index/error/500")),
+                component: Error500,
                 checkToken: true,
                 authority: ["admin", "error"],
             },
@@ -196,6 +203,7 @@ export const findAdminRouteByUrl = (url: string) => {
             }
         }
     }
+
     return find(adminRoutesWithAbsolutePath)
 }
 

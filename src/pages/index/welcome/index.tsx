@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"
 import { useAppAuth } from "@/store/auth.ts"
 import usePageContext from "@/components/AdminPagesProvider/usePageContext"
 
-function Welcome() {
+function WelcomePage() {
     const { open } = usePageContext()
     const location = useLocation()
     const { update } = useAppAuth()
@@ -47,4 +47,4 @@ function Welcome() {
     )
 }
 
-export default Welcome
+export default WelcomePage
