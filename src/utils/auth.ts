@@ -1,5 +1,5 @@
 import { RouteConfig } from "@/router/config.tsx"
-import { useAppAuth } from "@/store/auth.ts"
+import { useAppUser } from "@/store/user.ts"
 import { useEffect, useState } from "react"
 
 export function routeAuthCheck(route: RouteConfig, permissions: string[]): boolean {
@@ -28,7 +28,7 @@ export function authCheck(authority: string[], permissions: string[], type?: "al
 
 export function useAuthCheck(authority: string[], type?: "all" | "any"): boolean {
     const [ok, setOk] = useState(false)
-    const { permissions } = useAppAuth()
+    const { permissions } = useAppUser()
     useEffect(() => {
         setOk(authCheck(authority, permissions, type))
     }, [permissions, authority, type])

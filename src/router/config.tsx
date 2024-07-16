@@ -59,7 +59,7 @@ export const adminRoutes: Array<RouteConfig> = [
         checkToken: true,
         search: true,
         searchKeyWords: ["欢迎页", "welcome"],
-        authority: ["admin", "welcome"],
+        authority: ["admin"],
         icon: <IconHomeFilled size={18} />,
     },
     // 虚拟表格
@@ -91,7 +91,7 @@ export const adminRoutes: Array<RouteConfig> = [
         cache: true,
         checkToken: true,
         search: true,
-        authority: ["admin", "error"],
+        authority: ["admin"],
         icon: <IconAlertOctagonFilled size={18} />,
         children: [
             {
@@ -101,7 +101,7 @@ export const adminRoutes: Array<RouteConfig> = [
                 search: true,
                 component: Error404,
                 checkToken: true,
-                authority: ["admin", "error"],
+                authority: ["admin"],
             },
             {
                 path: "500",
@@ -110,7 +110,7 @@ export const adminRoutes: Array<RouteConfig> = [
                 search: true,
                 component: Error500,
                 checkToken: true,
-                authority: ["admin", "error"],
+                authority: ["admin"],
             },
         ],
     },
@@ -120,7 +120,7 @@ export const adminRoutes: Array<RouteConfig> = [
         path: "/nested",
         meta: { title: "nested" },
         checkToken: true,
-        authority: ["admin", "nested"],
+        authority: ["admin"],
         icon: <IconLayout2Filled size={18} />,
         children: [
             {
@@ -130,7 +130,7 @@ export const adminRoutes: Array<RouteConfig> = [
                 search: true,
                 component: lazy(() => import("@/pages/index/nested/menu1")),
                 checkToken: true,
-                authority: ["admin", "nested"],
+                authority: ["admin"],
             },
             {
                 path: "menu2",
@@ -138,7 +138,7 @@ export const adminRoutes: Array<RouteConfig> = [
                 cache: true,
                 checkToken: true,
                 component: lazy(() => import("@/pages/index/nested/menu2/layout")),
-                authority: ["admin", "nested"],
+                authority: ["admin"],
                 children: [
                     {
                         path: "menu2-1",
@@ -147,7 +147,7 @@ export const adminRoutes: Array<RouteConfig> = [
                         search: true,
                         component: lazy(() => import("@/pages/index/nested/menu2/menu2-1")),
                         checkToken: true,
-                        authority: ["admin", "nested"],
+                        authority: ["admin"],
                     },
                     {
                         path: "menu2-2",
@@ -155,7 +155,7 @@ export const adminRoutes: Array<RouteConfig> = [
                         component: lazy(() => import("@/pages/index/nested/menu2/menu2-2")),
                         checkToken: true,
                         search: true,
-                        authority: ["admin", "nested"],
+                        authority: ["admin"],
                     },
                 ],
             },

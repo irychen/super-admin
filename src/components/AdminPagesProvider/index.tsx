@@ -4,7 +4,7 @@ import { useKeepaliveRef } from "keepalive-for-react"
 import { message } from "antd"
 import { findAdminRouteByUrl } from "@/router/config.tsx"
 import { useTranslation } from "react-i18next"
-import { useAppAuth } from "@/store/auth.ts"
+import { useAppUser } from "@/store/user.ts"
 import { routeAuthCheck } from "@/utils/auth.ts"
 import { useSessionStorageState } from "ahooks"
 
@@ -133,7 +133,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
         }
     }
 
-    const { permissions } = useAppAuth()
+    const { permissions } = useAppUser()
 
     useEffect(() => {
         const route = findAdminRouteByUrl(active)
@@ -144,7 +144,7 @@ export function PageManageProvider(props: { children: ReactNode }) {
                 url: active,
             })
         }
-    }, [])
+    }, [permissions])
 
     const closeCurrent = () => {
         return close(active)

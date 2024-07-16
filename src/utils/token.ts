@@ -11,11 +11,3 @@ export function setToken(token: string) {
 export function removeToken() {
     localStorage.removeItem(TOKEN_KEY)
 }
-
-const token = {
-    getToken,
-    setToken,
-    removeToken,
-}
-
-export default token

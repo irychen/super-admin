@@ -1,4 +1,4 @@
-import { useAppAuth } from "@/store/auth.ts"
+import { useAppUser } from "@/store/user.ts"
 import { ReactNode, useLayoutEffect, useMemo } from "react"
 import { adminRoutes, RouteConfig } from "@/router/config.tsx"
 import { isArray, mergePath } from "fortea"
@@ -19,7 +19,7 @@ interface ItemType {
 function RenderMenu() {
     const { t, i18n } = useTranslation()
     const { open } = usePageContext()
-    const { permissions } = useAppAuth()
+    const { permissions } = useAppUser()
     const [selectedKeys, setSelectedKeys] = useSessionStorageState<string[]>("_menu_selectedKeys_", {
         defaultValue: ["/"],
     })

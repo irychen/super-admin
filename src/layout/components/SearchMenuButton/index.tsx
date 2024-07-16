@@ -3,7 +3,7 @@ import { IconArrowDown, IconArrowUp, IconSearch } from "@tabler/icons-react"
 import { Divider, Empty, Input, InputRef, Modal } from "antd"
 import { adminRoutesWithAbsolutePath, RouteConfig } from "@/router/config.tsx"
 import { mergePath } from "fortea"
-import { useAppAuth } from "@/store/auth.ts"
+import { useAppUser } from "@/store/user.ts"
 import { routeAuthCheck } from "@/utils/auth.ts"
 import { css } from "@emotion/react"
 import { useNavigate } from "react-router-dom"
@@ -19,7 +19,7 @@ type ItemType = {
 function SearchMenuButton() {
     const { t } = useTranslation()
     const inputRef = useRef<InputRef>(null)
-    const { permissions } = useAppAuth()
+    const { permissions } = useAppUser()
     const [showSearch, setShowSearch] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchValue, setSearchValue] = useState("")

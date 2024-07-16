@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { Avatar, Dropdown, MenuProps } from "antd"
 import { UserOutlined } from "@ant-design/icons"
+import { storageKeys } from "@/constants"
+import { removeToken } from "@/utils/token.ts"
 
 function AvatarAndDropdown() {
     const navigate = useNavigate()
@@ -17,8 +19,8 @@ function AvatarAndDropdown() {
             key: "logout",
             danger: true,
             onClick: () => {
-                // window.localStorage.clear()
-                window.localStorage.clear()
+                window.localStorage.removeItem(storageKeys.user)
+                removeToken()
                 navigate("/login", { replace: true })
             },
             label: "Logout",

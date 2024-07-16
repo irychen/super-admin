@@ -7,7 +7,7 @@ const { VITE_API_MAX_TIMEOUT, VITE_API_BASE_URL } = import.meta.env
 
 const baseUrl = VITE_API_BASE_URL || "http://localhost:3000"
 
-export const baseRequestInstance = axios.create({
+export const requestInstance = axios.create({
     timeout: VITE_API_MAX_TIMEOUT ? toNumber(VITE_API_MAX_TIMEOUT) : 10000,
 })
 
@@ -17,18 +17,8 @@ interface RequestConfig extends AxiosRequestConfig {
     hideLoading?: boolean
 }
 
-/**
- * 重定向到登录页面
- */
-export function redirectToLogin() {
-    if (window.location.hash !== "#/login") {
-        window.location.hash = "#/login"
-        window.location.reload()
-    }
-}
-
 // 添加响应拦截器;
-baseRequestInstance.interceptors.response.use(
+requestInstance.interceptors.response.use(
     function (response) {
         // Access-Control-Expose-Headers x-token
         // 检查响应头中是否有 new token
@@ -60,35 +50,29 @@ const baseRequest = function (method = "GET", url: string, data: any = {}, confi
     if (config.hideLoading === true) {
         config.headers["loading"] = "false"
     }
-    if (config.needToken) {
-        const token = getToken()
-        if (!token) {
-            redirectToLogin()
-            throw new Error("token is null")
-        }
-        config.headers["token"] = token
-    }
+
+    config.headers["token"] = getToken()
 
     let response: Promise<AxiosResponse<any, any>>
     switch (method) {
         case "GET":
-            response = baseRequestInstance.get(url, {
+            response = requestInstance.get(url, {
                 params: data,
                 ...(config || {}),
             })
             break
         case "POST":
-            response = baseRequestInstance.post(url, data, {
+            response = requestInstance.post(url, data, {
                 ...(config || {}),
             })
             break
         case "PUT":
-            response = baseRequestInstance.put(url, data, {
+            response = requestInstance.put(url, data, {
                 ...(config || {}),
             })
             break
         case "DELETE":
-            response = baseRequestInstance.delete(url, {
+            response = requestInstance.delete(url, {
                 data,
                 ...(config || {}),
             })
@@ -101,40 +85,21 @@ const baseRequest = function (method = "GET", url: string, data: any = {}, confi
             .then(res => {
                 // 服务器正常返回 检查状态码 code 是否为 0 或者 success 为 true
                 const data = res.data || {}
-                const { success } = data
-                const msg = data?.message || data?.msg || data?.error
-                if (success !== true) {
-                    notification.error({
-                        message: "错误",
-                        description: <div dangerouslySetInnerHTML={{ __html: msg || "未知错误" }}></div>,
-                    })
-                    reject(data)
-                } else {
-                    resolve(data)
-                }
+                resolve(handleResponse(data))
             })
-            .catch(err => {
-                console.log(err)
+            .catch(async err => {
                 const { response, message } = err
-                const msg =
-                    response?.data?.error ||
-                    response?.data?.message ||
-                    response?.data?.msg ||
-                    response?.data?.error?.message ||
-                    response?.data ||
-                    message
-                if (response?.status === 401) {
-                    redirectToLogin()
-                }
                 if (message === "Network Error") {
                     antdMessage.error("网络开小差了!  请稍后重试 ...")
                 } else {
                     // msg = "timeout of 10000ms exceeded" 提取超时时间ms
-                    if (msg?.startsWith && msg?.startsWith("timeout of")) {
-                        const timeout = msg.match(/\d+/)
+                    if (message?.startsWith && message?.startsWith("timeout of")) {
+                        const timeout = message.match(/\d+/)
                         antdMessage.error(`请求超时 ${Math.ceil(Number(timeout) / 1000)}s`)
                     } else {
-                        antdMessage.error(msg)
+                        if (response) {
+                            return reject(handleResponse(response.data))
+                        }
                     }
                 }
                 reject(err)
@@ -159,5 +124,34 @@ function del(url: string, data?: any, config?: RequestConfig) {
 }
 
 const request = { get, post, put, del }
+
+export interface ResponseList<T> {
+    data: T[]
+    msg: string
+    code: number
+    details?: string
+}
+
+export interface ResponseData<T> {
+    data: T
+    msg: string
+    code: number
+    details?: string
+}
+
+function handleResponse<T>(res: ResponseList<T> | ResponseData<T>) {
+    if (res.code !== 0) {
+        let msg = res.msg || "未知错误"
+        if (res.details) {
+            msg += `: ${res.details}`
+        }
+        notification.error({
+            message: "错误",
+            description: <div dangerouslySetInnerHTML={{ __html: msg || "未知错误" }}></div>,
+        })
+        return Promise.reject(res)
+    }
+    return res
+}
 
 export default request

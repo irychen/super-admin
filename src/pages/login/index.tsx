@@ -2,11 +2,65 @@ import { APP_NAME } from "@/constants"
 import { Button, Checkbox, Form, Input } from "antd"
 import { useNavigate } from "react-router-dom"
 import AdminLogo from "@/components/AdminLogo"
-import { useAppAuth } from "@/store/auth.ts"
+import { useAppUser } from "@/store/user.ts"
+import { userLogin } from "@/api/services/user.ts"
+import { useLocalStorageState } from "ahooks"
+import { useEffect } from "react"
+import { setToken } from "@/utils/token.ts"
+
+const localAccountKey = "local-account"
 
 function Login() {
     const navigate = useNavigate()
-    const { update } = useAppAuth()
+    const [form] = Form.useForm()
+    const { update } = useAppUser()
+    const [rememberMe, setRememberMe] = useLocalStorageState("rememberMe", {
+        defaultValue: false,
+    })
+
+    useEffect(() => {
+        const localAccount = localStorage.getItem(localAccountKey)
+        if (localAccount) {
+            const { email, password } = JSON.parse(localAccount)
+            form.setFieldsValue({ email, password })
+        }
+    }, [])
+
+    const handleLogin = async () => {
+        // form.validateFields().then(async ({ email, password }) => {
+        //     const res = await userLogin(email, password)
+        //     if (res.code === 0) {
+        //         if (rememberMe) {
+        //             localStorage.setItem(localAccountKey, JSON.stringify({ email, password }))
+        //         } else {
+        //             localStorage.removeItem(localAccountKey)
+        //         }
+        //         const { token, user } = res.data
+        //         update(state => {
+        //             state.token = token
+        //             state.name = user.name
+        //             state.avatarURL = user.avatarURL
+        //             state.roles = user.roles
+        //             // 菜单权限字段
+        //             state.permissions = user.permissions || ["admin"]
+        //             state.desc = user.desc
+        //         })
+        //         setToken(token)
+        //         navigate("/")
+        //     }
+        // })
+
+        update(state => {
+            state.token = "xxx"
+            state.name = "admin"
+            state.avatarURL = ""
+            state.roles = ["admin"]
+            state.permissions = ["admin"]
+            state.desc = ""
+        })
+        setToken("xxx")
+        navigate("/")
+    }
 
     return (
         <div
@@ -40,13 +94,13 @@ function Login() {
                     </div>
                     <div className={"flex text-[20px] font-bold py-[10px]"}>
                         <div className={"text-[--primary-color]"}>{APP_NAME}</div>
-                        <div className={"ml-[10px]"}>Login</div>
+                        <div className={"ml-[6px]"}>Login</div>
                     </div>
                     <p className={"text-[13px] text-[#444] dark:text-[#999]"}>
                         Welcome to {APP_NAME}, please login to continue
                     </p>
                     <div className={"w-full max-w-[320px] my-[20px]"}>
-                        <Form className={"w-full"} layout={"vertical"}>
+                        <Form className={"w-full"} layout={"vertical"} form={form}>
                             <Form.Item
                                 label={"Email"}
                                 name={"email"}
@@ -67,29 +121,19 @@ function Login() {
                             {/*remember me*/}
                             <Form.Item>
                                 <div className={"flex items-center"}>
-                                    <Checkbox>Remember me</Checkbox>
+                                    <Checkbox
+                                        checked={rememberMe}
+                                        onChange={e => {
+                                            setRememberMe(e.target.checked)
+                                        }}
+                                    >
+                                        Remember me
+                                    </Checkbox>
                                 </div>
                             </Form.Item>
                         </Form>
                         <div>
-                            <Button
-                                className={"w-full"}
-                                type={"primary"}
-                                onClick={() => {
-                                    update(config => {
-                                        config.token = "token"
-                                        config.permissions = [
-                                            "admin",
-                                            "welcome",
-                                            "table",
-                                            "nested",
-                                            "error",
-                                            "pro_table",
-                                        ]
-                                    })
-                                    navigate("/")
-                                }}
-                            >
+                            <Button className={"w-full"} type={"primary"} onClick={handleLogin}>
                                 Login
                             </Button>
                         </div>
