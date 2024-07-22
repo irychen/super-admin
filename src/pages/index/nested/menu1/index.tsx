@@ -1,4 +1,4 @@
-import { Divider } from "antd"
+import { DatePicker, Divider, Select } from "antd"
 
 function Menu1() {
     return (
@@ -6,6 +6,15 @@ function Menu1() {
             <h1 className={"text-center text-2xl"}>Menu1</h1>
             <Divider />
             <p className={"text-center text-[#999] dark:text-[#ccc]"}>This is a demo page for nested routing.</p>
+            <div>
+                <DatePicker />
+                <Select
+                    placeholder={"Select"}
+                    style={{
+                        width: 120,
+                    }}
+                />
+            </div>
         </div>
     )
 }

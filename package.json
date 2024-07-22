@@ -25,7 +25,7 @@
     "dependencies": {
         "@ant-design/cssinjs": "^1.20.0",
         "@ant-design/icons": "^5.3.6",
-        "@ant-design/pro-components": "^2.7.1",
+        "@ant-design/pro-components": "^2.7.14",
         "@emotion/react": "^11.11.4",
         "@tabler/icons-react": "^3.2.0",
         "ahooks": "^3.7.11",
@@ -36,7 +36,7 @@
         "fortea": "^1.0.9",
         "i18next": "^23.11.3",
         "i18next-browser-languagedetector": "^7.2.1",
-        "keepalive-for-react": "^2.0.7",
+        "keepalive-for-react": "^2.0.9",
         "lodash": "^4.17.21",
         "react": "18.2.0",
         "react-beautiful-dnd": "^13.1.1",
