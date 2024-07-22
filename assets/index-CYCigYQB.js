@@ -1,0 +1,1 @@
+import{bU as l,bV as a,bW as u}from"./index-D71TCNAg.js";function s(){return l("div",{className:"w-full h-full p-[8px]"},l(a,{bordered:!1,className:"w-full h-full",title:"Menus2 Layout"},l(u,null)))}export{s as default};

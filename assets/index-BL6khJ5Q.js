@@ -1,0 +1,1 @@
+import{bU as e,aZ as t,as as a,av as s}from"./index-D71TCNAg.js";function c(){return e("div",{className:"p-[20px]"},e("h1",{className:"text-center text-2xl"},"Menu1"),e(s,null),e("p",{className:"text-center text-[#999] dark:text-[#ccc]"},"This is a demo page for nested routing."),e("div",null,e(t,null),e(a,{placeholder:"Select",style:{width:120}})))}export{c as default};
