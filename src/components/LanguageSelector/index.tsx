@@ -8,11 +8,13 @@ const languageMap = [
         value: "en",
         label: "🇬🇧 English",
         short: "En",
+        alias: ["en", "en-US", "en-GB"],
     },
     {
         value: "zh",
         label: "🇨🇳 中文",
         short: "Zh",
+        alias: ["zh", "zh-CN"],
     },
 ]
 
@@ -26,7 +28,7 @@ function LanguageSelector() {
     }
 
     const currentLang = useMemo(() => {
-        return languageMap.find(item => item.value === i18n.language)
+        return languageMap.find(item => item.alias.includes(i18n.language))
     }, [i18n.language])
 
     return (

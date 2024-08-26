@@ -9,7 +9,6 @@ interface AppConfig {
     showBreadcrumb: boolean
     themeMode: ThemeMode
     isDark: boolean
-    locale: string
     update: (updater: (config: AppConfig) => void) => void
     reset: () => void
 }
@@ -18,7 +17,6 @@ export const DEFAULT_CONFIG = {
     collapsed: false,
     showBreadcrumb: true,
     themeMode: "system" as ThemeMode,
-    locale: "zh",
     isDark: false,
 }
 

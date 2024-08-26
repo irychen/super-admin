@@ -1,8 +1,9 @@
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
-import enTranslation from "@/locales/en.json"
-import zhTranslation from "@/locales/zh.json"
+import enTranslation from "@/i18n/locales/en.json"
+import zhTranslation from "@/i18n/locales/zh.json"
+import { DEFAULT_LOCALE } from "@/constants" // 确保这个值是 'en' 或你希望的默认语言
 
 i18n.use(LanguageDetector)
     .use(initReactI18next)
@@ -10,9 +11,13 @@ i18n.use(LanguageDetector)
         resources: {
             en: { translation: enTranslation },
             zh: { translation: zhTranslation },
+            "en-US": { translation: enTranslation },
+            "zh-CN": { translation: zhTranslation },
+            "en-GB": { translation: enTranslation },
         },
-        lng: "zh", // 默认语言
-        fallbackLng: "en", // 回退语言
+        fallbackLng: {
+            default: [DEFAULT_LOCALE],
+        },
         interpolation: {
             escapeValue: false, // 不转义插值
         },

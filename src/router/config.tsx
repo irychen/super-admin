@@ -84,17 +84,6 @@ export const adminRoutes: Array<RouteConfig> = [
         authority: ["admin"],
         icon: <IconTableFilled size={18} />,
     },
-    // pro table
-    {
-        path: "/pro-table",
-        meta: { title: "pro_table" },
-        cache: true,
-        component: lazy(() => import("@/pages/index/pro_table")),
-        checkToken: true,
-        search: true,
-        authority: ["admin"],
-        icon: <IconTableFilled size={18} />,
-    },
 
     // 错误页
     {

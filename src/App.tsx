@@ -1,22 +1,30 @@
 import AppRouter from "@/router"
-import { Suspense, useLayoutEffect } from "react"
+import { Suspense, useLayoutEffect, useState } from "react"
 import Loading from "@/components/Loading"
 import { StyleProvider } from "@ant-design/cssinjs"
 import { ConfigProvider, ThemeConfig, theme } from "antd"
 import "antd/dist/reset.css"
 import { useAppConfig } from "@/store/config"
-import i18n from "i18next"
-import "dayjs/locale/zh-cn"
-import "dayjs/locale/en.js"
-import dayjs from "dayjs"
+import { getI18n } from "react-i18next"
+
 // antd locals
 import zh from "antd/lib/locale/zh_CN"
 import en from "antd/lib/locale/en_US"
 import { Locale } from "antd/es/locale"
+import { DEFAULT_LOCALE } from "@/constants"
+import dayjs from "dayjs"
+import "dayjs/locale/zh-cn"
+import "dayjs/locale/en"
+import "dayjs/locale/en-gb"
+import "dayjs/locale/zh"
+import { isNil } from "fortea"
 
 const localeMap = {
     en,
     zh,
+    zh_CN: zh,
+    en_US: en,
+    en_GB: en,
 } as Record<string, Locale>
 
 const themeModeToken: Record<"dark" | "light", ThemeConfig> = {
@@ -39,19 +47,29 @@ const themeModeToken: Record<"dark" | "light", ThemeConfig> = {
 }
 
 function App() {
-    const { themeMode, update, isDark, locale } = useAppConfig()
+    const { themeMode, update, isDark } = useAppConfig()
+    const i18n = getI18n()
+    const [locale, setLocale] = useState<string>(i18n.language)
+    console.log("locale: ", locale)
 
     i18n.on("languageChanged", lng => {
-        update(state => {
-            state.locale = lng
-        })
+        if (lng !== locale) {
+            setLocale(lng)
+            dayjs.locale(lng)
+        }
     })
 
-    useLayoutEffect(() => {
-        i18n.changeLanguage(locale)
-        console.log("locale", locale)
-        dayjs.locale(locale)
-    }, [locale])
+    if (isNil(localeMap[locale])) {
+        let lng = ""
+        if (locale.startsWith("zh-")) {
+            lng = "zh"
+        }
+        if (locale.startsWith("en-")) {
+            lng = "en"
+        }
+        lng = lng || DEFAULT_LOCALE
+        i18n.changeLanguage(lng)
+    }
 
     useLayoutEffect(() => {
         const isAuto = themeMode === "system"
@@ -92,7 +110,7 @@ function App() {
     return (
         <StyleProvider hashPriority="high">
             <ConfigProvider
-                locale={localeMap[locale] || zh}
+                locale={localeMap[locale] || localeMap[DEFAULT_LOCALE]}
                 theme={{
                     token: {
                         colorPrimary: isDark ? "#4a9fee" : "#1890ff",
