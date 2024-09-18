@@ -50,7 +50,6 @@ function App() {
     const { themeMode, update, isDark } = useAppConfig()
     const i18n = getI18n()
     const [locale, setLocale] = useState<string>(i18n.language)
-    console.log("locale: ", locale)
 
     i18n.on("languageChanged", lng => {
         if (lng !== locale) {

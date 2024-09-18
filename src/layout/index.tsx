@@ -24,36 +24,6 @@ function Layout() {
     const { pages, open, close, active } = usePageContext()
     const { collapsed, update, showBreadcrumb } = useAppConfig()
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 1000) {
-                update(config => {
-                    config.collapsed = true
-                })
-            } else {
-                update(config => {
-                    config.collapsed = false
-                })
-            }
-            // showBreadcrumb if screen width is greater than 768px
-            if (window.innerWidth > 768) {
-                update(config => {
-                    config.showBreadcrumb = true
-                })
-            } else {
-                update(config => {
-                    config.showBreadcrumb = false
-                })
-            }
-        }
-        handleResize()
-        const onResize = throttle(handleResize, 100)
-        window.addEventListener("resize", onResize)
-        return () => {
-            window.removeEventListener("resize", onResize)
-        }
-    }, [])
-
     return (
         <Fragment>
             <ALayout className={"w-full h-screen"}>
