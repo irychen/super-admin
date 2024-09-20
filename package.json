@@ -35,7 +35,7 @@
         "fortea": "^1.0.9",
         "i18next": "^23.14.0",
         "i18next-browser-languagedetector": "^7.2.1",
-        "keepalive-for-react": "^2.0.11",
+        "keepalive-for-react": "^2.0.12",
         "lodash": "^4.17.21",
         "react": "18.2.0",
         "react-beautiful-dnd": "^13.1.1",
