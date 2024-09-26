@@ -1,4 +1,6 @@
+import { useAntdThemeToken } from "@/hooks"
 import { css } from "@emotion/react"
+import { memo } from "react"
 
 interface AdminLogoProps {
     size?: number
@@ -7,13 +9,13 @@ interface AdminLogoProps {
 
 function AdminLogo(props: AdminLogoProps) {
     const { size = 50, colorful = false } = props
+    const { colorPrimary } = useAntdThemeToken()
     return (
         <div
             css={css`
-                color: ${colorful ? "var(--color-primary)" : "#000"};
-
+                color: ${colorful ? colorPrimary : "#333"};
                 .dark & {
-                    color: ${colorful ? "var(--color-primary)" : "#fff"};
+                    color: ${colorful ? colorPrimary : "#f1f1f1"};
                 }
             `}
         >
@@ -39,4 +41,4 @@ function AdminLogo(props: AdminLogoProps) {
     )
 }
 
-export default AdminLogo
+export default memo(AdminLogo)

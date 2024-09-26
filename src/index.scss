@@ -1,0 +1,151 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+}
+
+body {
+    font-size: 14px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@mixin light {
+    --scrollbar-thumb: #d1d1d1;
+    --scrollbar-thumb-hover: #bebebe;
+    --scrollbar-thumb-hover-border: #808080;
+}
+
+@mixin dark {
+    --scrollbar-thumb: #525252;
+    --scrollbar-thumb-hover: rgb(79, 79, 79);
+    --scrollbar-thumb-hover-border: rgb(140, 140, 140);
+}
+
+:root {
+    @include light;
+}
+
+.dark {
+    @include dark;
+}
+
+.scrollbar {
+    &::-webkit-scrollbar {
+        z-index: 0 !important;
+        width: 8px;
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0);
+    }
+
+    &::-webkit-scrollbar-corner {
+        z-index: 0;
+        background-color: rgba(255, 255, 255, 0);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        width: 8px;
+        height: 8px;
+        border-radius: 3px;
+        z-index: 1 !important;
+        background-color: var(--scrollbar-thumb);
+        border: 1px solid rgba(0, 0, 0, 0);
+
+        &:hover {
+            background-color: var(--scrollbar-thumb-hover);
+            border: 1px solid var(--scrollbar-thumb-hover-border);
+        }
+    }
+}
+
+.keep-alive-render {
+    width: 100%;
+    height: 100%;
+}
+
+.dark {
+    .keep-alive-render {
+        color-scheme: dark;
+    }
+}
+
+.cache-component {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.ant-layout {
+    .keep-alive-render {
+        height: unset !important;
+        .cache-component {
+            height: unset !important;
+            overflow: visible;
+        }
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: scale(0.92);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.cache-component {
+    animation:
+        fade-in 0.3s ease-in-out,
+        slide-in 0.3s ease-in-out;
+}
+
+// antd pro-components override -------------- start
+
+.ant-pro-table-search.ant-pro-table-search-query-filter {
+    margin-bottom: 0px !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    border-radius: 0 !important;
+}
+
+.dark {
+    .ant-pro-table-search.ant-pro-table-search-query-filter {
+        border-bottom: 1px solid #303030 !important;
+    }
+}
+
+.ant-pro-query-filter.ant-pro-query-filter {
+    padding: 18px !important;
+}
+
+.ant-pro-table-list-toolbar-container {
+    padding-block: 8px !important;
+}
+
+.ant-pro-query-filter-row {
+    row-gap: 12px !important;
+}
+
+// antd pro-components override -------------- end

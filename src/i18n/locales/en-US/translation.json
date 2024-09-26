@@ -1,0 +1,75 @@
+{
+  "common":{},
+  "loading":"Loading...",
+  "layout":{
+    "menu":{
+      "admin":"Admin",
+      "dashboard":"Dashboard",
+      "welcome":"Welcome",
+      "userinfo":"User Info",
+      "users_management":"Users Management",
+      "super_table":"Super Table",
+      "nested":"Nested",
+      "nested_1":"Nested 1",
+      "nested_1_1":"Nested 1-1",
+      "nested_2":"Nested 2",
+      "nested_2_1":"Nested 2-1",
+      "error_pages":"Error Pages",
+      "error_404":"404",
+      "error_500":"500",
+      "error_403":"403"
+    },
+    "search_dialog":{
+      "no_search_result": "No Search Result",
+      "to_navigate": "to select",
+      "to_open": "to open",
+      "items_number": "Total {{total}} items"
+    },
+    "notice":{
+      "title":"Notifications",
+      "description":"You have {{count}} new messages"
+    },
+    "settings_drawer":{
+      "settings":"Settings",
+      "screen_full":"Full Screen",
+      "screen_exit":"Exit Full Screen",
+      "theme_mode":"Theme Mode",
+      "theme_light":"Light",
+      "theme_dark":"Dark",
+      "theme_system":"System",
+      "breadcrumb":"Breadcrumb",
+      "others":"Others",
+      "layout_stretch":"Layout Stretch",
+      "primary_color":"Primary Color",
+      "enable_memoized_scroll_top":"Enable memoized scrolltop",
+      "multi_tabs":"Multi Tabs"
+    },
+    "tabs_function":{
+      "close_other":"Close other",
+      "close_left":"Close to the left", 
+      "close_right":"Close to the right",
+      "refresh_current":"Refresh current"
+    }
+  },
+  "pages":{
+    "login":{
+      "description":"Welcome to {{title}}, please login",
+      "email":"Email",
+      "email_placeholder":"Please input your email",
+      "password":"Password",
+      "password_placeholder":"Please input your password",
+      "login":"Login",
+      "remember_me":"Remember me",
+      "create_account":"Create an account",
+      "dont_have_account":"Don't have an account?"
+    }
+  },
+  "pageType":{
+    "edit":" Edit",
+    "create":" Create",
+    "view":" View",
+    "list":" List",
+    "audit":" Audit",
+    "detail":" Detail"
+  }
+}

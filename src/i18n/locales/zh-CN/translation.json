@@ -1,0 +1,75 @@
+{
+    "common": {},
+    "loading": "正在加载资源...",
+    "layout": {
+        "menu": {
+            "dashboard": "仪表盘",
+            "welcome": "欢迎",
+            "users": "用户",
+            "userinfo": "用户信息",
+            "users_management": "用户管理",
+            "super_table": "超级表格",
+            "nested": "嵌套路由",
+            "nested_1": "嵌套1",
+            "nested_2": "嵌套2",
+            "nested_1_1": "嵌套1-1",
+            "nested_2_1": "嵌套2-1",
+            "error_pages": "错误页面",
+            "error_404": "404",
+            "error_500": "500",
+            "error_403": "403"
+        },
+        "search_dialog": {
+            "no_search_result": "没有搜索结果",
+            "to_navigate": "选择",
+            "to_open": "打开",
+            "items_number": "共 {{total}} 项"
+        },
+        "notice": {
+            "title": "通知",
+            "description": "你有{{count}}条新消息"
+        },
+        "settings_drawer": {
+            "settings": "设置",
+            "screen_full": "全屏",
+            "screen_exit": "退出全屏",
+            "theme_mode": "主题模式",
+            "theme_light": "亮色",
+            "theme_dark": "暗色",
+            "theme_system": "系统",
+            "breadcrumb": "面包屑",
+            "others": "其他",
+            "layout_stretch": "布局伸展",
+            "primary_color": "主色",
+            "enable_memoized_scroll_top": "启用记忆滚动条",
+            "multi_tabs": "多标签页"
+        },
+        "tabs_function": {
+            "close_other": "关闭其他",
+            "close_left": "关闭左侧",
+            "close_right": "关闭右侧",
+            "refresh_current": "刷新当前"
+        }
+    },
+    "pages": {
+        "login": {
+            "description": "欢迎使用{{title}}, 请登录",
+            "email": "邮箱",
+            "email_placeholder": "请输入邮箱",
+            "password": "密码",
+            "password_placeholder": "请输入密码",
+            "login": "登录",
+            "remember_me": "记住我",
+            "create_account": "创建账户",
+            "dont_have_account": "没有账户？"
+        }
+    },
+    "pageType": {
+        "edit": "编辑",
+        "create": "创建",
+        "view": "查看",
+        "list": "列表",
+        "audit": "审核",
+        "detail": "详情"
+    }
+}

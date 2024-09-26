@@ -144,6 +144,8 @@ type ValueTypeToFieldPropsMap = {
 
 export interface SuperTableSelectColumnType<RecordType> extends SuperTableColumnTypeBase<RecordType, "select"> {
     selectOptions: Array<{ label: string; value: string }>
+
+    transform?: (value: string | number | string[] | number[]) => Record<string, any>
 }
 
 export interface SuperTableDatePickerColumnType<RecordType> extends SuperTableColumnTypeBase<RecordType, "date"> {
@@ -391,6 +393,19 @@ const SuperTable = <T extends object>({ ...props }: SuperTableProps<T>) => {
                     columns={showTableColumns}
                     dataSource={dataSource}
                     rowKey={props?.rowKey || "uid"}
+                    scroll={{
+                        x: "max-content",
+                        ...(props.scroll || {}),
+                    }}
+                    rowSelection={
+                        props.rowSelection
+                            ? {
+                                  columnWidth: 50,
+                                  fixed: true,
+                                  ...(props.rowSelection || {}),
+                              }
+                            : undefined
+                    }
                 />
             </Card>
         </div>

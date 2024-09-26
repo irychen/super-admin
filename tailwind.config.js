@@ -10,11 +10,7 @@ export default {
             pad: { max: "767px" },
             mobile: { max: "420px" },
         },
-        extend: {
-            boxShadow: {
-                light: "0 2px 4px rgba(0, 0, 0, 0.07)",
-            },
-        },
+        extend: {},
     },
     plugins: [],
 }

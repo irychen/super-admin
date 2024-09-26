@@ -1,10 +1,9 @@
-import { APP_NAME } from "@/constants"
-import { Button, Form, Input } from "antd"
-import { useNavigate } from "react-router-dom"
 import AdminLogo from "@/components/AdminLogo"
+import config from "@/config"
+import { navigateTo } from "@/router/navigate"
+import { Button, Form, Input } from "antd"
 
 function SignUp() {
-    const navigate = useNavigate()
     return (
         <div
             className={
@@ -20,10 +19,10 @@ function SignUp() {
                     <AdminLogo />
                 </div>
                 <div className={"flex w-full justify-center text-center text-[20px] font-bold py-[10px]"}>
-                    <div className={""}>{APP_NAME}</div>
+                    <div className={""}>{config.appTitle}</div>
                     <div className={"ml-[10px]"}>Sign Up</div>
                 </div>
-                <p className={"text-[13px] text-center text-[#444] dark:text-[#999]"}>Welcome to {APP_NAME}</p>
+                <p className={"text-[13px] text-center text-[#444] dark:text-[#999]"}>Welcome to {config.appTitle}</p>
                 <div className={"w-full mx-auto max-w-[320px] my-[20px]"}>
                     <Form className={"w-full"} layout={"vertical"}>
                         <Form.Item
@@ -60,7 +59,7 @@ function SignUp() {
                             className={"w-full"}
                             type={"primary"}
                             onClick={() => {
-                                navigate("/")
+                                navigateTo("/")
                             }}
                         >
                             Sign Up
@@ -68,14 +67,14 @@ function SignUp() {
                     </div>
                     <div className={"flex items-center justify-center text-[13px] py-[20px]"}>
                         <p className={"text-[#888]"}>{"Already have an account?"}</p>
-                        <a
-                            className={"text-[#5375FE] ml-[6px] cursor-pointer"}
+                        <Button
+                            type={"link"}
                             onClick={() => {
-                                navigate("/login")
+                                navigateTo("/login")
                             }}
                         >
                             Login
-                        </a>
+                        </Button>
                     </div>
                 </div>
             </div>

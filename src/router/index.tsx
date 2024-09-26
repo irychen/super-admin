@@ -1,110 +1,102 @@
-import { BrowserRouter, HashRouter, Navigate, Route, Routes, useLocation } from "react-router-dom"
-import routes, { RouteConfig } from "@/router/config.tsx"
-import { Fragment, ReactNode, useEffect, useMemo, useState } from "react"
-import { useAppUser } from "@/store/user.ts"
-import NoAuth from "@/components/NoAuth"
-import { routeAuthCheck } from "@/utils/auth"
-import { isTokenExpired } from "fortea"
-import { requestInstance } from "@/utils/request.tsx"
+import { ComponentType, LazyExoticComponent, ReactElement, ReactNode } from "react"
+import { Routes, useLocation, useNavigate } from "react-router-dom"
+import createRoutes from "./create-routes"
+import routes from "./config"
+import { setNavigate } from "./navigate"
+import PageType from "./page-types"
+import { mergePath } from "fortea"
+import { setLocation } from "@/utils/location"
 
-const isHash = import.meta.env.VITE_ROUTER_MODE === "hash"
+export type Component =
+    | ComponentType<unknown>
+    | LazyExoticComponent<ComponentType<unknown>>
+    | LazyExoticComponent<() => ReactElement>
 
-const Router = isHash ? HashRouter : BrowserRouter
+export interface BaseRouterConfig {
+    path: string
+    // if component is not set, the route will be treated as a default outlet
+    component?: Component
+    children?: Array<BaseRouterConfig> | Array<CacheRouterConfig> | Array<PageRouterConfig>
+    meta?: Record<string, unknown>
+    authKeys?: Array<string>
+    authKeyCheckType?: "and" | "or"
+    tokenRequired?: boolean
+    redirect?: string
+}
 
-const createRoutes = (routes: RouteConfig[]) => {
-    return routes.map(route => {
-        const { children, path, component: Component } = route
-        if (children) {
-            return (
-                <Route
-                    key={path}
-                    path={path}
-                    element={
-                        Component && (
-                            <TokenCheck check={route.checkToken} path={path}>
-                                <AuthCheck route={route}>
-                                    <Component route={route} />
-                                </AuthCheck>
-                            </TokenCheck>
-                        )
-                    }
-                >
-                    {createRoutes(children)}
-                </Route>
-            )
+export interface CacheRouterConfig extends BaseRouterConfig {
+    // keepAlive when true, the component will not be unmounted when navigating away from it
+    cache?: boolean
+    children?: Array<CacheRouterConfig>
+}
+
+export interface PageRouterConfig extends CacheRouterConfig {
+    children?: Array<PageRouterConfig>
+    icon?: ReactNode
+    hideInMenu?: boolean
+    menuName?: string
+    types?: Array<PageType>
+    search?: boolean // wether to be searchable
+    searchKeys?: Array<string> // the keys to be used for searching
+}
+
+export interface RouteConfig extends PageRouterConfig {
+    absolutePath?: string
+    breadcrumbs?: Array<RouteConfig>
+    subRoutes?: Array<RouteConfig>
+    children?: Array<RouteConfig>
+}
+
+const traverseRoutes = (
+    routes: Array<RouteConfig>,
+    upperPath: string,
+    breadcrumbs: Array<RouteConfig> = [],
+    subRoutes: Array<RouteConfig> = [],
+): Array<RouteConfig> => {
+    const items: RouteConfig[] = []
+    routes.map(route => {
+        const thisPath = mergePath(upperPath, route.path)
+        route.absolutePath = thisPath
+        route.subRoutes = []
+        const newBreadcrumbs = [...breadcrumbs, route]
+        route.breadcrumbs = newBreadcrumbs
+        if (route.children && route.children.length > 0) {
+            route.children = traverseRoutes(route.children, thisPath, [...newBreadcrumbs], route.subRoutes)
+        } else {
+            subRoutes.push(route)
         }
-        return (
-            <Route
-                key={path}
-                path={path}
-                element={
-                    Component && (
-                        <TokenCheck check={route.checkToken} path={path}>
-                            <AuthCheck route={route}>
-                                <Component route={route} />
-                            </AuthCheck>
-                        </TokenCheck>
-                    )
-                }
-            />
-        )
+        items.push(route)
     })
+    return items
 }
 
-function AuthCheck(props: { children: ReactNode; route: RouteConfig }) {
-    const { children, route } = props
-    const { permissions } = useAppUser()
-    const ok = routeAuthCheck(route, permissions)
-    if (!ok) return <NoAuth />
-    return <Fragment>{children}</Fragment>
-}
+const okRoutes = traverseRoutes(routes, "")
 
-function TokenCheck(props: { children: ReactNode; check?: boolean; path?: string }) {
-    const { children, check = true } = props
-    const location = useLocation()
-    const { token } = useAppUser()
-    const [requestRedirect, setRequestRedirect] = useState(false)
-
-    // 添加响应拦截器 401 重定向到登录页面
-    requestInstance.interceptors.response.use(
-        function (response) {
-            return response
-        },
-        function (error) {
-            if (error.response?.status === 401) {
-                setRequestRedirect(true)
+// eslint-disable-next-line react-refresh/only-export-components
+export const findRouteByAbsolutePath = (absolutePath: string) => {
+    function find(routes: Array<RouteConfig>): RouteConfig | undefined {
+        for (let i = 0; i < routes.length; i++) {
+            const route = routes[i]
+            if (route.absolutePath === absolutePath) {
+                return route
             }
-            return Promise.reject(error)
-        },
-    )
-
-    const isLogin = useMemo(() => {
-        return location.pathname?.includes("/login")
-    }, [location.pathname])
-
-    if (isLogin) {
-        return <Fragment>{children}</Fragment>
-    } else {
-        // if (check && isTokenExpired(token)) {
-        //     return <Navigate to={"/login"} />
-        // }
-        if (check && !token) {
-            return <Navigate to={"/login"} />
+            if (route.children && route.children.length > 0) {
+                const targetRoute = find(route.children)
+                if (targetRoute) {
+                    return targetRoute
+                }
+            }
         }
-        if (requestRedirect) {
-            return <Navigate to={"/login"} />
-        }
-
-        return <Fragment>{children}</Fragment>
     }
+    return find(okRoutes)
 }
 
-const AppRouter = () => {
-    return (
-        <Router>
-            <Routes>{createRoutes(routes)}</Routes>
-        </Router>
-    )
+function AppRoutes() {
+    const navigate = useNavigate()
+    const location = useLocation()
+    setNavigate(navigate)
+    setLocation(location)
+    return <Routes>{createRoutes(okRoutes)}</Routes>
 }
 
-export default AppRouter
+export default AppRoutes

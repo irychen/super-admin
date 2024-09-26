@@ -4,7 +4,7 @@ import { ScrollConfig } from "@/components/SuperTable"
 import { useKeepAliveContext } from "keepalive-for-react"
 import { isFunc } from "fortea"
 
-export function useThemeToken() {
+export function useAntdThemeToken() {
     const { token } = theme.useToken()
     return useMemo(() => token, [token])
 }

@@ -3,6 +3,7 @@ import {
     SuperTableColumnType,
     SuperTableDatePickerColumnType,
     SuperTableDateRangePickerColumnType,
+    SuperTableSelectColumnType,
 } from "@/components/SuperTable"
 import { ReactNode, RefObject, useEffect, useImperativeHandle, useRef, useState } from "react"
 import { isFunc, isNil, isString } from "fortea"
@@ -121,6 +122,21 @@ const SearchForm = <T extends object>({ ...props }: SearchFormProps<T>) => {
                         }
                     }
                 })
+                // select columns
+                const selectColumns = items.filter(column => column.valueType === "select")
+                selectColumns?.forEach(column => {
+                    const { dataIndex, transform } = column as SuperTableSelectColumnType<any>
+                    if (params[dataIndex]) {
+                        if (isFunc(transform)) {
+                            const data = transform(params[dataIndex]) || {}
+                            params = {
+                                ...params,
+                                ...data,
+                            }
+                            delete params[dataIndex]
+                        }
+                    }
+                })
                 return params
             },
             setFieldsValue: (values: Record<string, any>) => {
@@ -209,7 +225,9 @@ const SearchForm = <T extends object>({ ...props }: SearchFormProps<T>) => {
                                     icon={<ReloadOutlined />}
                                     onClick={() => {
                                         form.resetFields()
-                                        onReset && onReset()
+                                        if (isFunc(onReset)) {
+                                            onReset()
+                                        }
                                     }}
                                 >
                                     重置

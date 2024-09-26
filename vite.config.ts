@@ -1,15 +1,10 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import { resolve } from "path"
-const BASE_SITE_URL = process.env.VITE_BASE_SITE_URL || "/"
-const envDir = resolve(__dirname, "src", ".env")
+const base = process.env.VITE_BASE_SITE_URL || "/"
 // https://vitejs.dev/config/
 export default defineConfig({
-    envDir: envDir,
-    define: {
-        "process.env": {},
-    },
-    base: BASE_SITE_URL,
+    base,
     plugins: [
         react({
             jsxImportSource: "@emotion/react",
