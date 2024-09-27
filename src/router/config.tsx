@@ -34,6 +34,7 @@ import Error500 from "@/pages/admin/error/500"
 import ClarityErrorStandardSolid from "@/components/icons/ClarityErrorStandardSolid"
 import Error403 from "@/pages/403"
 import SuperTablePage from "@/pages/admin/super-table"
+import IconParkTwotoneTable from "@/components/icons/IconParkTwotoneTable"
 
 export const ADMIN_PATH = "/admin"
 
@@ -68,7 +69,7 @@ export const adminRoutes: RouteConfig[] = [
         component: SuperTablePage,
         meta: { title: "super_table" },
         search: true,
-        icon: <UimCircleLayer width={16} height={16} />,
+        icon: <IconParkTwotoneTable width={16} height={16} />,
     },
     {
         path: "nested",
