@@ -1,9 +1,11 @@
+import { useSettingsStore } from "@/store/settings"
 import { useEffect, useMemo, useRef, ReactNode, memo } from "react"
 import { useLocation } from "react-router-dom"
 
 function AnimationWrapper(props: { children: ReactNode }) {
     const domRef = useRef<HTMLDivElement>(null)
     const location = useLocation()
+    const enableMemoizedScrollTop = useSettingsStore(state => state.enableMemoizedScrollTop)
     const scrollHistoryMap = useRef<Map<string, number>>(new Map())
     const activeKey = useMemo(() => {
         return location.pathname + location.search
@@ -12,7 +14,11 @@ function AnimationWrapper(props: { children: ReactNode }) {
     useEffect(() => {
         const divDom = domRef.current
         if (!divDom) return
-        divDom.scrollTo(0, scrollHistoryMap.current.get(activeKey) || 0)
+        if (enableMemoizedScrollTop) {
+            divDom.scrollTo(0, scrollHistoryMap.current.get(activeKey) || 0)
+        } else {
+            divDom.scrollTo(0, 0)
+        }
         const onScroll = (e: Event) => {
             const target = e.target as HTMLDivElement
             if (!target) return
@@ -22,7 +28,7 @@ function AnimationWrapper(props: { children: ReactNode }) {
         return () => {
             divDom?.removeEventListener("scroll", onScroll)
         }
-    }, [activeKey])
+    }, [activeKey, enableMemoizedScrollTop])
 
     const { children } = props
     return (

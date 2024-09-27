@@ -54,8 +54,8 @@ function SettingsButton() {
     const colorPrimarys = ["#00a76f", "#0780EA", "#7635DC", "#2065D1", "#FDA92D", "#FF3030"]
     const setPrimaryColor = useSettingsStore(state => state.setPrimaryColor)
     const primaryColor = useSettingsStore(state => state.primaryColor)
-    const enableMemoizedScollTop = useSettingsStore(state => state.enableMemoizedScollTop)
-    const setEnableMemoizedScollTop = useSettingsStore(state => state.setEnableMemoizedScollTop)
+    const enableMemoizedScrollTop = useSettingsStore(state => state.enableMemoizedScrollTop)
+    const setEnableMemoizedScrollTop = useSettingsStore(state => state.setEnableMemoizedScrollTop)
     const multiTabs = useSettingsStore(state => state.multiTabs)
     const setMultiTabs = useSettingsStore(state => state.setMultiTabs)
     return (
@@ -254,9 +254,9 @@ function SettingsButton() {
                     <div className={"flex items-center justify-between text-[#999] my-[8px]"}>
                         {t("layout.settings_drawer.enable_memoized_scroll_top")}
                         <Switch
-                            checked={enableMemoizedScollTop}
+                            checked={enableMemoizedScrollTop}
                             onChange={checked => {
-                                setEnableMemoizedScollTop(checked)
+                                setEnableMemoizedScrollTop(checked)
                             }}
                             size={"small"}
                         />

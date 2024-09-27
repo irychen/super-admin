@@ -12,7 +12,7 @@ interface SettingsStore {
     siderMenuOpenKeys: string[]
     layoutStretch: boolean
     primaryColor: string
-    enableMemoizedScollTop: boolean
+    enableMemoizedScrollTop: boolean
     multiTabs: boolean
     setTheme: (theme: Theme) => void
     setThemeMode: (themeMode: ThemeMode) => void
@@ -22,7 +22,7 @@ interface SettingsStore {
     setSiderMenuOpenKeys: (openKeys: string[]) => void
     setLayoutStretch: (stretch: boolean) => void
     setPrimaryColor: (primaryColor: string) => void
-    setEnableMemoizedScollTop: (enableMemoizedScollTop: boolean) => void
+    setEnableMemoizedScrollTop: (enableMemoizedScrollTop: boolean) => void
     setMultiTabs: (multiTabs: boolean) => void
 }
 
@@ -37,7 +37,7 @@ export const useSettingsStore = create<SettingsStore>()(
             siderMenuOpenKeys: [],
             layoutStretch: false,
             primaryColor: "#0780EA",
-            enableMemoizedScollTop: true,
+            enableMemoizedScrollTop: true,
             multiTabs: true,
             setTheme: (theme: Theme) => set({ theme }),
             setThemeMode: (themeMode: ThemeMode) => set({ themeMode }),
@@ -47,7 +47,7 @@ export const useSettingsStore = create<SettingsStore>()(
             setSiderMenuOpenKeys: (openKeys: string[]) => set({ siderMenuOpenKeys: openKeys }),
             setLayoutStretch: (stretch: boolean) => set({ layoutStretch: stretch }),
             setPrimaryColor: (primaryColor: string) => set({ primaryColor }),
-            setEnableMemoizedScollTop: (enableMemoizedScollTop: boolean) => set({ enableMemoizedScollTop }),
+            setEnableMemoizedScrollTop: (enableMemoizedScrollTop: boolean) => set({ enableMemoizedScrollTop }),
             setMultiTabs: (multiTabs: boolean) => set({ multiTabs }),
         }),
         {
@@ -66,8 +66,8 @@ export const settingsStore = {
     setSiderMenuOpenKeys: (openKeys: string[]) => useSettingsStore.getState().setSiderMenuOpenKeys(openKeys),
     setLayoutStretch: (stretch: boolean) => useSettingsStore.getState().setLayoutStretch(stretch),
     setPrimaryColor: (primaryColor: string) => useSettingsStore.getState().setPrimaryColor(primaryColor),
-    setEnableMemoizedScollTop: (enableMemoizedScollTop: boolean) =>
-        useSettingsStore.getState().setEnableMemoizedScollTop(enableMemoizedScollTop),
+    setEnableMemoizedScrollTop: (enableMemoizedScrollTop: boolean) =>
+        useSettingsStore.getState().setEnableMemoizedScrollTop(enableMemoizedScrollTop),
     setMultiTabs: (multiTabs: boolean) => useSettingsStore.getState().setMultiTabs(multiTabs),
 }
 

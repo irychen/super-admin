@@ -22,24 +22,11 @@ function Home() {
                 <p className={"text-center py-[10px] mb-[30px] text-md"}>{config.appDescription}</p>
                 <div className={"flex justify-center items-center pb-[30px]"}>
                     <Space>
-                        <Link to={"/signup"}>
-                            <Button
-                                style={{
-                                    color: "#fff",
-                                    backgroundImage: "linear-gradient(45deg, #de50b6, #3081f8)",
-                                    border: "none",
-                                }}
-                                className={"w-[120px]"}
-                                size={"large"}
-                            >
-                                Sign Up
-                            </Button>
-                        </Link>
                         <Link to={"/login"}>
                             <Button
                                 style={{
                                     color: "#fff",
-                                    backgroundImage: "linear-gradient(45deg, #48c79b, #2ab4ef)",
+                                    backgroundImage: "linear-gradient(45deg, green, #2ab4ef)",
                                     border: "none",
                                 }}
                                 className={"w-[120px]"}
@@ -52,7 +39,7 @@ function Home() {
                             <Button
                                 style={{
                                     color: "#fff",
-                                    backgroundImage: "linear-gradient(45deg, #F15656, #48A39D)",
+                                    backgroundImage: "linear-gradient(45deg, #F15656, purple)",
                                     border: "none",
                                 }}
                                 size={"large"}
