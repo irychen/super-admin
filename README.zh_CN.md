@@ -4,7 +4,7 @@
 
 简介：正在构建中的后台管理解决方案 🔨...
 
-演示：[https://irychen.github.io/super-admin/](https://irychen.github.io/super-admin/)
+演示：[https://super-admin.tech](https://super-admin.tech)
 
 ![demo](./images/admin_login.png)
 
