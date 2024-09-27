@@ -4,9 +4,7 @@
 
 Introduction: Backend management solution under construction 🔨...
 
-visit 01 : [https://super-admin.tech](https://super-admin.tech)
-
-visit 02 : [https://irychen.github.io/super-admin/](https://irychen.github.io/super-admin/)
+visit  : [https://super-admin.tech](https://super-admin.tech)
 
 ![demo](./images/admin_login.png)
 
