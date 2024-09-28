@@ -1,6 +1,6 @@
 import AdminLogo from "@/components/AdminLogo"
 import config from "@/config"
-import { navigateTo } from "@/router/navigate"
+import { navigateTo } from "@/utils/navigate"
 import { Button, Form, Input } from "antd"
 
 function SignUp() {

@@ -1,5 +1,5 @@
 import { findRouteByAbsolutePath } from "@/router"
-import { navigateTo } from "@/router/navigate"
+import { navigateTo } from "@/utils/navigate"
 import { getKeepaliveIns } from "@/utils/keepaliveIns"
 import { getLocation } from "@/utils/location"
 import { messageApi } from "@/utils/message"

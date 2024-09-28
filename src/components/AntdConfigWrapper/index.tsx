@@ -18,6 +18,7 @@ const localeMap = {
 }
 
 function AntdConfigWrapper(props: { children: React.ReactNode }) {
+    console.log("AntdConfigWrapper render")
     const { children } = props
     const i18n = getI18n()
     const [locale, setLocale] = useState<string>(i18n.language)

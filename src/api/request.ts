@@ -1,5 +1,5 @@
 import AppConfig from "@/config"
-import { navigateTo } from "@/router/navigate"
+import { navigateTo } from "@/utils/navigate"
 import { tokenStore } from "@/store/token"
 import { notificationApi } from "@/utils/notification"
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"

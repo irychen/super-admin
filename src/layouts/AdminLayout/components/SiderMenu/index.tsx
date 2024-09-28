@@ -3,6 +3,7 @@ import { adminRoutes } from "@/router/config"
 import { useAuthStore } from "@/store/auth"
 import { useSettingsStore } from "@/store/settings"
 import { openTabPage } from "@/store/tabs"
+import { checkAuthKeys } from "@/utils/auth"
 import { Menu } from "antd"
 import { isArray } from "fortea"
 import { memo, ReactNode, useLayoutEffect, useMemo } from "react"
@@ -19,7 +20,7 @@ interface ItemType {
 
 function SiderMenu() {
     const { t, i18n } = useTranslation()
-    const authKeys = useAuthStore(state => state.keys)
+    const userAuthKeys = useAuthStore(state => state.keys)
     const location = useLocation()
 
     const siderMenuSelectedKeys = useSettingsStore(state => state.siderMenuSelectedKeys)
@@ -43,21 +44,10 @@ function SiderMenu() {
             for (let i = 0; i < routes.length; i++) {
                 const route = routes[i]
                 const hasChildren = isArray(route.children) && route.children.length > 0
-                const { authKeyCheckType = "and", authKeys: authority } = route
-                if (isArray(authority) && authority.length > 0) {
-                    if (authKeyCheckType === "or") {
-                        const ok = authority.some(authKey => authKeys.includes(authKey))
-                        if (!ok) {
-                            continue
-                        }
-                    }
-                    if (authKeyCheckType === "and") {
-                        const ok = authority.every(authKey => authKeys.includes(authKey))
-                        if (!ok) {
-                            continue
-                        }
-                    }
-                }
+                const { authKeyCheckType, authKeys } = route
+                const authPass = checkAuthKeys(authKeys, userAuthKeys, authKeyCheckType)
+                if (!authPass) continue
+
                 const menuItem: ItemType = {
                     key: route.absolutePath || "",
                     title: t(`layout.menu.${route.meta?.title}`),
@@ -96,7 +86,7 @@ function SiderMenu() {
 
         return traverseRoutes(adminRoutes)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authKeys, i18n.language])
+    }, [userAuthKeys, i18n.language])
 
     return (
         <Menu

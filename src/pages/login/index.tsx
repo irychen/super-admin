@@ -1,6 +1,6 @@
 import AdminLogo from "@/components/AdminLogo"
 import config from "@/config"
-import { navigateTo } from "@/router/navigate"
+import { navigateTo } from "@/utils/navigate"
 import { Button, Checkbox, Form, Input } from "antd"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"

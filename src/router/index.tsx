@@ -1,11 +1,9 @@
 import { ComponentType, LazyExoticComponent, ReactElement, ReactNode } from "react"
-import { Routes, useLocation, useNavigate } from "react-router-dom"
+import { Routes } from "react-router-dom"
 import createRoutes from "./create-routes"
 import routes from "./config"
-import { setNavigate } from "./navigate"
-import PageType from "./page-types"
+import PageType from "./page-type"
 import { mergePath } from "fortea"
-import { setLocation } from "@/utils/location"
 
 export type Component =
     | ComponentType<unknown>
@@ -18,7 +16,7 @@ export interface BaseRouterConfig {
     component?: Component
     children?: Array<BaseRouterConfig> | Array<CacheRouterConfig> | Array<PageRouterConfig>
     meta?: Record<string, unknown>
-    authKeys?: Array<string>
+    authKeys?: Array<string> | string
     authKeyCheckType?: "and" | "or"
     tokenRequired?: boolean
     redirect?: string
@@ -92,10 +90,6 @@ export const findRouteByAbsolutePath = (absolutePath: string) => {
 }
 
 function AppRoutes() {
-    const navigate = useNavigate()
-    const location = useLocation()
-    setNavigate(navigate)
-    setLocation(location)
     return <Routes>{createRoutes(okRoutes)}</Routes>
 }
 

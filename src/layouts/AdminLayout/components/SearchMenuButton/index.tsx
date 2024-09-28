@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useAuthStore } from "@/store/auth"
 import { RouteConfig } from "@/router"
-import checkAuthKeys from "@/router/checkAuthKeys"
 import { adminRoutes } from "@/router/config"
 import IconamoonSearchDuotone from "@/components/icons/IconamoonSearchDuotone"
 import { useAntdThemeToken } from "@/hooks"
+import { checkAuthKeys } from "@/utils/auth"
 
 type ItemType = {
     key: string
@@ -21,7 +21,7 @@ type ItemType = {
 function SearchMenuButton() {
     const { t } = useTranslation()
     const inputRef = useRef<InputRef>(null)
-    const authKeys = useAuthStore(state => state.keys)
+    const userAuthKeys = useAuthStore(state => state.keys)
     const { colorPrimary } = useAntdThemeToken()
     const [showSearch, setShowSearch] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -35,8 +35,8 @@ function SearchMenuButton() {
         function traverseRoutes(routes: RouteConfig[]) {
             for (let i = 0; i < routes.length; i++) {
                 const route = routes[i]
-                const ok = checkAuthKeys(route.authKeys || [], authKeys, route.authKeyCheckType)
-                if (!ok) continue
+                const authPass = checkAuthKeys(route.authKeys, userAuthKeys, route.authKeyCheckType)
+                if (!authPass) continue
                 const keywords = route.searchKeys || ([] as string[])
 
                 const menuItem: ItemType = {
@@ -69,7 +69,7 @@ function SearchMenuButton() {
         traverseRoutes(adminRoutes)
         return items
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authKeys, searchValue])
+    }, [userAuthKeys, searchValue])
 
     const keyDownDealingRef = useRef(false)
 

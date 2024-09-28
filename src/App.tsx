@@ -1,18 +1,22 @@
-import { BrowserRouter, HashRouter } from "react-router-dom"
+import { BrowserRouter, HashRouter, useLocation, useNavigate } from "react-router-dom"
 import config from "@/config"
-import { Fragment } from "react"
+import { Fragment, ReactNode } from "react"
 import { notification, message } from "antd"
 import { setNotificationApi } from "@/utils/notification"
 import { setMessageApi } from "@/utils/message"
 import AppRoutes from "@/router"
 import AntdConfigWrapper from "./components/AntdConfigWrapper"
 import BaseLayout from "@/layouts/BaseLayout"
+import { setNavigate } from "./utils/navigate"
+import { setLocation } from "./utils/location"
 
 const { useNotification } = notification
 
 const Router = config.hashRouter ? HashRouter : BrowserRouter
 
 const App = () => {
+    console.log("App render")
+
     const [notificationApi, notificationContextHolder] = useNotification()
     setNotificationApi(notificationApi)
 
@@ -28,12 +32,22 @@ const App = () => {
                 {messageContextHolder}
                 <BaseLayout>
                     <Router>
-                        <AppRoutes />
+                        <FunctionRegistry>
+                            <AppRoutes />
+                        </FunctionRegistry>
                     </Router>
                 </BaseLayout>
             </AntdConfigWrapper>
         </Fragment>
     )
+}
+
+function FunctionRegistry({ children }: { children: ReactNode }) {
+    const navigate = useNavigate()
+    const location = useLocation()
+    setNavigate(navigate)
+    setLocation(location)
+    return children
 }
 
 function logInfo() {
