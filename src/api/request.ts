@@ -1,5 +1,5 @@
 import AppConfig from "@/config"
-import { navigateTo } from "@/utils/navigate"
+import { navigate } from "@/utils/navigate"
 import { tokenStore } from "@/store/token"
 import { notificationApi } from "@/utils/notification"
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
@@ -44,7 +44,7 @@ const base = function (method = "GET", url: string, data: unknown = {}, config?:
             // config.headers["x-token"] = token
             // config.headers["token"] = token
         } else {
-            navigateTo("/login")
+            navigate("/login")
             console.error("token is not found")
         }
     }

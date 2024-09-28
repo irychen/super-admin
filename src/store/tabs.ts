@@ -1,5 +1,5 @@
 import { findRouteByAbsolutePath } from "@/router"
-import { navigateTo } from "@/utils/navigate"
+import { navigate } from "@/utils/navigate"
 import { getKeepaliveIns } from "@/utils/keepaliveIns"
 import { getLocation } from "@/utils/location"
 import { messageApi } from "@/utils/message"
@@ -61,7 +61,7 @@ export function openTabPage(tabPage: TabPageItem, options?: NavigateOptions) {
     if (activeKey === tabPage.url) {
         return
     }
-    navigateTo(tabPage.url, {
+    navigate(tabPage.url, {
         state: tabPage.state,
         ...options,
     })
@@ -81,7 +81,7 @@ export function closeTabPage(url: string) {
     tabPages = tabPages.filter(tab => tab.url !== url)
     tabsStore.setTabPages(() => [...tabPages])
     const nextActiveItem = tabPages.find(tab => tab.url === lastActiveKey) || tabPages[tabPages.length - 1]
-    navigateTo(nextActiveItem.url, {
+    navigate(nextActiveItem.url, {
         state: nextActiveItem.state,
         replace: true,
     })

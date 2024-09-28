@@ -1,11 +1,10 @@
 import { memo, ReactNode } from "react"
-import { RouteConfig } from "@/router"
 import { useAuthStore } from "@/store/auth"
 import { Navigate, useLocation } from "react-router-dom"
 import { useTokenStore } from "@/store/token"
 import { Fragment } from "react"
 import { checkAuthKeys } from "@/utils/auth"
-import { getLocation } from "@/utils/location"
+import NoAuth from "@/components/Error/NoAuth"
 
 interface RouteGuardProps {
     children: ReactNode
@@ -50,7 +49,7 @@ function RouteGuard(props: RouteGuardProps) {
     }
 
     if (!authPass) {
-        return <Navigate to="/403" />
+        return <NoAuth />
     }
 
     return <Fragment>{children}</Fragment>

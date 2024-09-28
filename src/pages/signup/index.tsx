@@ -1,6 +1,6 @@
 import AdminLogo from "@/components/AdminLogo"
 import config from "@/config"
-import { navigateTo } from "@/utils/navigate"
+import { navigate } from "@/utils/navigate"
 import { Button, Form, Input } from "antd"
 
 function SignUp() {
@@ -59,7 +59,7 @@ function SignUp() {
                             className={"w-full"}
                             type={"primary"}
                             onClick={() => {
-                                navigateTo("/")
+                                navigate("/")
                             }}
                         >
                             Sign Up
@@ -70,7 +70,7 @@ function SignUp() {
                         <Button
                             type={"link"}
                             onClick={() => {
-                                navigateTo("/login")
+                                navigate("/login")
                             }}
                         >
                             Login

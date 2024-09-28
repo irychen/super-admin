@@ -1,6 +1,6 @@
 import AdminLogo from "@/components/AdminLogo"
 import config from "@/config"
-import { navigateTo } from "@/utils/navigate"
+import { navigate } from "@/utils/navigate"
 import { Button, Checkbox, Form, Input } from "antd"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
@@ -93,7 +93,7 @@ function Login() {
                         <Button
                             type={"link"}
                             onClick={() => {
-                                navigateTo("/signup")
+                                navigate("/signup")
                             }}
                         >
                             {t("pages.login.create_account")}

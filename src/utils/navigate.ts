@@ -1,11 +1,11 @@
 import { NavigateFunction, NavigateOptions } from "react-router-dom"
 
-let _navigateIns: NavigateFunction
+let _navigate: NavigateFunction
 
 export function setNavigate(nav: NavigateFunction) {
-    _navigateIns = nav
+    _navigate = nav
 }
 
-export function navigateTo(path: string, options?: NavigateOptions) {
-    _navigateIns(path, options)
+export function navigate(path: string, options?: NavigateOptions) {
+    _navigate(path, options)
 }
