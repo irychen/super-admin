@@ -5,8 +5,7 @@ import { css } from "@emotion/react"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useAuthStore } from "@/store/auth"
-import { RouteConfig } from "@/router"
-import { adminRoutes } from "@/router/config"
+import { formedAdminRoutes, RouteConfig } from "@/router"
 import IconamoonSearchDuotone from "@/components/icons/IconamoonSearchDuotone"
 import { useAntdThemeToken } from "@/hooks"
 import { checkAuthKeys } from "@/utils/auth"
@@ -66,7 +65,7 @@ function SearchMenuButton() {
             }
         }
 
-        traverseRoutes(adminRoutes)
+        traverseRoutes(formedAdminRoutes)
         return items
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userAuthKeys, searchValue])

@@ -1,7 +1,7 @@
 import { ComponentType, LazyExoticComponent, ReactElement, ReactNode } from "react"
 import { Routes } from "react-router-dom"
 import createRoutes from "./create-routes"
-import routes from "./config"
+import routes, { ADMIN_PATH, adminRoutes } from "./config"
 import PageType from "./page-type"
 import { mergePath } from "fortea"
 
@@ -68,9 +68,10 @@ const traverseRoutes = (
     return items
 }
 
-const okRoutes = traverseRoutes(routes, "")
+export const formedAdminRoutes = traverseRoutes(adminRoutes, ADMIN_PATH)
 
-// eslint-disable-next-line react-refresh/only-export-components
+export const formedRoutes = traverseRoutes(routes, "")
+
 export const findRouteByAbsolutePath = (absolutePath: string) => {
     function find(routes: Array<RouteConfig>): RouteConfig | undefined {
         for (let i = 0; i < routes.length; i++) {
@@ -86,11 +87,11 @@ export const findRouteByAbsolutePath = (absolutePath: string) => {
             }
         }
     }
-    return find(okRoutes)
+    return find(formedRoutes)
 }
 
 function AppRoutes() {
-    return <Routes>{createRoutes(okRoutes)}</Routes>
+    return <Routes>{createRoutes(formedRoutes)}</Routes>
 }
 
 export default AppRoutes

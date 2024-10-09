@@ -1,5 +1,4 @@
-import { RouteConfig } from "@/router"
-import { adminRoutes } from "@/router/config"
+import { formedAdminRoutes, RouteConfig } from "@/router"
 import { useAuthStore } from "@/store/auth"
 import { useSettingsStore } from "@/store/settings"
 import { openTabPage } from "@/store/tabs"
@@ -84,7 +83,7 @@ function SiderMenu() {
             return items
         }
 
-        return traverseRoutes(adminRoutes)
+        return traverseRoutes(formedAdminRoutes)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userAuthKeys, i18n.language])
 

@@ -7,14 +7,11 @@ import KeepAliveArea from "./components/KeepAliveArea"
 import SiderMenu from "./components/SiderMenu"
 import Tabs from "./components/Tabs"
 import SideDrawerMenuButton from "./components/SideDrawerMenuButton"
-import { lazy, memo, Suspense } from "react"
+import { memo } from "react"
 import { useAntdThemeToken } from "@/hooks"
-
-const HeaderControllers = lazy(() => import("./components/HeaderControllers"))
+import HeaderControllers from "./components/HeaderControllers"
 
 function AdminLayout() {
-    console.log("AdminLayout render")
-
     const menuCollapsed = useSettingsStore(state => state.menuCollapsed)
     const showBreadcrumb = useSettingsStore(state => state.showBreadcrumb)
     const multiTabs = useSettingsStore(state => state.multiTabs)
@@ -51,9 +48,7 @@ function AdminLayout() {
                             {showBreadcrumb && <Breadcrumbs />}
                         </div>
                         <div className={"side-drawer-btn pad:block hidden"}>{<SideDrawerMenuButton />}</div>
-                        <Suspense>
-                            <HeaderControllers />
-                        </Suspense>
+                        <HeaderControllers />
                     </header>
                     {multiTabs && (
                         <div className={"pages-tabs h-[37px] bg-[#fff]  dark:bg-[#161C24]  "}>
