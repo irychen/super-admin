@@ -29,5 +29,5 @@ pnpm install
 ## run dev
 
 ```bash
-pnpm run dev
+pnpm run start:mock
 ```

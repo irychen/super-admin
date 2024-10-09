@@ -29,5 +29,5 @@ pnpm install
 ## 运行开发环境
 
 ```bash
-pnpm run dev
+pnpm run start:mock
 ```
