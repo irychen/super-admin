@@ -23,8 +23,6 @@ export interface BaseRouterConfig {
 }
 
 export interface CacheRouterConfig extends BaseRouterConfig {
-    // keepAlive when true, the component will not be unmounted when navigating away from it
-    cache?: boolean
     children?: Array<CacheRouterConfig>
 }
 

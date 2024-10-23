@@ -1,6 +1,4 @@
 import SuperTable, { SuperTableColumnsType } from "@/components/SuperTable"
-import { useEffect, useRef } from "react"
-import { useKeepAliveContext } from "keepalive-for-react"
 
 interface DataType {
     id: number

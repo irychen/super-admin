@@ -6,7 +6,7 @@ import { setKeepaliveIns } from "@/utils/keepaliveIns"
 import KeepAlive, { useKeepaliveRef } from "keepalive-for-react"
 import { memo, ReactNode, Suspense, useEffect, useMemo } from "react"
 import { useLocation, useOutlet } from "react-router-dom"
-import AnimationWrapper from "../AnimationWrapper"
+import MemoizedScrollTop from "../MemoizedScrollTop"
 
 function KeepAliveArea() {
     console.log("keepalive area render")
@@ -14,7 +14,7 @@ function KeepAliveArea() {
     const location = useLocation()
     const aliveRef = useKeepaliveRef()
 
-    const cacheKey = useMemo(() => {
+    const activeCacheKey = useMemo(() => {
         return location.pathname + location.search
     }, [location.pathname, location.search])
 
@@ -23,17 +23,12 @@ function KeepAliveArea() {
         const absolutePath = location.pathname
         const route = findRouteByAbsolutePath(absolutePath)
         openTabPage({
-            url: cacheKey,
+            url: activeCacheKey,
             title: route?.meta?.title as string,
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cacheKey])
+    }, [activeCacheKey])
 
     const outlet = useOutlet()
-
-    const route = useMemo(() => {
-        return findRouteByAbsolutePath(cacheKey)
-    }, [cacheKey])
 
     const multiTabs = useSettingsStore(state => state.multiTabs)
 
@@ -41,19 +36,13 @@ function KeepAliveArea() {
     const hideTabsClass = "calc(100vh - 60px)"
 
     return (
-        <KeepAlive
-            async={false}
-            microAsync={true}
-            aliveRef={aliveRef}
-            activeName={cacheKey}
-            max={18}
-            cache={route?.cache}
-            animationWrapper={AnimationWrapper}
-        >
-            <Suspense fallback={<LoadingArea height={multiTabs ? showTabsClass : hideTabsClass} />}>
-                <SpreadArea>{outlet}</SpreadArea>
-            </Suspense>
-        </KeepAlive>
+        <MemoizedScrollTop>
+            <KeepAlive transition aliveRef={aliveRef} activeCacheKey={activeCacheKey} max={18}>
+                <Suspense fallback={<LoadingArea height={multiTabs ? showTabsClass : hideTabsClass} />}>
+                    <SpreadArea>{outlet}</SpreadArea>
+                </Suspense>
+            </KeepAlive>
+        </MemoizedScrollTop>
     )
 }
 

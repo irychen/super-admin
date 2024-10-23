@@ -57,8 +57,8 @@ importers:
         specifier: ^2.6.1
         version: 2.6.1
       keepalive-for-react:
-        specifier: ^2.0.18
-        version: 2.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^3.0.1
+        version: 3.0.1(react-dom@18.2.0(react@18.2.0))(react-router-dom@6.26.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       qs:
         specifier: ^6.13.0
         version: 6.13.0
@@ -1710,11 +1710,12 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  keepalive-for-react@2.0.18:
-    resolution: {integrity: sha512-a6C9HfmxqZMUjqrbTDVIbG9I5GDFIqOCIHGCzvWLECDRLnD2JPPjfFXhQz99FrEIjHi9phncaSberNVOXMgPTw==}
+  keepalive-for-react@3.0.1:
+    resolution: {integrity: sha512-pG6kxdnv0nzOJ2AQ+55bckVMhAryLKGUtMYVogAti529yklkbg2Zg+ggJgKhAOuIya46tMPdP21fEACHYuM+hg==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
+      react-router-dom: '>=6.0.0'
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -4535,10 +4536,11 @@ snapshots:
 
   json5@2.2.3: {}
 
-  keepalive-for-react@2.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  keepalive-for-react@3.0.1(react-dom@18.2.0(react@18.2.0))(react-router-dom@6.26.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0):
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      react-router-dom: 6.26.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
   keyv@4.5.4:
     dependencies:

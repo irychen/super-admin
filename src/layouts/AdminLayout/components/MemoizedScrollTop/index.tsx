@@ -2,7 +2,7 @@ import { useSettingsStore } from "@/store/settings"
 import { useEffect, useMemo, useRef, ReactNode, memo } from "react"
 import { useLocation } from "react-router-dom"
 
-function AnimationWrapper(props: { children: ReactNode }) {
+function MemoizedScrollTop(props: { children: ReactNode }) {
     const domRef = useRef<HTMLDivElement>(null)
     const location = useLocation()
     const enableMemoizedScrollTop = useSettingsStore(state => state.enableMemoizedScrollTop)
@@ -32,10 +32,10 @@ function AnimationWrapper(props: { children: ReactNode }) {
 
     const { children } = props
     return (
-        <div ref={domRef} className="animation-wrapper scrollbar w-full h-full overflow-auto">
+        <div ref={domRef} className="animation-wrapper scrollbar w-full h-full overflow-y-auto overflow-x-hidden">
             {children}
         </div>
     )
 }
 
-export default memo(AnimationWrapper)
+export default memo(MemoizedScrollTop)

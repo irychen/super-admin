@@ -41,7 +41,6 @@ export const ADMIN_PATH = "/admin"
 export const adminRoutes: RouteConfig[] = [
     {
         path: "dashboard",
-        cache: true,
         component: AdminWelcome,
         meta: { title: "dashboard" },
         search: true,
@@ -49,7 +48,6 @@ export const adminRoutes: RouteConfig[] = [
     },
     {
         path: "users-management",
-        cache: true,
         component: AdminUsers,
         meta: { title: "users_management" },
         search: true,
@@ -57,7 +55,6 @@ export const adminRoutes: RouteConfig[] = [
     },
     {
         path: "userinfo",
-        cache: true,
         component: AdminUserInfo,
         meta: { title: "userinfo" },
         search: true,
@@ -65,7 +62,6 @@ export const adminRoutes: RouteConfig[] = [
     },
     {
         path: "super-table",
-        cache: true,
         component: SuperTablePage,
         meta: { title: "super_table" },
         search: true,

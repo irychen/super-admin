@@ -6,8 +6,6 @@ import SolarUsersGroupRoundedBoldDuotone from "@/components/icons/SolarUsersGrou
 import Fa6SolidSackDollar from "@/components/icons/Fa6SolidSackDollar"
 import MingcuteBillFill from "@/components/icons/MingcuteBillFill"
 import SolarSaleBold from "@/components/icons/SolarSaleBold"
-// import { useKeepAliveContext } from "keepalive-for-react"
-// import { Button, Input } from "antd"
 import { useEffect } from "react"
 
 function DigitCard(props: { title: string; value: string; color: string; icon: React.ReactNode }) {
@@ -32,29 +30,10 @@ function Dashboard() {
         console.log("Dashboard useEffect")
     }, [])
 
-    // const { refresh } = useKeepAliveContext()
-    // const [refreshUrl, setRefreshUrl] = useState<string>("/admin/users-management")
-
     return (
         <div className="w-full h-full p-6 transition-colors duration-300">
             <div className="font-bold text-2xl text-gray-800 dark:text-gray-200">Dashboard</div>
             <p className="text-gray-500 text-sm mt-2">This is the dashboard page. You can look at the data here.</p>
-
-            {/* <div className="flex justify-end mt-6">
-                <Input
-                    placeholder="Please enter the url"
-                    value={refreshUrl}
-                    onChange={e => setRefreshUrl(e.target.value)}
-                />
-                <Button
-                    onClick={() => {
-                        refresh(refreshUrl)
-                    }}
-                >
-                    Refresh
-                </Button>
-            </div> */}
-
             <div className="container mt-6 grid pad:grid-cols-1 desktop:grid-cols-2 grid-cols-4 gap-6">
                 {[
                     {

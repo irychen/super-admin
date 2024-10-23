@@ -77,7 +77,7 @@ export function closeTabPage(url: string) {
         messageApi().warning("The last tab page cannot be closed")
         return
     }
-    getKeepaliveIns().removeCache(url)
+    getKeepaliveIns().destroy(url)
     tabPages = tabPages.filter(tab => tab.url !== url)
     tabsStore.setTabPages(() => [...tabPages])
     const nextActiveItem = tabPages.find(tab => tab.url === lastActiveKey) || tabPages[tabPages.length - 1]

@@ -55,8 +55,7 @@ function LineChart(props: LineChartProps) {
     const chartInstance = useRef<echarts.ECharts | null>(null)
     const layoutStretch = useSettingsStore(state => state.layoutStretch)
     useEffectOnActive(
-        active => {
-            if (!active) return
+        () => {
             const color = colorSet[theme]
 
             const defaultOptions: EChartsOption = {
@@ -77,7 +76,7 @@ function LineChart(props: LineChartProps) {
             setTimeout(() => {
                 chartInstance.current = echarts.init(container, theme)
                 chartInstance.current.setOption(mergedOptions)
-            }, 100)
+            }, 200)
 
             function onResize() {
                 chartInstance.current?.resize()
@@ -89,8 +88,8 @@ function LineChart(props: LineChartProps) {
                 chartInstance.current?.dispose()
             }
         },
-        false,
         [theme, options, layoutStretch],
+        false,
     )
 
     return <div className={cn("line-chart w-full h-full", className)} ref={chartRef} />

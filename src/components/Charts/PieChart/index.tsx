@@ -27,8 +27,7 @@ function PieChart(props: PieChartProps) {
     const chartInstance = useRef<echarts.ECharts | null>(null)
     const layoutStretch = useSettingsStore(state => state.layoutStretch)
     useEffectOnActive(
-        active => {
-            if (!active) return
+        () => {
             const color = colorSet[theme]
 
             const defaultOptions: EChartsOption = {
@@ -49,7 +48,7 @@ function PieChart(props: PieChartProps) {
             setTimeout(() => {
                 chartInstance.current = echarts.init(container, theme)
                 chartInstance.current.setOption(mergedOptions)
-            }, 100)
+            }, 200)
 
             function onResize() {
                 chartInstance.current?.resize()
@@ -61,8 +60,8 @@ function PieChart(props: PieChartProps) {
                 chartInstance.current?.dispose()
             }
         },
-        false,
         [theme, options, layoutStretch],
+        false,
     )
 
     return <div className={cn("pie-chart w-full h-full", className)} ref={chartRef} />
