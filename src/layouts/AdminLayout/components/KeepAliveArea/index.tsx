@@ -3,7 +3,7 @@ import { findRouteByAbsolutePath } from "@/router"
 import { useSettingsStore } from "@/store/settings"
 import { openTabPage } from "@/store/tabs"
 import { setKeepaliveIns } from "@/utils/keepaliveIns"
-import KeepAlive, { useKeepaliveRef } from "keepalive-for-react"
+import KeepAlive, { useKeepAliveRef } from "keepalive-for-react"
 import { memo, ReactNode, Suspense, useEffect, useMemo } from "react"
 import { useLocation, useOutlet } from "react-router-dom"
 import MemoizedScrollTop from "../MemoizedScrollTop"
@@ -12,7 +12,7 @@ function KeepAliveArea() {
     console.log("keepalive area render")
 
     const location = useLocation()
-    const aliveRef = useKeepaliveRef()
+    const aliveRef = useKeepAliveRef()
 
     const activeCacheKey = useMemo(() => {
         return location.pathname + location.search
