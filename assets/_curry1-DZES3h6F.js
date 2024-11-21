@@ -1,0 +1,1 @@
+function t(e){return e!=null&&typeof e=="object"&&e["@@functional/placeholder"]===!0}function u(e){return function n(r){return arguments.length===0||t(r)?n:e.apply(this,arguments)}}export{u as _,t as a};
